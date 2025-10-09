@@ -1,0 +1,1 @@
+ALTER TABLE "license_agreements" ADD COLUMN "content" text NOT NULL;

@@ -1,0 +1,149 @@
+<!-- /static/scholarship-pattern.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+  <defs>
+    <!-- Brand-friendly stroke color (very subtle). Adjust opacity if needed -->
+    <style>
+      .s { stroke: #ffffff; stroke-opacity: .18; fill: none; stroke-width: 1.6; }
+      .f { fill: #ffffff; fill-opacity: .08; }
+    </style>
+
+    <!-- Simple sparkle -->
+    <g id="sparkle">
+      <path class="s" d="M0 -10 L0 10 M-10 0 L10 0" />
+      <circle class="s" cx="0" cy="0" r="6"/>
+    </g>
+
+    <!-- Graduation cap -->
+    <g id="cap" transform="scale(1)">
+      <path class="s" d="M0 0 L40 -14 L80 0 L40 14 Z" transform="translate(-40,-8)"/>
+      <path class="s" d="M-20 6 Q0 16 20 6" />
+      <path class="s" d="M80 0 L95 6" />
+      <circle class="s" cx="95" cy="6" r="3" />
+    </g>
+
+    <!-- Ribbon/Badge -->
+    <g id="ribbon">
+      <circle class="s" cx="0" cy="0" r="16"/>
+      <path class="s" d="M0 -8 L0 8"/>
+      <path class="s" d="M-10 0 L10 0"/>
+      <path class="s" d="M-6 16 L-12 28 L0 22 L12 28 L6 16" />
+    </g>
+
+    <!-- Puzzle piece -->
+    <g id="puzzle">
+      <path class="s" d="
+        M-18 -12 h10
+        c0 -6 10 -6 10 0 h10
+        v10
+        c6 0 6 10 0 10 v10
+        h-10
+        c0 6 -10 6 -10 0 h-10
+        v-10
+        c-6 0 -6 -10 0 -10 v-10 z"/>
+    </g>
+
+    <!-- Laptop -->
+    <g id="laptop">
+      <rect class="s" x="-18" y="-12" width="36" height="20" rx="2" />
+      <rect class="s" x="-24" y="8" width="48" height="6" rx="1.5" />
+      <line class="s" x1="-14" y1="-6" x2="14" y2="-6"/>
+      <line class="s" x1="-14" y1="0" x2="6" y2="0"/>
+    </g>
+
+    <!-- Soft dot cluster -->
+    <g id="dots">
+      <circle class="f" cx="0" cy="0" r="3"/>
+      <circle class="f" cx="18" cy="-10" r="2.5"/>
+      <circle class="f" cx="-16" cy="12" r="2.5"/>
+    </g>
+  </defs>
+
+  <!-- Background (transparent) so it overlays your primary color nicely -->
+  <rect width="600" height="600" fill="none"/>
+
+  <!-- Grid placement: 5x5 -->
+  <!-- Row 1 -->
+  <g transform="translate(60,60)">
+    <use href="#cap"/>
+  </g>
+  <g transform="translate(180,60)">
+    <use href="#puzzle"/>
+  </g>
+  <g transform="translate(300,60)">
+    <use href="#ribbon"/>
+  </g>
+  <g transform="translate(420,60)">
+    <use href="#laptop"/>
+  </g>
+  <g transform="translate(540,60)">
+    <use href="#sparkle"/>
+  </g>
+
+  <!-- Row 2 -->
+  <g transform="translate(60,180)">
+    <use href="#laptop"/>
+  </g>
+  <g transform="translate(180,180)">
+    <use href="#sparkle"/>
+  </g>
+  <g transform="translate(300,180)">
+    <use href="#cap"/>
+  </g>
+  <g transform="translate(420,180)">
+    <use href="#dots"/>
+  </g>
+  <g transform="translate(540,180)">
+    <use href="#puzzle"/>
+  </g>
+
+  <!-- Row 3 -->
+  <g transform="translate(60,300)">
+    <use href="#ribbon"/>
+  </g>
+  <g transform="translate(180,300)">
+    <use href="#dots"/>
+  </g>
+  <g transform="translate(300,300)">
+    <use href="#sparkle"/>
+  </g>
+  <g transform="translate(420,300)">
+    <use href="#cap"/>
+  </g>
+  <g transform="translate(540,300)">
+    <use href="#laptop"/>
+  </g>
+
+  <!-- Row 4 -->
+  <g transform="translate(60,420)">
+    <use href="#sparkle"/>
+  </g>
+  <g transform="translate(180,420)">
+    <use href="#ribbon"/>
+  </g>
+  <g transform="translate(300,420)">
+    <use href="#puzzle"/>
+  </g>
+  <g transform="translate(420,420)">
+    <use href="#dots"/>
+  </g>
+  <g transform="translate(540,420)">
+    <use href="#cap"/>
+  </g>
+
+  <!-- Row 5 -->
+  <g transform="translate(60,540)">
+    <use href="#laptop"/>
+  </g>
+  <g transform="translate(180,540)">
+    <use href="#cap"/>
+  </g>
+  <g transform="translate(300,540)">
+    <use href="#dots"/>
+  </g>
+  <g transform="translate(420,540)">
+    <use href="#puzzle"/>
+  </g>
+  <g transform="translate(540,540)">
+    <use href="#ribbon"/>
+  </g>
+</svg>

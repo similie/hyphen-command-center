@@ -1,0 +1,1 @@
+ALTER TABLE "registration_table" RENAME TO "registration";

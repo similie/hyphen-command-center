@@ -1,0 +1,1 @@
+ALTER TABLE "registration" ALTER COLUMN "verified" SET DEFAULT false;

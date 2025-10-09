@@ -1,0 +1,2 @@
+ALTER TABLE "verification_token" ADD COLUMN "user_id" uuid NOT NULL;--> statement-breakpoint
+ALTER TABLE "verification_token" ADD CONSTRAINT "verification_token_user_id_user_uid_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("uid") ON DELETE no action ON UPDATE no action;

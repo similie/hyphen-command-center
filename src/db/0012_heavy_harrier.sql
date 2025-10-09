@@ -1,0 +1,1 @@
+ALTER TABLE "site_routing" ALTER COLUMN "config_id" SET DATA TYPE integer;

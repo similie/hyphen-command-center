@@ -1,0 +1,6 @@
+{
+  "files.watcherExclude": {
+    " **/.svelte-kit/**: true,": true,
+    " **/node_modules/**: true,": true
+  }
+}
