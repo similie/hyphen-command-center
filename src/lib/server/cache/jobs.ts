@@ -4,7 +4,7 @@ import {
   type EmailTemplateContent,
 } from "$lib/server/email/email";
 import { QueueManager, type JobValue } from "$lib/server/cache/queue";
-import { SocketServer } from "./websocket";
+import { DeviceConfigModel, type IDeviceConfig } from "$lib/api";
 
 export class JobsManager {
   // ... your existing code ...
@@ -59,19 +59,38 @@ export class JobsManager {
     return queue.add(emailName, { to, template });
   }
 
+  private static sendFirehose(data: any) {
+    return socketServer.broadcast({
+      topic: "firehose",
+      data,
+    });
+  }
+
+  private static async sendDevice(data: any, identity: string) {
+    const r1 = await socketServer.broadcast({
+      topic: `device/${identity}`,
+      data,
+    });
+
+    const r2 = await socketServer.broadcast({
+      topic: `devices`,
+      data,
+    });
+    return [r1, r2];
+  }
+
   private static async mqttProcessor(job: JobValue) {
-    console.log("GOT THIS JOB", job.data);
+    // console.log("GOT THIS JOB", job.data);
     try {
-      await socketServer.broadcast({
-        topic: "firehose",
-        data: job.data,
-      });
+      await JobsManager.sendFirehose(job.data);
+
+      if (job.data.device) {
+        await JobsManager.sendDevice(job.data, job.data.device.identity);
+      }
     } catch (e) {
       console.error("Socket error", e);
     }
   }
-
-  private static async reminderWorker(job: JobValue) {}
 
   private static async emailProcessor(job: JobValue) {
     const { to, template } = job.data as {
@@ -81,10 +100,41 @@ export class JobsManager {
     return await SystemEmail.send(to, template);
   }
 
-  public get jobNames() {
-    return ["mqtt-message", "send-email"];
+  private static async processedConfig(job: JobValue) {
+    const data = job.data as IDeviceConfig;
+    console.log(
+      "Processed pending config for",
+      data,
+      DeviceConfigModel.getConfigTopic(data),
+      DeviceConfigModel.getConfigTopicAction(data),
+    );
+
+    await socketServer.broadcast({
+      topic: DeviceConfigModel.getConfigTopic(data),
+      data,
+    });
+    await socketServer.broadcast({
+      topic: DeviceConfigModel.getConfigTopicAction(data),
+      data,
+    });
   }
 
+  public static async processDeviceForwardArtifacts(job: JobValue) {
+    const { ctx, fwd } = job.data as { ctx: any; fwd: any };
+    await socketServer.broadcast({
+      topic: `forwarder/${ctx.id}/artifacts`,
+      data: fwd.artifacts,
+    });
+  }
+
+  public get jobNames() {
+    return [
+      "mqtt-message",
+      "processed-pending-config",
+      "send-email",
+      "process-device-forward-artifacts",
+    ];
+  }
   public get getJob() {
     if (!JobsManager._instance) {
       throw new Error("Jobs manager not started");
@@ -99,7 +149,18 @@ export class JobsManager {
       {
         name: jobNames[1],
         opt: queue.queueOpt,
+        cb: JobsManager.processedConfig,
+      },
+      {
+        name: jobNames[2],
+        opt: queue.queueOpt,
         cb: JobsManager.emailProcessor,
+      },
+
+      {
+        name: jobNames[3],
+        opt: queue.queueOpt,
+        cb: JobsManager.processDeviceForwardArtifacts,
       },
     ];
     return jobs;
@@ -114,7 +175,7 @@ export class JobsManager {
     const jobs = this._instance.getJob;
 
     for (const job of jobs) {
-      queue.queue(job.name, job.opt);
+      // queue.queue(job.name, job.opt);
       queue.worker(job.name, job.cb);
     }
     return this._instance;

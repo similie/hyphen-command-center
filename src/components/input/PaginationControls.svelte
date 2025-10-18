@@ -1,10 +1,18 @@
 <script lang="ts">
-  import { Pagination, PaginationNav } from "flowbite-svelte";
-  export let onChange: (skip: number, limit: number) => void | Promise<void>;
-  export let limit = 30;
-  export let skip = 0;
-  export let count;
-  export let currentPage = 0;
+  import { PaginationNav } from "flowbite-svelte";
+  let {
+    onChange,
+    limit = 30,
+    skip = 0,
+    count,
+    currentPage = $bindable(1),
+  } = $props<{
+    onChange: (skip: number, limit: number) => void | Promise<void>;
+    limit?: number;
+    skip?: number;
+    count: number;
+    currentPage?: number;
+  }>();
 
   let pages: { name: string; active?: boolean }[] = [];
   const setActive = () => {
@@ -18,7 +26,7 @@
 
   const setPages = () => {
     pages = Array.from(
-      { length: Math.ceil(count / limit) },
+      { length: Math.ceil(count / (limit ?? 1)) },
       (_, i) => i + 1,
     ).map((val) => {
       return { name: val.toString() };
@@ -26,54 +34,21 @@
     if (pages.length === 0) {
       return;
     }
-    pages[currentPage].active = true;
+    pages[currentPage - 1].active = true;
   };
 
   const pullDocuments = () => {
-    skip = currentPage * limit;
+    skip = (currentPage - 1) * limit;
     return onChange(skip, limit);
   };
 
-  const previous = () => {
-    if (currentPage === 0) {
-      return;
-    }
-    currentPage--;
-
-    setActive();
-    pullDocuments();
-  };
-  const next = () => {
-    if (currentPage === pages.length - 1) {
-      return;
-    }
-    currentPage++;
-    setActive();
-    pullDocuments();
-  };
-  const handleClick = (e: MouseEvent) => {
-    e.preventDefault();
-    const target = e.target as HTMLElement;
-    if (target.tagName !== "BUTTON") {
-      return;
-    }
-
-    const pageNumber = target.textContent?.trim() || "";
-    const parsedPageNumber = parseInt(pageNumber);
-    if (isNaN(parsedPageNumber)) {
-      return;
-    }
-    currentPage = parsedPageNumber - 1;
-    setActive();
-    pullDocuments();
-  };
   let lastCount = 0;
-  $: {
+  $effect(() => {
     if (count !== lastCount) {
       setPages();
       lastCount = count;
     }
-  }
+  });
 
   function handlePageChange(page: number) {
     currentPage = page;
@@ -84,16 +59,8 @@
 </script>
 
 {#if count > limit}
-  <!-- <Pagination
-    class="mt-8 flex justify-end"
-    {pages}
-    {currentPage}
-    onprevious={previous}
-    onnext={next}
-    onclick={handleClick}
-  /> -->
   <PaginationNav
-    totalPages={count}
+    totalPages={Math.ceil(count / (limit ?? 1))}
     {currentPage}
     onPageChange={handlePageChange}
   />

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { loadI18n, siteConfig } from "$lib";
+  import { EllipsiesConnector, loadI18n, siteConfig } from "$lib";
   import { onMount } from "svelte";
   import { page } from "$app/state";
   import { browser } from "$app/environment";
@@ -27,6 +27,7 @@
   onMount(async () => {
     await loadI18n();
     setGtag();
+    EllipsiesConnector.init();
     const url = new URL(window.location.href);
     // Look for the force-reload param
     const reloadTo = url.searchParams.get("force-reload"); //  [oai_citation:0‡MDN Web Docs](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Frameworks_libraries/Svelte_stores?utm_source=chatgpt.com)

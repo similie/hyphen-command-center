@@ -2,11 +2,30 @@ import type { SiteConfig, UUID } from "$lib/types";
 import CryptoJS from "crypto-js";
 import { v4 } from "uuid";
 import { siteConfigInstance } from "$lib/stores/config";
-
+import { generateFromEmail, generateUsername } from "unique-username-generator";
 export const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 export const copyToClipboard = (text: string, cb: () => void) => {
   navigator.clipboard.writeText(text).then(cb);
+};
+
+export const generateRandomUsername = (
+  email?: string,
+  capitalize: boolean = false,
+  separator: string = " ",
+) => {
+  if (email && emailRegex.test(email)) {
+    return generateFromEmail(email, 0);
+  }
+  // blueWhale
+  let username = generateUsername(separator, 0, 20);
+  if (capitalize) {
+    username = username
+      .split(separator)
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(separator);
+  }
+  return username;
 };
 
 export const wrapModelSet = <T>(
@@ -306,6 +325,31 @@ export function getLast30DaysLabels(locale = "en-US"): string[] {
   }
 
   return labels;
+}
+export function decodeBufferJson(json: {
+  type: string;
+  data: number[];
+}): string {
+  if (!json || json.type !== "Buffer" || !Array.isArray(json.data)) {
+    throw new Error("Invalid buffer JSON format");
+  }
+
+  const uint8 = new Uint8Array(json.data);
+  const decoder = new TextDecoder("utf-8");
+  return decoder.decode(uint8);
+}
+export function bufferToString(
+  buffer: ArrayBuffer | Uint8Array | Buffer,
+): string {
+  // Node.js Buffer support (works in SSR or hybrid apps)
+  if (typeof Buffer !== "undefined" && buffer instanceof Buffer) {
+    return buffer.toString("utf-8");
+  }
+
+  // If it's a browser-based ArrayBuffer or Uint8Array
+  const uint8 = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
+  const decoder = new TextDecoder("utf-8");
+  return decoder.decode(uint8);
 }
 
 export function humanizeNumber(value: number, precision = 1): string {

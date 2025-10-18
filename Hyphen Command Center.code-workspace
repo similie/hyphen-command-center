@@ -1,0 +1,19 @@
+{
+  "folders": [
+	{
+		"path": "."
+	},
+	{
+		"path": "../Hyphen-CommandCenter-API"
+	},
+	{
+		"path": "../Hyphen-CommandCenter-Types"
+	},
+	{
+		"path": "../ellipsies"
+	},
+	{
+		"path": "../http-connector"
+	}
+]
+}

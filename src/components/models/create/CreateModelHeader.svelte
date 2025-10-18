@@ -37,7 +37,7 @@
   <NavUl>
     <NavLi>
       {#if !hideOnEdit}
-        <Button type="button" bind:color={buttonColor} onclick={onCreate}
+        <Button type="button" color={buttonColor} onclick={onCreate}
           >{$_t(verb)}</Button
         >
       {/if}

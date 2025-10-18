@@ -28,7 +28,7 @@
       const obj = ParseSocketMessage<DevicePayloadMessage>(message);
       return `\`\`\`json\n${JSON.stringify(obj, null, 2)}\n\`\`\``;
     } catch {
-      return message;
+      return `${message}`;
     }
   };
 
@@ -49,12 +49,13 @@
 <Card
   class="w-full dark:bg-gray-950 flex flex-col p-6 max-w-full overflow-hidden"
 >
-  <div class="w-full h-full flex flex-col">
+  <div class="w-full flex flex-col h-full">
     {#if !event}
       <div
-        class="p-2 rounded-2xl border-primary-100 border shadow-md inset-2 shadow-primary-600"
+        class="p-2 rounded-2xl border-primary-100 border shadow inset-2 shadow-primary-600"
       >
-        <Heading tag="h5" class="text-center">{$_t("Select an Event")}</Heading>
+        <Heading tag="h5" class="text-center ">{$_t("Select an Event")}</Heading
+        >
       </div>
     {:else}
       <div class="flex space-x-2 mb-4">
@@ -70,9 +71,11 @@
         </Clipboard>
       </div>
 
-      <Heading tag="h5">{event.topic}</Heading>
+      <Heading tag="h5" class="whitespace-pre-wrap break-words"
+        >{event.topic}</Heading
+      >
       <P
-        >{$_t("Device")}: <A
+        >{$_t("Device")}: {event.device ? `${event.device.name} ` || "" : ""}<A
           onclick={() => copyToClipboardLocal(decoded.device)}
           >{decoded.device}</A
         >
@@ -83,12 +86,12 @@
         class="w-full h-full border-2 border-primary-500 border-dashed rounded-2xl shadow inset-2"
       >
         {#if pretty}
-          <div class="rounded-2xl overflow-hidden">
+          <div class="rounded-2xl overflow-hidden p-4">
             <MarkdownContentRender {content} />
           </div>
         {:else}
-          <div class="w-full p-4 rounded-2xl">
-            <P class="whitespace-pre-wrap break-words">{event.message}</P>
+          <div class="w-full p-2 rounded-2xl">
+            <P class="whitespace-pre-wrap break-words p-2">{event.message}</P>
           </div>
         {/if}
       </div>

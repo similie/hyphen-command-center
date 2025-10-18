@@ -3,14 +3,16 @@
     InputFormItem,
     InputItemsRow,
     RequiredLabel,
-  } from "$components/input";
-  import { _t } from "$lib";
-  import { Button, Hr, Input, Spinner, Textarea } from "flowbite-svelte";
+    Toast,
+  } from "$components";
+  import { _t, DeviceConfigModel } from "$lib";
+  import { Button, Hr, Input, Label, Spinner, Textarea } from "flowbite-svelte";
   import { PaperPlaneOutline } from "flowbite-svelte-icons";
   type MQTTEvent = {
     topic: string;
     data: string;
   };
+  const api = new DeviceConfigModel();
   let { onSent } = $props<{ onSent: (data: MQTTEvent) => void }>();
   let loading = $state(false);
   let formEl = $state<HTMLFormElement | undefined>(undefined);
@@ -33,6 +35,22 @@
   const onInput = () => {
     validState = formEl?.checkValidity() ?? false;
   };
+
+  const sendEvent = async () => {
+    try {
+      loading = true;
+      const result = await api.publish(event.topic, event.data);
+      if (!result.ok) {
+        return Toast.error($_t("Failed to send event"));
+      }
+      Toast.success($_t("Event sent successfully"));
+    } catch {
+      console.error("Failed to send event");
+      Toast.error($_t("Failed to send event"));
+    } finally {
+      loading = false;
+    }
+  };
 </script>
 
 {#if loading}
@@ -49,14 +67,18 @@
     </InputItemsRow>
     <InputItemsRow>
       <InputFormItem>
-        <RequiredLabel content={$_t("Data")}></RequiredLabel>
-        <Textarea bind:value={event.data} required class="w-full" />
+        <Label>{$_t("Data")}</Label>
+        <Textarea bind:value={event.data} class="w-full" />
       </InputFormItem>
     </InputItemsRow>
     <Hr class="my-4" />
     <InputItemsRow>
-      <Button disabled={!validState} type="submit" class="ml-auto" outline
-        ><PaperPlaneOutline /> {$_t("Send")}</Button
+      <Button
+        onclick={sendEvent}
+        disabled={!validState}
+        type="submit"
+        class="ml-auto"
+        outline><PaperPlaneOutline /> {$_t("Send")}</Button
       >
     </InputItemsRow>
   </form>

@@ -1,6 +1,7 @@
 import {
   CacheKeys,
   createCacheKey,
+  EllipsiesConnector,
   type Session,
   type SiteConfig,
   type SiteRoutingModel,
@@ -21,6 +22,9 @@ export async function handle({ event, resolve }) {
     if (!sessionToken) {
       return null;
     }
+
+    EllipsiesConnector.init().cookieValue = sessionToken;
+
     try {
       const uQuery = new UserQuery();
       const decoded = uQuery.decode(sessionToken);

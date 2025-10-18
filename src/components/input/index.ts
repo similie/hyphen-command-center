@@ -27,3 +27,4 @@ export { default as FileUploadElement } from "./FileUploadElement.svelte";
 export { default as TagInput } from "./TagInput.svelte";
 export { default as SelectDayOfWeek } from "./SelectDayOfWeek.svelte";
 export { default as ProductsSelect } from "./ProductsSelect.svelte";
+export { default as StringObjectInput } from "./StringObjectInput.svelte";

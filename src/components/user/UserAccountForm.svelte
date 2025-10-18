@@ -9,7 +9,7 @@
     UserEmailInput,
   } from "$components";
   import { _t, siteUser, UserApi, Debounce, type UserModel } from "$lib";
-  import { Label, Input, Button, P, Hr } from "flowbite-svelte";
+  import { Label, Input, Button, Hr } from "flowbite-svelte";
   import { PlusOutline } from "flowbite-svelte-icons";
   const config = $page.data.config;
   const defaultUser = { role: config.defaultRole, password: "" };
@@ -51,7 +51,6 @@
   };
 
   const setUser = (changedUser: UserModel) => {
-    console.log("changeUser", changedUser);
     if (!autoClear) {
       model = changedUser;
       user = changedUser;
@@ -64,7 +63,6 @@
   };
 
   const saveChanges = async () => {
-    console.log("saveChanges", model);
     if (!$siteUser || !model) {
       return;
     }

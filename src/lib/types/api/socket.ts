@@ -1,9 +1,12 @@
+import type { IDevice } from "$lib/api";
 import type { UUID } from "../models";
 
 export interface SocketMessage<T = any> {
-  _uid: UUID;
   topic: string;
-  data: T;
+  message?: T;
+  data?: T;
+  _uid?: UUID;
+  device?: IDevice;
   targetClientId?: string; // Optional: specifies the recipient client ID
 }
 export type CallbackFunction = (message: SocketMessage) => void;
@@ -13,7 +16,10 @@ export type SocketMessageCallback<T> = (message: SocketMessage<T>) => void;
 
 export type SocketEventHandler<T> = (data: T) => void;
 
-export type FireHoseEvent = { topic: string; message: string };
+export type FireHoseEvent = {
+  topic: string;
+  message: string;
+};
 
 // Define message types for your WebSocket communication
 export type WebSocketMessage =

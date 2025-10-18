@@ -63,6 +63,18 @@ export function loadLinks(): { links: SidebarLink[] } {
             role: UserRoles.USER_MANAGER,
             links: [],
           },
+
+          {
+            type: "item",
+            href: "/forwarders",
+            label: "Forwarders",
+            icon: ShapesOutline,
+            name: "admin.forwarders",
+            classes: "",
+            role: UserRoles.USER_MANAGER,
+            links: [],
+          },
+
           {
             type: "item",
             href: "/spaces",

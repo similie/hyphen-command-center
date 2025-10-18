@@ -46,6 +46,7 @@
 <Modal
   oncancel={() => onCancel && onCancel(model)}
   title={title || "Destroy this Content"}
+  onclick={(e) => e.stopPropagation()}
   bind:open
 >
   <P>{body ? $_t(body) : $_t("Are you sure to delete this content?")}</P>

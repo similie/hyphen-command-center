@@ -1,11 +1,6 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import {
-    Navbar,
-    PageFooter,
-    Spotlight,
-    SpacesListedView,
-  } from "$components";
+  import { Navbar, PageFooter, Spotlight, SpacesListedView } from "$components";
 
   import BasicModelPage from "$layouts/BasicModelPage.svelte";
   import BodyContainer from "$layouts/BodyContainer.svelte";
@@ -17,6 +12,8 @@
     siteUser,
     type SpacesModel,
     LocalSocket,
+    DeviceModel,
+    type IDevice,
   } from "$lib";
   import {
     Button,
@@ -37,21 +34,24 @@
   const setBackgroundFill = () => {
     // Set the background fill color
     backgroundFill = isDarkMode() ? "#030712" : "#FFFFFF"; // Change this to your desired color
-
   };
   let dmFunction: (() => void) | undefined;
-
-  // const firehose = (values: any) => {
-  //     console.log("GOT THESE VALUES", values);
-  // };
-
+  const dApi = new DeviceModel();
   onMount(async () => {
     dmFunction = await onDarkModeChange(() => {
       // Handle dark mode change
       setBackgroundFill();
     });
 
-
+    dApi
+      .find()
+      .sort({ lastTouched: "ASC" })
+      .fetch()
+      .then((devices: IDevice[]) => {
+        // Handle the retrieved devices
+        console.log("Retrieved devices:", devices);
+      })
+      .catch(console.error);
     // LocalSocket.instance.listen("firehose", firehose);
   });
 
@@ -64,10 +64,7 @@
   let openDrawer = $state(true);
   // Example: dynamic models you’ll injec
   let image: HTMLImgAttributes | undefined = $state();
-
 </script>
-
-
 
 <BasicModelPage open={false} {openDrawer}>
   {#snippet header()}{/snippet}
@@ -81,13 +78,12 @@
       title=""
       width={30}
       >{#snippet createSection()}
-          <!-- BOOMO -->
+        <!-- BOOMO -->
       {/snippet}
     </Navbar>
   {/snippet}
   {#snippet bodyContent()}
-    <div class="w-full">
-    </div>
+    <div class="w-full"></div>
   {/snippet}
 </BasicModelPage>
 
