@@ -323,7 +323,6 @@
                 checked={$formData[field.name] || false}
                 bind:value={$formData[field.name]}
                 oninput={(e) => {
-                  console.log("FUCKING CHANGE", e, $formData[field.name]);
                   // handleInputChange(field.name, e);
                 }}
               />

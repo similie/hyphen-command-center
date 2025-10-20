@@ -9,8 +9,10 @@
     timeZone = undefined as string | undefined,
     dateStyle = "medium" as Style,
     timeStyle = "short" as Style,
+    class: className = "",
     customOptions = undefined as Intl.DateTimeFormatOptions | undefined,
   } = $props<{
+    class?: string;
     stamp: string | number | Date;
     format?: Fmt;
     locale?: string | string[];
@@ -83,7 +85,11 @@
 </script>
 
 {#if dateObj}
-  <time datetime={dateObj.toISOString()} title={dateObj.toString()}>
+  <time
+    class={className}
+    datetime={dateObj.toISOString()}
+    title={dateObj.toString()}
+  >
     {human()}
   </time>
 {:else}

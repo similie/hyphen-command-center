@@ -1,11 +1,12 @@
 <script lang="ts">
-  import { ForwarderTemplatesEditor } from "$components";
+  import { ForwarderTemplatesEditor, UserAvatar } from "$components";
   import { BodyContainer } from "$layouts";
   import {
     onEvent,
     _t,
     ForwarderTemplatesModel,
     type IForwarderTemplate,
+    ParameterValueOwnerBy,
   } from "$lib";
   import { Accordion, AccordionItem, Heading, P } from "flowbite-svelte";
   import { onDestroy, onMount } from "svelte";
@@ -54,7 +55,10 @@
       {#each templates as template}
         <AccordionItem>
           {#snippet header()}
-            <Heading tag="h5">{template.name}</Heading>
+            <div class="flex items-center space-x-2">
+              <UserAvatar size="md" avatar={template.avatar} />
+              <Heading tag="h5">{template.name}</Heading>
+            </div>
           {/snippet}
           <ForwarderTemplatesEditor
             ondestroy={removeTemplate}

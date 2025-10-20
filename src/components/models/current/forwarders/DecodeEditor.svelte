@@ -101,7 +101,7 @@
   };
 </script>
 
-<div class="flex flex-wrap md:flex-nowrap space-x-4">
+<div class="flex flex-wrap md:flex-nowrap space-x-4 mb-12">
   <div class="w-full flex flex-col space-y-4 md:w-1/2">
     <form oninput={onInput} bind:this={formEl} class="w-full">
       <InputItemsRow>

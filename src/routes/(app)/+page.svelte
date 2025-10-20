@@ -77,9 +77,7 @@
       alt="Academy Logo"
       title=""
       width={30}
-      >{#snippet createSection()}
-        <!-- BOOMO -->
-      {/snippet}
+      >{#snippet createSection()}{/snippet}
     </Navbar>
   {/snippet}
   {#snippet bodyContent()}

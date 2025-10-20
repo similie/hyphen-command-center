@@ -28,7 +28,7 @@
 
 <GradientBackground className="w-full h-full">
   <div
-    class="bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 rounded-lg border border-gray-200 dark:border-gray-700 divide-gray-200 dark:divide-gray-700 shadow-md max-w-sm boomo w-full h-full flex flex-col"
+    class="bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 rounded-lg border border-gray-200 dark:border-gray-700 divide-gray-200 dark:divide-gray-700 shadow-md max-w-sm w-full h-full flex flex-col"
   >
     {#if model.image}
       <Img

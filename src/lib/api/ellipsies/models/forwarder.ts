@@ -21,7 +21,7 @@ export interface IParameters extends IEntity {
   secret: boolean;
   iv?: string;
   owner?: UUID;
-  ownerBy?: ParameterValueOwnerBy;
+  ownedBy?: ParameterValueOwnerBy;
 }
 export class ParametersModel extends Model<IParameters> {
   constructor() {
@@ -171,11 +171,12 @@ export interface IForwarders extends IEntity {
   name: string;
   enabled: boolean;
   topicPattern: string;
-  condition?: string;
-  decoderIds: UUID[];
-  mapIds: UUID[];
+  // condition?: string;
+  // decoderIds: UUID[];
+  // mapIds: UUID[];
+  // transformerIds: UUID[]; // list of Transformer ids
   targets: ForwarderTarget[];
-  retryPolicy?: { maxAttempts?: number; backoffMs?: number };
+  // retryPolicy?: { maxAttempts?: number; backoffMs?: number };
   owner?: UUID;
   ownedBy?: ParameterValueOwnerBy;
   order: number;
@@ -198,6 +199,7 @@ export interface IForwarderTemplate extends IEntity {
   condition?: string;
   decoderIds?: UUID[];
   mapIds?: UUID[];
+  transformerIds?: UUID[];
   targets: ForwarderTargetTemplates[];
   retryPolicy?: { maxAttempts?: number; backoffMs?: number };
   owner?: UUID;

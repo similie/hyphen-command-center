@@ -8,7 +8,6 @@
     type ForwarderTargetTemplates,
     type IForwarderTemplate,
   } from "$lib";
-  import { onMount } from "svelte";
   import { DecoderInput, ParamMapper } from "./inputs";
   import {
     InputItemsRow,
@@ -39,6 +38,7 @@
   let formEl = $state<HTMLFormElement | null>(null);
   let valid = $state(false);
   let saving = $state(false);
+  let destroyModal = $state(false);
   let { value = $bindable(), ondestroy } = $props<{
     value?: Partial<IForwarderTemplate>;
     ondestroy?: (val: IForwarderTemplate) => void;
@@ -59,11 +59,9 @@
     value || defaultForwarder(),
   );
   const api = new ForwarderTemplatesModel();
-  const isValid = $derived(() => {
+  const isValid = () => {
     valid = formEl ? formEl.checkValidity() : false;
-  });
-  onMount(() => {});
-
+  };
   const applyTarget = (target: ForwarderTargetTemplates) => {
     template.targets = template.targets || [];
     template.targets.push(target);
@@ -128,7 +126,6 @@
       saving = false;
     }
   };
-  let destroyModal = $state(false);
 </script>
 
 <DestroyModelModal
@@ -225,12 +222,32 @@
         >{$_t("Decoders")}
         <small>{$_t("Order matters. Decoders cascade output.")}</small></Label
       >
-      <DecoderInput disabled={saving} bind:value={template.decoderIds} />
+      <DecoderInput
+        onChange={() => isValid()}
+        disabled={saving}
+        bind:value={template.decoderIds}
+      />
     </InputFormItem>
 
     <InputFormItem>
       <Label>{$_t("Param Mapping")}</Label>
-      <ParamMapper disabled={saving} bind:value={template.decoderIds} />
+      <ParamMapper
+        onChange={() => isValid()}
+        disabled={saving}
+        bind:value={template.mapIds}
+      />
+    </InputFormItem>
+
+    <InputFormItem>
+      <Label
+        >{$_t("Transformers")}
+        <small>{$_t("Decoders after parameter mapping")}</small></Label
+      >
+      <DecoderInput
+        onChange={() => isValid()}
+        disabled={saving}
+        bind:value={template.transformerIds}
+      />
     </InputFormItem>
   </InputItemsRow>
   <InputFormItem>
@@ -285,7 +302,7 @@
   <div class="w-full flex flex-col mb-6">
     <Hr class="my-4" />
     <div class="flex space-x-4 w-full mt-4">
-      {#if value.id}
+      {#if template.id}
         <Button
           disabled={saving}
           color="red"

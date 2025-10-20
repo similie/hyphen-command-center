@@ -4,7 +4,12 @@ import {
   type EmailTemplateContent,
 } from "$lib/server/email/email";
 import { QueueManager, type JobValue } from "$lib/server/cache/queue";
-import { DeviceConfigModel, type IDeviceConfig } from "$lib/api";
+import {
+  DeviceConfigModel,
+  type IDeviceConfig,
+  type IForwarders,
+} from "$lib/api";
+import { generateUniqueUUID } from "$lib/utils";
 
 export class JobsManager {
   // ... your existing code ...
@@ -102,13 +107,6 @@ export class JobsManager {
 
   private static async processedConfig(job: JobValue) {
     const data = job.data as IDeviceConfig;
-    console.log(
-      "Processed pending config for",
-      data,
-      DeviceConfigModel.getConfigTopic(data),
-      DeviceConfigModel.getConfigTopicAction(data),
-    );
-
     await socketServer.broadcast({
       topic: DeviceConfigModel.getConfigTopic(data),
       data,
@@ -120,10 +118,14 @@ export class JobsManager {
   }
 
   public static async processDeviceForwardArtifacts(job: JobValue) {
-    const { ctx, fwd } = job.data as { ctx: any; fwd: any };
+    const { ctx, fwd } = job.data as { ctx: any; fwd: IForwarders };
     await socketServer.broadcast({
-      topic: `forwarder/${ctx.id}/artifacts`,
-      data: fwd.artifacts,
+      topic: `forwarder/${fwd.id}/artifacts`,
+      data: {
+        ...ctx.artifacts,
+        _uid: generateUniqueUUID(),
+        _date: new Date(),
+      },
     });
   }
 
