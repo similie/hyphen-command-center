@@ -28,3 +28,4 @@ export { default as TagInput } from "./TagInput.svelte";
 export { default as SelectDayOfWeek } from "./SelectDayOfWeek.svelte";
 export { default as ProductsSelect } from "./ProductsSelect.svelte";
 export { default as StringObjectInput } from "./StringObjectInput.svelte";
+export { default as StringArrayInput } from "./StringArrayInput.svelte";

@@ -17,6 +17,7 @@
   import DeviceLocationDetails from "./DeviceLocationDetails.svelte";
   import { Accordion, AccordionItem, Heading } from "flowbite-svelte";
   import DeviceForwarders from "./DeviceForwarders.svelte";
+  import DeviceSensors from "./DeviceSensors.svelte";
   let { device } = $props<{ device: IDevice }>();
   let events = $state<SocketMessage<FireHoseEvent>[]>([]);
   const eventName = $derived(`device/${device.identity}`);
@@ -122,7 +123,7 @@
       {#snippet header()}
         <Heading tag="h5">{$_t("Device Details")}</Heading>
       {/snippet}
-      <div class="flex space-x-4 w-full">
+      <div class="flex flex-wrap md:flex-nowrap space-x-4 w-full">
         <DeviceDetails {editable} {device} />
         <DeviceHeartbeat {device} />
         <DeviceLocationDetails {editable} {device} />
@@ -132,7 +133,10 @@
       {#snippet header()}
         <Heading tag="h5">{$_t("Integrations")}</Heading>
       {/snippet}
-      <DeviceForwarders {device} />
+      <div class="flex flex-wrap md:flex-nowrap space-x-4">
+        <DeviceSensors {device} />
+        <DeviceForwarders {device} />
+      </div>
     </AccordionItem>
   </Accordion>
   <DeviceEventsViewer {events} {device} {onScrollToBottom} />

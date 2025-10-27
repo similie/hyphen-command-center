@@ -20,7 +20,11 @@
     buttonColor = "alternative",
     onavatar,
     role = UserRoles.GUEST,
+    square = false,
+    border = false,
   } = $props<{
+    square?: boolean;
+    border?: boolean;
     open?: boolean;
     avatar?: UUID | undefined;
     disabled?: boolean;
@@ -66,9 +70,11 @@
 
 {#if avatar && !noShowAvatar}
   <Avatar
-    class="mb-2"
+    class={square ? "rounded-none  " : "mb-2"}
+    {border}
+    cornerStyle={square ? "rounded" : undefined}
     src={appFileBase(avatar, { size: "md", token })}
-    size="md"
+    size="lg"
   />
   <!-- {#if !disabled} -->
   <Button

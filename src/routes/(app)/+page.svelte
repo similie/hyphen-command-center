@@ -71,14 +71,7 @@
 
   {#snippet body()}{/snippet}
   {#snippet headerContent()}
-    <Navbar
-      src="/favicon.png"
-      darkSrc="/favicon.png"
-      alt="Academy Logo"
-      title=""
-      width={30}
-      >{#snippet createSection()}{/snippet}
-    </Navbar>
+    <Navbar title="">{#snippet createSection()}{/snippet}</Navbar>
   {/snippet}
   {#snippet bodyContent()}
     <div class="w-full"></div>

@@ -13,9 +13,19 @@
     type MqttTargetTemplate,
     ParameterValueOwnerBy,
     siteUser,
+    UserRoles,
     type UUID,
   } from "$lib";
-  import { Button, Helper, Hr, Input, Label, P, Toggle } from "flowbite-svelte";
+  import {
+    Button,
+    Card,
+    Heading,
+    Helper,
+    Hr,
+    Input,
+    P,
+    Toggle,
+  } from "flowbite-svelte";
   import ForwardTemplateSelectionRows from "./ForwardTemplateSelectionRows.svelte";
   import {
     RequiredLabel,
@@ -48,8 +58,6 @@
   let saving = $state(false);
   let destroyModal = $state(false);
   const api = new ForwardersModel();
-  //   let secretParams = $state<string[]>([]);
-
   let readyValues = $state<Record<string, boolean>>({});
   const setDefault = () => {
     return {
@@ -154,6 +162,8 @@
       console.error("Error deleting forwarder:", error);
     }
   };
+
+  let isAdmin = $derived($siteUser && $siteUser.role > UserRoles.MANAGER);
 </script>
 
 <DestroyModelModal
@@ -181,7 +191,7 @@
           <div class="flex flex-col items-center- space-y-2">
             <div class="flex items-center space-x-2">
               <UserAvatar avatar={selectedTemplate.avatar} size="sm" />
-              {#if !editForwarder.id}
+              {#if !editForwarder.id && isAdmin}
                 <Button
                   color="red"
                   outline
@@ -195,18 +205,6 @@
                     validateForm();
                   }}>{$_t("Change Template")}</Button
                 >
-                <!-- {:else} -->
-                <!-- <Button
-                outline
-                pill
-                size="xs"
-                disabled={saving}
-                onclick={() => {
-                  syncToTemplate();
-                  saveValues();
-                  Toast.success("Forwarder Synced to Template");
-                }}>{$_t("Sync Template")}</Button
-              > -->
               {/if}
             </div>
             <P>{selectedTemplate.name}</P>
@@ -248,27 +246,30 @@
         {#each editForwarder.targets as target, tIdx}
           {@const targetTemplate = selectedTemplate?.targets[tIdx]}
           {#if targetTemplate}
-            <InputFormItem>
-              <P class="font-bold">
+            <InputFormItem class="space-y-2">
+              <Heading tag="h3" class="font-bold">
                 {$_t("Target")}
                 {tIdx + 1}: {target.kind}
-              </P>
+              </Heading>
               {#if target.kind === ForwarderTargetKind.MQTT}
                 {@const mqttTarget = target as MqttTarget}
                 {@const mqttTemplate = targetTemplate as MqttTargetTemplate}
                 {@const templateParams = mqttTemplate.payloadTemplate || []}
                 {#if templateParams.length === 0}
-                  <Helper
-                    >{$_t(
-                      "No body parameters required for this target.",
-                    )}</Helper
-                  >
+                  <Card class="p-2  dark:bg-gray-950">
+                    <P class="text-center"
+                      >{$_t("No body parameters required for this target.")}</P
+                    >
+                  </Card>
                 {:else}
-                  <Label>{$_t("Payload Template Parameters")}</Label>
+                  <Heading tag="h6"
+                    >{$_t("Payload Template Parameters")}</Heading
+                  >
                   <SecretParamInputs
                     keys={templateParams}
                     name="MQTT Payload"
                     disabled={saving}
+                    editable={isAdmin}
                     bind:valid={readyValues[`target_${tIdx}_mqtt_payload`]}
                     ownedBy={ParameterValueOwnerBy.INTEGRATION}
                     owner={(editForwarder.id as UUID) || editForwarder.uid}
@@ -283,21 +284,21 @@
                 {@const templateBody = httpTemplate.bodyTemplate || []}
 
                 {#if templateHeaders.length === 0}
-                  <Helper
-                    >{$_t(
-                      "No header parameters required for this target.",
-                    )}</Helper
-                  >
+                  <Card class="p-2  dark:bg-gray-950">
+                    <P class="text-center"
+                      >{$_t(
+                        "No header parameters required for this target.",
+                      )}</P
+                    >
+                  </Card>
                 {:else}
-                  <Label
-                    >{$_t("Header Template Parameters") +
-                      " " +
-                      readyValues[`target_${tIdx}_http_headers`]}
-                  </Label>
+                  <Heading tag="h6">{$_t("Header Template Parameters")}</Heading
+                  >
                   <SecretParamInputs
                     keys={httpTemplate.headers || []}
                     name="HTTP Headers"
                     disabled={saving}
+                    editable={isAdmin}
                     bind:valid={readyValues[`target_${tIdx}_http_headers`]}
                     ownedBy={ParameterValueOwnerBy.INTEGRATION}
                     onChange={() => validateForm()}
@@ -306,17 +307,18 @@
                   />
                 {/if}
                 {#if templateBody.length === 0}
-                  <Helper
-                    >{$_t(
-                      "No body parameters required for this target.",
-                    )}</Helper
-                  >
+                  <Card class=" p-2  dark:bg-gray-950">
+                    <P class="text-center"
+                      >{$_t("No body parameters required for this target.")}</P
+                    >
+                  </Card>
                 {:else}
-                  <Label>{$_t("Body Template Parameters")}</Label>
+                  <Heading tag="h6">{$_t("Body Template Parameters")}</Heading>
                   <SecretParamInputs
                     keys={httpTemplate.bodyTemplate || []}
                     name="HTTP Body"
                     disabled={saving}
+                    editable={isAdmin}
                     bind:valid={readyValues[`target_${tIdx}_http_body`]}
                     ownedBy={ParameterValueOwnerBy.INTEGRATION}
                     onChange={() => validateForm()}
@@ -330,21 +332,23 @@
         {/each}
       {/if}
     </InputItemsRow>
-    <div class="w-full flex flex-col">
-      <Hr />
-      <InputItemsRow>
-        {#if editForwarder.id}
-          <Button
-            disabled={saving}
-            onclick={() => (destroyModal = true)}
-            type="button"
-            color="red"><TrashBinOutline /></Button
+    {#if $siteUser && $siteUser.role > UserRoles.MANAGER}
+      <div class="w-full flex flex-col">
+        <Hr />
+        <InputItemsRow>
+          {#if editForwarder.id}
+            <Button
+              disabled={saving}
+              onclick={() => (destroyModal = true)}
+              type="button"
+              color="red"><TrashBinOutline /></Button
+            >
+          {/if}
+          <Button type="submit" class="w-full" disabled={!valid || saving}
+            ><FloppyDiskOutline /> {$_t("Save Forwarder")}</Button
           >
-        {/if}
-        <Button type="submit" class="w-full" disabled={!valid || saving}
-          ><FloppyDiskOutline /> {$_t("Save Forwarder")}</Button
-        >
-      </InputItemsRow>
-    </div>
+        </InputItemsRow>
+      </div>
+    {/if}
   {/if}
 </form>

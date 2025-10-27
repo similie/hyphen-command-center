@@ -11,10 +11,12 @@
     onAdd,
     onRemove,
     onChange,
+    disabled = false,
     id = "sting-object-entry",
   } = $props<{
     value?: Record<string, string>;
     required?: boolean;
+    disabled?: boolean;
     onAdd?: () => void;
     onRemove?: () => void;
     onChange?: (val: Record<string, string>) => void;
@@ -97,6 +99,7 @@
             bind:value={localValue[index][0]}
             oninput={setValues}
             required={true}
+            {disabled}
             color={localValue[index][0] ? undefined : "red"}
           />
           <Input
@@ -106,6 +109,7 @@
             bind:value={localValue[index][1]}
             required={true}
             oninput={setValues}
+            {disabled}
             color={localValue[index][1] ? undefined : "red"}
           />
           <Button
@@ -115,11 +119,13 @@
               onRemove && onRemove();
               checkForm();
             }}
+            {disabled}
             color="alternative"><MinusOutline /></Button
           >
         </div>
       {/each}
       <Button
+        {disabled}
         onclick={() => {
           localValue.push(["", ""]);
           setValues();

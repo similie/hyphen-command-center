@@ -1,9 +1,5 @@
 <script lang="ts">
-  import {
-    ForwarderEditor,
-    ForwardMapEditor,
-    ForwarderViewer,
-  } from "$components";
+  import { ForwarderViewer } from "$components";
   import BodyContainer from "$layouts/BodyContainer.svelte";
   import {
     onEvent,
@@ -11,10 +7,8 @@
     ForwardersModel,
     type IForwarders,
     ParameterValueOwnerBy,
-    LocalSocket,
-    type SocketMessage,
   } from "$lib";
-  import { Accordion, AccordionItem, Heading, P } from "flowbite-svelte";
+  import { Accordion, P } from "flowbite-svelte";
   import { onDestroy, onMount } from "svelte";
   const api = new ForwardersModel();
   let forwarders = $state<IForwarders[]>([]);

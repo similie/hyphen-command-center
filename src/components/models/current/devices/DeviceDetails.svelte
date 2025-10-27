@@ -8,14 +8,17 @@
     type IDevice,
   } from "$lib";
   import { A, Card, Heading, Input, Label, P, Textarea } from "flowbite-svelte";
-  import { Toast } from "$components";
+  import { SelectDeviceType, Toast } from "$components";
   import {
     BanOutline,
     DownloadOutline,
     EditOutline,
     FloppyDiskOutline,
+    RefreshOutline,
   } from "flowbite-svelte-icons";
   import DateFormat from "$components/content/DateFormat.svelte";
+  import DeviceQRCode from "./DeviceQRCode.svelte";
+  import DestroyModelModal from "$components/models/destroy/DestroyModelModal.svelte";
 
   const api = new DeviceModel();
   const cApi = new DeviceCertificate();
@@ -26,6 +29,9 @@
   let editProps = $state<Record<string, boolean>>({});
   let name = $state(device.name || "");
   let notes = $state(device.notes || "");
+  let hideDeviceProfile = $state(true);
+  let destroyModalOpen = $state(false);
+  let rebuildingCertificates = $state(false);
   const editName = async () => {
     if (!name) {
       return;
@@ -39,6 +45,18 @@
       device.name = name;
     } catch (e) {
       console.error("Error saving device name", e);
+    }
+  };
+
+  const editProfile = async () => {
+    if (!device.profile) {
+      return;
+    }
+    try {
+      await api.update({ id: device.id }, { profile: device.profile });
+      hideDeviceProfile = true;
+    } catch (e) {
+      console.error("Error saving device profile", e);
     }
   };
 
@@ -59,6 +77,9 @@
   };
 
   const download = () => {
+    if (rebuildingCertificates) {
+      return;
+    }
     cApi.download(device.identity).catch((e) => {
       console.error("Error downloading device certificates", e);
     });
@@ -69,7 +90,32 @@
       Toast.success("Text copied to clipboard");
     });
   };
+
+  const rebuildCertificates = async () => {
+    try {
+      rebuildingCertificates = true;
+      const result = await api.invalidateCertificate(device.id);
+      console.log("Rebuild certificates result:", result);
+      Toast.success("Certificate rebuild initiated for " + device.name);
+      destroyModalOpen = false;
+    } catch (e) {
+      console.error("Error rebuilding device certificates", e);
+      Toast.error("Error rebuilding device certificates");
+    } finally {
+      rebuildingCertificates = false;
+    }
+  };
 </script>
+
+{#if !rebuildingCertificates}
+  <DestroyModelModal
+    bind:open={destroyModalOpen}
+    onDestroy={rebuildCertificates}
+    title="Rebuild Certificates"
+    btnText="Rebuild Certificates"
+    body="Are you sure you want to rebuild the certificates for this device? This action will disconnect the device from the network and cannot not be restored without flashing the device with the new certificates. Only perform this action if the device has been stolen or it is physically in your possession."
+  />
+{/if}
 
 <Card
   class="w-full dark:bg-gray-950 flex flex-col p-6 max-w-full overflow-hidden space-y-4"
@@ -82,9 +128,24 @@
     </InputFormItem>
     <InputFormItem>
       {#if editable}
-        <A class="ml-auto" onclick={download}
-          ><DownloadOutline /> {$_t("Download Device Certificates")}</A
-        >
+        <div class="flex items-center w-full">
+          <A
+            class="ml-auto"
+            disabled={rebuildingCertificates}
+            onclick={download}
+            ><DownloadOutline /> {$_t("Download Device Certificates")}</A
+          >
+
+          <A
+            disabled={rebuildingCertificates}
+            class="ml-auto"
+            color="red"
+            onclick={() => (destroyModalOpen = true)}
+            ><RefreshOutline
+              class={rebuildingCertificates ? "animate-spin" : ""}
+            />
+          </A>
+        </div>
       {/if}
     </InputFormItem>
   </InputItemsRow>
@@ -122,6 +183,33 @@
 
   <InputItemsRow>
     <InputFormItem>
+      <Label>{$_t("Device Profile")}</Label>
+      <InputItemsRow>
+        <SelectDeviceType
+          bind:value={device.profile}
+          viewOnly={hideDeviceProfile}
+        />
+        {#if editable}
+          {#if hideDeviceProfile}
+            <A onclick={() => (hideDeviceProfile = false)}><EditOutline /></A>
+          {:else}
+            <A disabled={!device.profile} onclick={editProfile}>
+              {#if !device.profile}
+                <BanOutline />
+              {:else}
+                <FloppyDiskOutline />
+              {/if}
+            </A>
+          {/if}
+        {/if}
+      </InputItemsRow>
+    </InputFormItem>
+    <InputFormItem grow>
+      <DeviceQRCode {device} />
+    </InputFormItem>
+  </InputItemsRow>
+  <InputItemsRow>
+    <InputFormItem>
       <Label>{$_t("Created On")}</Label>
       <DateFormat stamp={device.createdAt} />
     </InputFormItem>
@@ -149,6 +237,6 @@
           </A>
         {/if}
       </div></InputFormItem
-    ></InputItemsRow
-  >
+    >
+  </InputItemsRow>
 </Card>

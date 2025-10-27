@@ -52,7 +52,7 @@
   <TableBodyCell
     ><UserRoleToggle disabled {user} {changeAction} /></TableBodyCell
   >
-  <TableBodyCell><UserQRCode {user} /></TableBodyCell>
+  <!-- <TableBodyCell><UserQRCode {user} /></TableBodyCell> -->
   <TableBodyCell
     ><Button type="button" onclick={() => (open = true)}>{$_t("Edit")}</Button
     ></TableBodyCell

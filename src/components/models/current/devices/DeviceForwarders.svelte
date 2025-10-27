@@ -6,6 +6,8 @@
     type IDevice,
     type IForwarders,
     onEvent,
+    siteUser,
+    UserRoles,
   } from "$lib";
   import { Accordion, Button, Heading, Modal, P } from "flowbite-svelte";
   import { onDestroy, onMount } from "svelte";
@@ -73,10 +75,12 @@
         <ForwarderViewer {forwarder} />
       {/each}
     </Accordion>
-    <div class="flex w-full">
-      <Button class="mt-4 ml-auto" onclick={() => (createModalOpen = true)}
-        ><PlusOutline />{$_t("Add Device Forwarder")}</Button
-      >
-    </div>
+    {#if $siteUser && $siteUser.role > UserRoles.MANAGER}
+      <div class="flex w-full">
+        <Button class="mt-4 " onclick={() => (createModalOpen = true)}
+          ><PlusOutline />{$_t("Add Device Forwarder")}</Button
+        >
+      </div>
+    {/if}
   </div>
 {/if}

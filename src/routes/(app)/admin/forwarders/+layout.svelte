@@ -11,13 +11,8 @@
   import { _t, siteUser, UserRoles } from "$lib";
   import { NavLi, NavUl, Button } from "flowbite-svelte";
   import { PlusOutline } from "flowbite-svelte-icons";
-  import { onDestroy, onMount, type Snippet } from "svelte";
+  import { type Snippet } from "svelte";
   let { children } = $props<{ children: Snippet }>();
-
-  onMount(async () => {});
-
-  onDestroy(() => {});
-
   let openDrawer = $state(true);
   let activeUrl = $derived(page.url.pathname);
 </script>
@@ -51,7 +46,7 @@
     <ForwardCreateElements />
   {/snippet}
   {#snippet headerContent()}
-    <Navbar title="Forwarders"
+    <Navbar title="Devices"
       >{#snippet createSection()}
         {#if $siteUser && $siteUser.role >= UserRoles.USER_MANAGER}
           <Button type="button" onclick={() => (openDrawer = !openDrawer)}

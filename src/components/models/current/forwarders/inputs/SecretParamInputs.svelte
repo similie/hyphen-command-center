@@ -37,6 +37,7 @@
     ownedBy = ParameterValueOwnerBy.SYSTEM,
     onChange,
     disabled = false,
+    editable = true,
   } = $props<{
     value?: UUID[] | string[];
     keys: ParameterToForwardDetails[];
@@ -46,6 +47,7 @@
     valid?: boolean;
     disabled?: boolean;
     onChange?: (vals: UUID[]) => void;
+    editable?: boolean;
   }>();
 
   let paramValues = $state<IParameters[]>([]);
@@ -137,33 +139,33 @@
   };
 </script>
 
-<DestroyModelModal
-  bind:open={destroyValueWarning}
-  onDestroy={destroyValue}
-  model={destroyKey}
-  onCancel={() => (destroyKey = "")}
-  title={$_t("Confirm Deletion")}
-  body={$_t("Are you sure you want to delete this parameter?")}
-/>
-
+{#if editable}
+  <DestroyModelModal
+    bind:open={destroyValueWarning}
+    onDestroy={destroyValue}
+    model={destroyKey}
+    onCancel={() => (destroyKey = "")}
+    title={$_t("Confirm Deletion")}
+    body={$_t("Are you sure you want to delete this parameter?")}
+  />
+{/if}
 <div class="flex flex-col w-full space-x-4 space-y-4">
   {#each keys as key}
     {#if paramValuesMap[key.key]}
       <Card class="p-2">
         <div class="flex items-center space-x-2 mb-2">
           <Heading tag="h5">{paramValuesMap[key.key].name}</Heading>
-          <!-- {#if paramValuesMap[key.key].secret}
-            <Badge color="warning">{$_t("Secret")}</Badge>
-          {/if} -->
-          <A
-            class="ml-auto"
-            color="red"
-            {disabled}
-            onclick={() => {
-              destroyKey = key.key;
-              destroyValueWarning = true;
-            }}><TrashBinOutline /></A
-          >
+          {#if editable}
+            <A
+              class="ml-auto"
+              color="red"
+              {disabled}
+              onclick={() => {
+                destroyKey = key.key;
+                destroyValueWarning = true;
+              }}><TrashBinOutline /></A
+            >
+          {/if}
         </div>
 
         <P class="text-sm">
@@ -214,7 +216,8 @@
                 <Button
                   disabled={keyValues[key.key].saving ||
                     !keyValues[key.key].value ||
-                    disabled}
+                    disabled ||
+                    !editable}
                   onclick={() => sendParamsValues(key.key)}
                   outline
                   >{#if keyValues[key.key].saving}

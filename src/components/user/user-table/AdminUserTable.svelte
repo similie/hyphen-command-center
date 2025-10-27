@@ -37,14 +37,19 @@
   let elementTxt = $state("");
   let localUsers = $state<UserModel[]>(users);
   let localCount = $state<number>(count);
-  let currentPage = $state<number>(0);
+  let currentPage = $state<number>(1);
   let searching = $state<boolean>(false);
   const bound = new Debounce();
 
   const sendSearch = bound.bounce(async () => {
     try {
       searching = true;
-      const search = await api.search(elementTxt, currentPage, limit, userRole);
+      const search = await api.search(
+        elementTxt,
+        currentPage - 1,
+        limit,
+        userRole,
+      );
       localUsers = search.users;
       localCount = search.count;
     } catch (error) {
@@ -59,7 +64,7 @@
     console.log("Reloading users", users);
     localUsers = users;
     localCount = count;
-    currentPage = 0;
+    currentPage = 1;
     elementTxt = "";
   };
 
@@ -101,14 +106,14 @@
   {/if}
 </div>
 
-<Table class="mt-3" striped hoverable={true} border={false}>
+<Table class="mt-3" shadow striped hoverable={true} border={false}>
   <TableHead>
     <TableHeadCell>{$_t("Profile")}</TableHeadCell>
     <TableHeadCell>{$_t("Name")}</TableHeadCell>
     <TableHeadCell>{$_t("Username")}</TableHeadCell>
     <TableHeadCell>{$_t("Email")}</TableHeadCell>
     <TableHeadCell>{$_t("Role")}</TableHeadCell>
-    <TableHeadCell>{$_t("QR")}</TableHeadCell>
+    <!-- <TableHeadCell>{$_t("QR")}</TableHeadCell> -->
     <TableHeadCell>{$_t("")}</TableHeadCell>
     <!-- <TableHeadCell>{$_t("Status")}</TableHeadCell> -->
   </TableHead>

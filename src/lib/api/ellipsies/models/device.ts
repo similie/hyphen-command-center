@@ -4,6 +4,7 @@ import {
   type IEntity,
   type UUID,
 } from "@similie/model-connect-entities";
+import type { ISensor, SensorType } from "./sensor";
 
 export interface IDevice extends IEntity {
   name: string;
@@ -15,11 +16,86 @@ export interface IDevice extends IEntity {
   lat?: number;
   lng?: number;
   lastTouched?: Date;
+  profile?: UUID;
 }
 export class DeviceModel extends Model<IDevice> {
   constructor() {
     super();
     this.modelname = "devices";
+  }
+
+  private formatUrl(path: string) {
+    const { url } = this.connector.raw(this.modelConfig);
+    const thisUrl = `${url}${path}`;
+    return thisUrl;
+  }
+
+  public async removeSensor(
+    model: IDevice,
+    sensorKey: string,
+  ): Promise<{ device: IDevice; sensor: ISensorWithKey }> {
+    const thisUrl = this.formatUrl("sensor");
+    const results = await (this.connector as HTTPConnector).getRequestResults(
+      { deviceId: model.id, sensorKey },
+      {},
+      thisUrl,
+      HttpMethod.DELETE,
+    );
+    if (!results.ok) {
+      throw new Error(`Error fetching sensors for device ${model.identity}`);
+    }
+
+    return results.json();
+  }
+
+  public async addSensor(
+    model: IDevice,
+    identity: string,
+  ): Promise<{ device: IDevice; sensor: ISensorWithKey }> {
+    const thisUrl = this.formatUrl("sensor");
+    const results = await (this.connector as HTTPConnector).getRequestResults(
+      { deviceId: model.id, identity },
+      {},
+      thisUrl,
+      HttpMethod.POST,
+    );
+    if (!results.ok) {
+      throw new Error(`Error fetching sensors for device ${model.identity}`);
+    }
+
+    return results.json();
+  }
+
+  public async refreshSensors(model: IDevice): Promise<DeviceConfigModel> {
+    const thisUrl = this.formatUrl("sensor");
+    const results = await (this.connector as HTTPConnector).getRequestResults(
+      { deviceId: model.id },
+      {},
+      thisUrl,
+      HttpMethod.PUT,
+    );
+    if (!results.ok) {
+      throw new Error(`Error fetching sensors for device ${model.identity}`);
+    }
+
+    return results.json();
+  }
+
+  public async sensors(
+    model: IDevice,
+  ): Promise<{ device: IDevice; sensors: ISensorWithKey[] }> {
+    const thisUrl = this.formatUrl(`sensor/${model.id}`);
+    const results = await (this.connector as HTTPConnector).getRequestResults(
+      {},
+      {},
+      thisUrl,
+      HttpMethod.GET,
+    );
+    if (!results.ok) {
+      throw new Error(`Error fetching sensors for device ${model.identity}`);
+    }
+
+    return results.json();
   }
 
   public override async toJson(model: IDevice): Promise<IDevice> {
@@ -39,6 +115,54 @@ export class DeviceModel extends Model<IDevice> {
     const now = new Date();
     const diff = now.getTime() - new Date(lastTouched).getTime();
     return diff < 15 * 60 * 1000; // 15 minutes
+  }
+
+  public async invalidateCertificate(
+    deviceId: string | UUID,
+  ): Promise<IDevice | IDevice[]> {
+    const thisUrl = this.formatUrl(`invalidate-certificate`);
+    const results = await (this.connector as HTTPConnector).getRequestResults(
+      { id: deviceId },
+      {},
+      thisUrl,
+      HttpMethod.POST,
+    );
+    if (!results.ok) {
+      throw new Error(`Error invalidating certificate for device ${deviceId}`);
+    }
+    return results.json();
+  }
+
+  public async buildArtifact(deviceId: string, buildId: string) {
+    const thisUrl = this.formatUrl(`artifacts/${deviceId}/${buildId}`);
+    const results = await (this.connector as HTTPConnector).getRequestResults(
+      {},
+      {},
+      thisUrl,
+      HttpMethod.GET,
+    );
+    const blob = await results.blob();
+    return blob;
+  }
+  public async flashDeviceLocal(
+    device: IDevice,
+    config: Record<string, any>,
+    cb: (data: string) => Promise<void>,
+  ) {
+    const thisUrl = this.formatUrl(`local-flash`);
+    return await (this.connector as HTTPConnector).buildStreamQuery(
+      { device: device.id, config },
+      {},
+      thisUrl,
+      HttpMethod.POST,
+      async (chunk: string) => {
+        try {
+          await cb(chunk);
+        } catch {
+          //
+        }
+      },
+    );
   }
 }
 
@@ -65,7 +189,10 @@ export interface IDeviceConfig extends IEntity {
   actionType: DeviceConfigActionType;
   user?: UUID;
   meta: Record<string, any>;
+  noNullify: boolean;
 }
+
+export type ISensorWithKey = ISensor & { relation: { key: string } };
 
 export class DeviceConfigModel extends Model<IDeviceConfig> {
   constructor() {
@@ -190,7 +317,7 @@ export class DeviceCertificate extends Model<IDeviceCertificate> {
     this.modelname = "certificates";
   }
 
-  async download(identity: string) {
+  async downloadAsBlob(identity: string): Promise<Blob> {
     const { url } = this.connector.raw(this.modelConfig);
     const thisUrl = `${url}download/${identity}`;
     const results = await (this.connector as HTTPConnector).getRequestResults(
@@ -202,10 +329,47 @@ export class DeviceCertificate extends Model<IDeviceCertificate> {
     const blob = new Blob([await results.arrayBuffer()], {
       type: "application/zip",
     });
+    return blob;
+  }
+
+  async download(identity: string) {
+    const blob = await this.downloadAsBlob(identity);
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = `${identity}-certificates.zip`;
     link.click();
     URL.revokeObjectURL(link.href);
+  }
+}
+
+export interface ISourceRepository extends IEntity {
+  name: string;
+  url: string;
+  sshKey: string;
+  branch: string;
+  meta: Record<string, any>;
+}
+
+export class SourceRepository extends Model<ISourceRepository> {
+  constructor() {
+    super();
+    this.modelname = "repositories";
+  }
+}
+
+export interface IDeviceProfile extends IEntity {
+  name: string;
+  avatar: UUID;
+  script: string;
+  defConfigSchema: Record<string, any>;
+  configSchema: Record<string, any>;
+  partitions: { address: number; type: string }[];
+  repository: UUID;
+}
+
+export class DeviceProfile extends Model<IDeviceProfile> {
+  constructor() {
+    super();
+    this.modelname = "deviceprofiles";
   }
 }

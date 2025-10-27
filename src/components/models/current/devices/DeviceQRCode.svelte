@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { siteConfig, type UserModel, _t } from "$lib";
+  import { siteConfig, type UserModel, _t, type IDevice } from "$lib";
   import QrCode from "@castlenine/svelte-qrcode";
   import { Button, Modal, A, Toggle } from "flowbite-svelte";
 
-  let { user, size = 200 } = $props<{ user: UserModel; size?: number }>();
+  let { device, size = 200 } = $props<{ device: IDevice; size?: number }>();
 
-  const baseUrl = `${$siteConfig.applicationApi}/profile/${user.uid}`;
+  const baseUrl = `${$siteConfig.applicationApi}/devices/${device.id}`;
   let open = $state(false);
 
   // whether to include the name under the QR code
@@ -25,20 +25,41 @@
       <!DOCTYPE html>
       <html>
         <head>
-          <title>Print QR Code</title>
+          <title>${device?.identity}</title>
           <style>
             /* ensure the QR & name are centered */
-            body { 
-              margin: 0; 
-              display: flex; 
-              align-items: center; 
-              justify-content: center; 
-              flex-direction: column;
-              height: 100vh;
+            @page {
+                size: auto;
+                margin: 2mm;
             }
-            #printable { text-align: center; }
-            /* prevent page margins cutting off content */
-            @page { margin: 1cm; }
+            html, body {
+                margin: 0;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                text-align: center;
+                font-family: "Helvetica", "Arial", sans-serif; /* non-serif */
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            #printable {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                height: 100%;
+                line-height: 0;
+                box-sizing: border-box;
+            }
+            p {
+                margin: 0;
+                line-height: 1.1;
+                font-size: 10pt;
+            }
           </style>
         </head>
         <body>
@@ -58,24 +79,26 @@
   }
 </script>
 
-<Modal bind:open title={user.name}>
+<Modal bind:open title={device.name}>
   <!-- this div will show up in the print preview -->
-  <div id="printable" class="flex flex-col items-center justify-center p-4">
+  <div id="printable" class="flex flex-col items-center justify-center">
     <QrCode
-      anchorsOuterColor="#fe795d"
-      anchorsInnerColor="#ef562f"
       data={baseUrl}
       logoPath="/similie.png"
       {size}
       haveBackgroundRoundedEdges
     />
     {#if includeName}
-      <p class="mt-3 text-lg font-semibold">{user.name}</p>
+      {#if device.name}
+        <p class="font-semibold">{device.name}</p>
+      {/if}
+      <p class="font-semibold">{device.identity}</p>
+      <p class="font-semibold">Hyphen Elemental 4</p>
     {/if}
   </div>
 
   <p class="text-center text-gray-500 mt-4">
-    {$_t(`Scan this QR code to access the profile of ${user.name}`)}
+    {$_t(`Scan this QR code to access the device profile of ${device.name}`)}
   </p>
   <p class="text-center text-gray-500 mt-2">
     {$_t("You can also access it at the following ")}
@@ -89,7 +112,7 @@
       {$_t("Print QR Code")}
     </Button>
     <Toggle bind:checked={includeName}>
-      {$_t("Print Name")}
+      {$_t("Print Identity")}
     </Toggle>
   </div>
 </Modal>

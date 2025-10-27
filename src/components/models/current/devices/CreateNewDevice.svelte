@@ -1,6 +1,11 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { InputFormItem, InputItemsRow, Toast } from "$components";
+  import {
+    InputFormItem,
+    InputItemsRow,
+    SelectDeviceType,
+    Toast,
+  } from "$components";
   import RequiredLabel from "$components/input/RequiredLabel.svelte";
   import { _t, DeviceModel, generateRandomUsername, type IDevice } from "$lib";
 
@@ -75,6 +80,10 @@
           bind:value={newDevice.identity}
           placeholder={$_t("This must be a unique identifier")}
         />
+      </InputFormItem>
+      <InputFormItem>
+        <Label>{$_t("Device Profile")}</Label>
+        <SelectDeviceType bind:value={newDevice.profile} required />
       </InputFormItem>
     </InputItemsRow>
 

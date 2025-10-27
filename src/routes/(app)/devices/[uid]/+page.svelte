@@ -1,6 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { page } from "$app/state";
+  import { CreatePopOutDetails, DeviceFlashTools } from "$components";
   import DeviceViewPage from "$components/models/current/devices/DeviceViewPage.svelte";
   import Navbar from "$components/navbar/Navbar.svelte";
   import BasicModelPage from "$layouts/BasicModelPage.svelte";
@@ -12,6 +13,7 @@
     removeNavbarCrumb,
     NavbarCrumbs,
   } from "$lib";
+  import { GradientButton } from "flowbite-svelte";
   import { onDestroy, onMount } from "svelte";
   if (!page.data.device) {
     goto("/devices");
@@ -34,16 +36,28 @@
 
 <BasicModelPage bind:openDrawer={closeNav}>
   {#snippet header()}
-    <span>NOOP</span>
+    <CreatePopOutDetails
+      name="Devices"
+      message="Flash your ESP32 device with Hyphen Command Center"
+    />
   {/snippet}
 
   {#snippet body()}
-    <span>NOOP</span>
+    <div class="flex w-full">
+      <div class="grow max-w-2xl mx-auto w-full h-1/2 overflow-y-auto">
+        <DeviceFlashTools {device} />
+      </div>
+    </div>
   {/snippet}
   {#snippet headerContent()}
     <Navbar title="Devices" headings={$NavbarCrumbs}
       >{#snippet createSection()}
-        <span></span>
+        <GradientButton
+          outline
+          color="cyanToBlue"
+          onclick={() => (closeNav = !closeNav)}
+          >{$_t("Flash Utilities")}</GradientButton
+        >
       {/snippet}
     </Navbar>
   {/snippet}

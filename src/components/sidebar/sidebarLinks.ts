@@ -6,6 +6,7 @@ import {
   DrawSquareOutline,
   WandMagicSparklesOutline,
   ShapesOutline,
+  BatteryOutline,
 } from "flowbite-svelte-icons";
 import SideBarSimilie from "./SideBarSimilie.svelte";
 
@@ -59,6 +60,17 @@ export function loadLinks(): { links: SidebarLink[] } {
             label: "Events",
             icon: ShapesOutline,
             name: "admin.events",
+            classes: "",
+            role: UserRoles.USER_MANAGER,
+            links: [],
+          },
+
+          {
+            type: "item",
+            href: "/devices",
+            label: "Devices",
+            icon: BatteryOutline,
+            name: "admin.devices",
             classes: "",
             role: UserRoles.USER_MANAGER,
             links: [],

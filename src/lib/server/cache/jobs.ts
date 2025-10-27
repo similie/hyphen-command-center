@@ -135,8 +135,25 @@ export class JobsManager {
       "processed-pending-config",
       "send-email",
       "process-device-forward-artifacts",
+      "processed-device-sensor",
     ];
   }
+
+  public static processDeviceSensorsSync(job: JobValue) {
+    const { sensors, device } = job.data as {
+      sensors: any[];
+      device: any;
+    };
+    return socketServer.broadcast({
+      topic: `device/${device.identity}/sensors/sync`,
+      data: {
+        sensors,
+        _uid: generateUniqueUUID(),
+        _date: new Date(),
+      },
+    });
+  }
+
   public get getJob() {
     if (!JobsManager._instance) {
       throw new Error("Jobs manager not started");
@@ -163,6 +180,12 @@ export class JobsManager {
         name: jobNames[3],
         opt: queue.queueOpt,
         cb: JobsManager.processDeviceForwardArtifacts,
+      },
+
+      {
+        name: jobNames[4],
+        opt: queue.queueOpt,
+        cb: JobsManager.processDeviceSensorsSync,
       },
     ];
     return jobs;

@@ -8,7 +8,6 @@
     _t,
     generateUniqueId,
     isNumeric,
-    stripStateFromObject,
   } from "$lib";
   import {
     Input,
@@ -316,14 +315,15 @@
       handleSubmit();
     }}
   >
-    <div class="grid grid-cols-{cols} gap-2 my-4">
+    <div class="grid grid-cols-1 md:grid-cols-{cols} gap-2 my-4">
       {@render header?.()}
 
       {#each fieldValues as field, i}
-        <div class="flex w-full">
-          {@render controls?.(field, i)}
-        </div>
-
+        {#if controls}
+          <div class="flex w-full">
+            {@render controls?.(field, i)}
+          </div>
+        {/if}
         {@const id = getId(field)}
         <div
           id="field-{id}"
@@ -350,7 +350,7 @@
             {/if}
           </div>
           {#if edit}
-            {#if field.type === "text"}
+            {#if field.type === "text" || field.type === "string"}
               <Input
                 type="text"
                 {id}
