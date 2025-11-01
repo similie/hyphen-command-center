@@ -21,7 +21,7 @@
   });
 </script>
 
-<BodyContainer>
+<BodyContainer class="mb-6">
   <!-- Hero / Intro -->
   <div class="space-y-16">
     <section class=" space-y-6">
@@ -63,13 +63,11 @@
         />
       </div>
     </section>
-
-    <!-- Transition to Academy -->
     <section class="grid md:grid-cols-2 gap-12 items-center">
       <div>
         <img
-          src="/academy-site.jpg"
-          alt="Similie Academy Students"
+          src="/4060xr.png"
+          alt="Our 4060 XR development board"
           class="rounded-2xl shadow-lg"
         />
       </div>
@@ -77,7 +75,7 @@
         <Heading
           tag="h2"
           class="font-semibold text-primary-600 dark:text-primary-600"
-          >{$_t("Why We Built the Academy")}</Heading
+          >{$_t("Our Mission")}</Heading
         >
         <P class=" leading-relaxed">
           {$_t(
@@ -86,7 +84,7 @@
         </P>
         <P class=" leading-relaxed">
           {$_t(
-            "Technology opens doors to the most profitable and globally connected industry in the world. By equipping Timorese youth with future-ready skills, the Academy ensures that opportunity isn’t limited by borders. Instead, it enables the people of Timor-Leste to step into the world as creators, entrepreneurs, and leaders in the digital age",
+            "Technology opens doors to the most profitable and globally connected industry in the world. By equipping Timorese youth with future-ready skills, Similie builds opportunity that isn’t limited by borders. Instead, it enables the people of Timor-Leste to step into the world as creators, entrepreneurs, and leaders in the digital age",
           )}.
         </P>
       </div>
@@ -104,8 +102,14 @@
           "Through open technology and transformative education, Similie aims to create a brighter, more resilient future for Timor-Leste—and for the world",
         )}.
       </P>
-      <Button href="/courses/public" color="light" size="xl" class="mt-4">
-        {$_t("Explore Our Courses")}
+      <Button
+        href="https://similie.com"
+        target="_blank"
+        color="light"
+        size="xl"
+        class="mt-4"
+      >
+        {$_t("Explore Similie")}
       </Button>
     </section>
   </div>

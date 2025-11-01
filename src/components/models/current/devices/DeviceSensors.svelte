@@ -29,10 +29,8 @@
     try {
       loading = true;
       const { sensors: foundSensors } = await dApi.sensors(device);
-      console.log("Found sensors:", foundSensors);
       deviceSensors = foundSensors;
       sensors = await sApi.find().sort({ createdAt: "ASC" }).fetch();
-      console.log("All sensors:", sensors);
     } catch (e) {
       console.error("Error fetching device sensors:", e);
     } finally {
@@ -98,20 +96,19 @@
   });
 
   onDestroy(() => {
-    // Cleanup if necessary
     LocalSocket.instance.forget(socketMessage, processSync);
   });
 </script>
 
-<div class="flex flex-col space-y-4 w-full">
+<div class="flex flex-col space-y-2 w-full">
   <div class="flex w-full items-center">
-    <Heading tag="h3" class="mb-2">{$_t("Device Sensors")}</Heading>
+    <Heading tag="h3">{$_t("Device Sensors")}</Heading>
     <A disabled={refreshing} onclick={refreshSensors} class="ml-auto"
       ><RefreshOutline class={refreshing ? "animate-spin" : ""} />
       {$_t("Refresh")}</A
     >
   </div>
-  <P
+  <P class="text-sm"
     >{$_t("Device Sensors Component for device")}: {device.name}
     <A
       ><InfoCircleOutline />
@@ -122,11 +119,11 @@
     {#each deviceSensors as sensor}
       <Card
         img={sensor.avatar ? appFileBase(sensor.avatar, "md") : undefined}
-        imgClass="object-cover h-32 "
-        class="max-w-xs w-48 relative"
+        imgClass="object-cover h-32"
+        class="max-w-xs relative"
       >
         <div class="absolute top-2 right-2 rounded-full p-1">
-          <Button size="xs" color="red" pill onclick={() => onRemove(sensor)}>
+          <Button size="xs" color="rose" pill onclick={() => onRemove(sensor)}>
             <TrashBinOutline size="xs" />
           </Button>
         </div>
@@ -142,7 +139,7 @@
       </Card>
     {/each}
   </div>
-  <div class="w-[25em]">
+  <div class="w-[22em]">
     <Label>{$_t("Available Sensors")}</Label>
     <AvailableSensors
       {onAdd}

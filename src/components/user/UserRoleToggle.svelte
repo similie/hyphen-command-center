@@ -69,7 +69,7 @@
 <Modal bind:open title={$_t(`Change Role for ${user.name}`)} size="md">
   <p>{$_t("Click to view or change the user role.")}</p>
   <div class="flex-col flex gap-2 mt-4 mx-auto">
-    <Button color="red" onclick={ban}>
+    <Button color="rose" onclick={ban}>
       {$_t("Ban User")}
       <BanOutline />
     </Button>

@@ -111,7 +111,7 @@
       </div>
     {:else}
       <div class="flex w-full space-x-4">
-        <EventHeading bind:events {onSearch} />
+        <EventHeading {events} {onSearch} />
       </div>
       <Hr />
       <div bind:this={scrollContainer} class=" max-h-screen overflow-y-auto">
@@ -162,7 +162,7 @@
                   <TableBodyCell>
                     {#if event.device}
                       {event.device.name || event.device.identity}
-                    {:else if "device" in parsedEvent}
+                    {:else if parsedEvent && "device" in parsedEvent}
                       {parsedEvent.device}
                     {:else}
                       {$_t("Unknown Device")}

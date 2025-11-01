@@ -158,12 +158,12 @@
   {/snippet}
 </Modal>
 
-<Modal color="red" bind:open={deleteModal} autoclose>
+<Modal color="rose" bind:open={deleteModal} autoclose>
   <div class="text-base leading-relaxed">
     {$_t("Are you sure you want to remove this content?")}
   </div>
   {#snippet footer()}
-    <Button onclick={deleteContent} color="red">{$_t("Proceed")}</Button>
+    <Button onclick={deleteContent} color="rose">{$_t("Proceed")}</Button>
     <Button class="ml-auto" color="alternative">{$_t("Go Back")}</Button>
   {/snippet}
 </Modal>

@@ -1,12 +1,5 @@
 <script lang="ts">
-  import {
-    Button,
-    Label,
-    Input,
-    ButtonGroup,
-    FloatingLabelInput,
-    Spinner,
-  } from "flowbite-svelte";
+  import { Button, FloatingLabelInput, Spinner } from "flowbite-svelte";
   import {
     CloseOutline,
     DownloadOutline,
@@ -45,7 +38,7 @@
     type="text"
     variant="outlined"
     bind:value
-    labelClass="rounded-xl"
+    classes={{ label: "rounded-xl" }}
     disabled={disabled || loading}
   >
     {callValue}
@@ -53,7 +46,7 @@
   <Button
     disabled={loading}
     outline
-    color={reset ? "green" : undefined}
+    color={reset ? "emerald" : undefined}
     class="ml-auto relative"
     onclick={() => onCall(value, callValue)}
     type="button"

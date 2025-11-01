@@ -52,7 +52,6 @@
       .then((fetchedDevices: IDevice[]) => {
         // Handle the retrieved devices
         devices = fetchedDevices;
-        console.log("Retrieved devices:", devices);
       })
       .catch(console.error);
   };
@@ -129,7 +128,7 @@
   <TableBody>
     {#if !devices.length}
       <TableBodyRow>
-        <TableBodyCell colspan={4}>
+        <TableBodyCell colspan={5}>
           <P class="text-center w-full">{$_t("No devices found")}</P>
         </TableBodyCell>
       </TableBodyRow>

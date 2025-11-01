@@ -16,13 +16,13 @@
   <Head />
   <Body>
     <Container>
-      <Heading class="text-amber-600 text-2xl"
+      <Heading class="text-cyan-500 text-2xl"
         >You're one-time passcode. Do not share this with anyone.</Heading
       >
       <Text style={{ fontWeight: 900 }}>{passcode}</Text>
       <Text>
-        This code will expire in {expire} minutes. We hope you enjoy exploring the
-        Academy.
+        This code will expire in {expire} minutes. We hope you enjoy exploring Hyphen
+        Command Center.
       </Text>
     </Container>
   </Body>

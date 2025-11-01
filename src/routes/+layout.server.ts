@@ -4,12 +4,15 @@ import {
   type UserConfig,
   type SiteConfig,
   type Session,
+  DeviceProfile,
+  EllipsiesConnector,
 } from "$lib";
 import { UserQuery } from "$lib/server/db/query";
 import { redirect } from "@sveltejs/kit";
 import type { RequestEvent } from "@sveltejs/kit";
 import { loadLinks } from "$components/sidebar/sidebarLinks";
-import type { SidebarLink } from "$lib";
+import type { IDeviceProfile, SidebarLink } from "$lib";
+import { LicenseAgreementQuery } from "$lib/server";
 const links = (() => {
   const locals = loadLinks();
   const linkValues: Record<string, SidebarLink> = {};
@@ -75,6 +78,7 @@ export const load = async (event: RequestEvent) => {
   const path = event.url.pathname;
   const config = await event.locals.config();
   const routing = APPLICATION_ROUTING();
+
   if (!config) {
     return { config: null, session: null };
   }
@@ -90,21 +94,34 @@ export const load = async (event: RequestEvent) => {
 
   if (!session?.user) throw redirect(303, routing.USERS.signin);
   const trustedId = event.cookies.get(UserQuery.TRUSTED_BROWSER);
-  if (!trustedId) {
+  if (!trustedId && config.twoFactorAuth) {
     throw redirect(303, routing.ACCOUNTS.otp);
-  }
-  const validIdentity = await UserQuery.isValidUser(
-    session?.user.uid,
-    trustedId,
-  );
+  } else if (trustedId) {
+    const validIdentity = await UserQuery.isValidUser(
+      session?.user.uid,
+      trustedId,
+    );
 
-  if (!validIdentity) {
-    throw redirect(303, routing.USERS.signin);
+    if (!validIdentity) {
+      throw redirect(303, routing.USERS.signin);
+    }
   }
+
+  const lq = new LicenseAgreementQuery();
+  const licenseAgreement = await lq.mostRecent(config!);
+  UserQuery.applyHyphenApiBase(event, config);
   // Check if the user is allowed to access the requested path
   const linkPath = links[path];
   if (linkPath && linkPath.role > session?.user.role) {
     throw redirect(303, routing.ERRORS[401]);
+  }
+
+  const dProfile = new DeviceProfile();
+  let profiles: IDeviceProfile[] = [];
+  try {
+    profiles = await dProfile.find().sort({ name: "ASC" }).fetch();
+  } catch (error) {
+    console.error("Error loading device profiles:", error);
   }
 
   try {
@@ -113,6 +130,8 @@ export const load = async (event: RequestEvent) => {
       session,
       config,
       userConfig,
+      profiles,
+      licenseAgreement,
     };
   } catch (error) {
     console.error("Error loading userConfig and llmConfig", error);

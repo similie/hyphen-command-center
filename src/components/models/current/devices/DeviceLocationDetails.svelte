@@ -11,7 +11,6 @@
   import {
     Control,
     ControlButton,
-    DefaultMarker,
     FullscreenControl,
     GeolocateControl,
     MapLibre,
@@ -25,6 +24,7 @@
   import { EditOutline, FloppyDiskOutline } from "flowbite-svelte-icons";
   import { InputFormItem } from "$components/input";
   import RequiredLabel from "$components/input/RequiredLabel.svelte";
+  import { SimilieMarker } from "./map";
   let api = new DeviceModel();
   let mapRef = $state<Map | undefined>();
   let { device, editable = false } = $props<{
@@ -70,9 +70,6 @@
       console.error("Error saving device location", e);
     }
   };
-
-  //-8.52913959, 115.2460252
-
   const checkValidity = () => {
     if (!formElement) return;
     validForm = formElement.checkValidity();
@@ -183,13 +180,11 @@
         {/if}
 
         {#each markers as { lngLat, name }}
-          <!-- Unlike the custom marker example, default markers do not have mouse events,
-    and popups only support the default openOn="click" behavior -->
-          <DefaultMarker {lngLat} draggable={false}>
+          <SimilieMarker {lngLat} {device}>
             <Popup offset={[0, -10]}>
               <div class="text-lg font-bold">{name}</div>
             </Popup>
-          </DefaultMarker>
+          </SimilieMarker>
         {/each}
       {/snippet}
     </MapLibre>

@@ -63,7 +63,7 @@
       <div class="w-full flex-col">
         <Hr class="my-4" />
         {#if model.uid && !model.active}
-          <Badge color="red">{$_t("Not Active")}</Badge>
+          <Badge color="rose">{$_t("Not Active")}</Badge>
         {/if}
         <div class="flex w-full justify-between items-center flex-wrap">
           <span class="text-3xl font-bold text-gray-900 dark:text-white">

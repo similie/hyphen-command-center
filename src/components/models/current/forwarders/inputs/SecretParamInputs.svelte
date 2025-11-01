@@ -158,7 +158,7 @@
           {#if editable}
             <A
               class="ml-auto"
-              color="red"
+              color="rose"
               {disabled}
               onclick={() => {
                 destroyKey = key.key;

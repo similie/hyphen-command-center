@@ -27,7 +27,7 @@
     onDelete?: (prof: IDeviceProfile) => void;
   }>();
   let setProfile = $state<Partial<IDeviceProfile>>(
-    profile ? profile : { defConfigSchema: {}, configSchema: {} },
+    profile ? profile : { defConfigSchema: {}, configSchema: {}, offline: 15 },
   );
   let destroyValueBind = $state<boolean>(false);
   let formElement: HTMLFormElement;
@@ -50,11 +50,9 @@
     saving = true;
     try {
       if (setProfile.id) {
-        console.log("Saving profile", setProfile);
         const result = await api.save(
           $state.snapshot(setProfile) as IDeviceProfile,
         );
-        console.log("Saved profile", result);
         setProfile = result;
         emitEvent<IDeviceProfile>("deviceprofile:created", result);
       } else {
@@ -112,10 +110,16 @@
   <InputItemsRow>
     <InputFormItem>
       <RequiredLabel content="Name" />
-      <ButtonGroup>
-        <Input disabled={saving} bind:value={setProfile.name} />
+      <ButtonGroup class="flex items-stretch">
+        <Input
+          class="h-11"
+          size="md"
+          disabled={saving}
+          bind:value={setProfile.name}
+        />
         <AvatarBuilder
           square
+          size="md"
           disabled={saving}
           bind:avatar={setProfile.avatar}
         />
@@ -124,6 +128,12 @@
     <InputFormItem>
       <Label>{$_t("Build Repository")}</Label>
       <DeviceRepositoriesSelect bind:value={setProfile.repository} />
+    </InputFormItem>
+    <InputFormItem>
+      <Label
+        >{$_t("Offline After")} <small>({$_t("time in minutes")})</small></Label
+      >
+      <Input type="number" bind:value={setProfile.offline} min={0} />
     </InputFormItem>
   </InputItemsRow>
   <PartitionTableDetails bind:value={setProfile.partitions} />
@@ -179,7 +189,7 @@
     {#if setProfile.id}
       <Button
         type="button"
-        color="red"
+        color="rose"
         outline
         disabled={saving}
         onclick={() => (destroyValueBind = true)}><TrashBinOutline /></Button

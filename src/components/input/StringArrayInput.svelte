@@ -32,7 +32,7 @@
         <Button
           type="button"
           class="ml-auto"
-          color="red"
+          color="rose"
           {disabled}
           outline
           onclick={() => {

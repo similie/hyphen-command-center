@@ -145,7 +145,6 @@
     } finally {
       saving = false;
     }
-    console.log("Submitting forwarder:", editForwarder);
   };
 
   const destroyForwarder = async () => {
@@ -193,7 +192,7 @@
               <UserAvatar avatar={selectedTemplate.avatar} size="sm" />
               {#if !editForwarder.id && isAdmin}
                 <Button
-                  color="red"
+                  color="rose"
                   outline
                   pill
                   disabled={saving}
@@ -341,7 +340,8 @@
               disabled={saving}
               onclick={() => (destroyModal = true)}
               type="button"
-              color="red"><TrashBinOutline /></Button
+              outline
+              color="rose"><TrashBinOutline /></Button
             >
           {/if}
           <Button type="submit" class="w-full" disabled={!valid || saving}

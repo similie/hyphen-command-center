@@ -24,14 +24,7 @@
   {/snippet}
 
   {#snippet headerContent()}
-    <Navbar
-      headings={$NavbarCrumbs}
-      src="/academy-trim.png"
-      darkSrc="/academy-dark.png"
-      alt="Academy Logo"
-      title=""
-      width={200}
-    >
+    <Navbar headings={$NavbarCrumbs} title="Similie">
       {#snippet createSection()}
         <!-- <CallToActionButton /> -->
       {/snippet}

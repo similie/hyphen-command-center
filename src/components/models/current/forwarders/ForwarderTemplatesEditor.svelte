@@ -265,7 +265,7 @@
                   outline
                   pill
                   type="button"
-                  color="red"
+                  color="rose"
                   size="xs"
                   class="ml-auto"
                   onclick={() => template.targets!.splice(index, 1)}
@@ -305,7 +305,8 @@
       {#if template.id}
         <Button
           disabled={saving}
-          color="red"
+          color="rose"
+          outline
           onclick={() => (destroyModal = true)}><TrashBinOutline /></Button
         >
       {/if}

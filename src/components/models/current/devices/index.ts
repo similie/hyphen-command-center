@@ -6,4 +6,7 @@ export { default as DeviceProfileEditor } from "./DeviceProfileEditor.svelte";
 export { default as DeviceFirmwareEditor } from "./DeviceFirmwareEditor.svelte";
 export { default as SelectDeviceType } from "./SelectDeviceType.svelte";
 export { default as DeviceRepositoriesSelect } from "./DeviceRepositoriesSelect.svelte";
+export { default as DeviceFleetMap } from "./DeviceFleetMap.svelte";
+export { default as BatteryIndicator } from "./BatteryIndicator.svelte";
+export { default as DeviceIndexPage } from "./DeviceIndexPage.svelte";
 export * from "./flash";

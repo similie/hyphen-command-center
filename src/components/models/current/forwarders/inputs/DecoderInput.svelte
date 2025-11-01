@@ -46,8 +46,6 @@
       } else {
         items = decoders.map((d) => ({ value: d.id as UUID, name: d.name }));
       }
-
-      console.log("Pulled decoders:", items);
     } catch (e) {
       console.error("Error pulling decoders", e);
     } finally {

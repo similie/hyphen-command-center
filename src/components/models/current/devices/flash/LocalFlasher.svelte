@@ -42,8 +42,6 @@
       }
       loading = true;
       profile = await dProfile.find({ id: device.profile }).fetchOne();
-      // profile.partitions;
-      console.log("Loaded device profile:", profile);
       config = device.config || {};
     } catch (err) {
       console.error("Error loading device profile:", err);
@@ -51,7 +49,6 @@
       config = {};
     } finally {
       loading = false;
-      console.log("WHAT IS PROFILE NOW:", loading);
     }
   };
 

@@ -38,7 +38,7 @@
 </Popover>
 
 <Search
-  inputClass="rounded-full"
+  classes={{ input: "rounded-full" }}
   size="md"
   bind:value={search}
   oninput={searchChanged}

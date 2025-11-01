@@ -19,6 +19,7 @@ import {
   AUTHENTICATION_TOKEN_COOKIE,
   CacheKeys,
   createCacheKey,
+  EllipsiesConnector,
   emailRegex,
   isUUID,
 } from "$lib";
@@ -30,7 +31,6 @@ import {
   minutesElapse,
 } from "$lib/server/utils/tools";
 import { RedisCache } from "$lib/server/cache";
-import { ShoppingCart } from "$lib/server/utils";
 
 export class RegistrationQuery extends ModelQuery<Registration> {
   private readonly verifyPath = "/users/account/verify";
@@ -183,6 +183,18 @@ ORDER BY
     };
   }
 
+  public static applyHyphenApiBase(event: RequestEvent, config: SiteConfig) {
+    const { cookies } = event;
+    const getUrl = (config: SiteConfig) => {
+      return process.env.SIBLING_API_URL || config?.applicationApi || undefined;
+    };
+    const sessionToken = cookies.get(UserQuery.SESSION_COOKIE);
+    if (!sessionToken) {
+      return;
+    }
+    EllipsiesConnector.start(getUrl(config)).cookieValue = sessionToken;
+  }
+
   public static async isValidUser(
     uid: UUID,
     trustedId: string,
@@ -198,8 +210,10 @@ ORDER BY
     }
     const vt = new VerificationTokenQuery();
     const token = await vt.findOne({ userId: uid, token: trustedId });
-    await RedisCache.set(key, token); // Cache for 1 hour
-    return !!token && token.valid;
+    if (token) {
+      await RedisCache.set(key, token); // Cache for 1 hour
+    }
+    return token?.valid ?? false;
   }
 
   public static isAdminUser(user: UserModel | null) {
@@ -604,7 +618,6 @@ ORDER BY
   }
 
   public static logout(event: RequestEvent) {
-    ShoppingCart.unsetCookie(event);
     event.cookies.delete(UserQuery.SESSION_COOKIE, { path: "/" });
   }
 

@@ -1,81 +1,37 @@
 <script lang="ts">
-  import { page } from "$app/state";
-  import { Navbar, PageFooter, Spotlight, SpacesListedView } from "$components";
-
-  import BasicModelPage from "$layouts/BasicModelPage.svelte";
-  import BodyContainer from "$layouts/BodyContainer.svelte";
-
   import {
-    onDarkModeChange,
-    isDarkMode,
-    _t,
-    siteUser,
-    type SpacesModel,
-    LocalSocket,
-    DeviceModel,
-    type IDevice,
-  } from "$lib";
-  import {
-    Button,
-    Card,
-    Carousel,
-    CarouselIndicators,
-    Controls,
-    Gallery,
-    Heading,
-    Hr,
-    P,
-  } from "flowbite-svelte";
-  import { onDestroy, onMount } from "svelte";
-  import type { HTMLImgAttributes } from "svelte/elements";
+    Navbar,
+    PageFooter,
+    DeviceFleetMap,
+    DeviceIndexPage,
+  } from "$components";
 
-  let backgroundFill = "#FFFFFF"; // Default background fill color
+  import { BasicModelPage } from "$layouts";
 
-  const setBackgroundFill = () => {
-    // Set the background fill color
-    backgroundFill = isDarkMode() ? "#030712" : "#FFFFFF"; // Change this to your desired color
-  };
-  let dmFunction: (() => void) | undefined;
-  const dApi = new DeviceModel();
-  onMount(async () => {
-    dmFunction = await onDarkModeChange(() => {
-      // Handle dark mode change
-      setBackgroundFill();
-    });
-
-    dApi
-      .find()
-      .sort({ lastTouched: "ASC" })
-      .fetch()
-      .then((devices: IDevice[]) => {
-        // Handle the retrieved devices
-        console.log("Retrieved devices:", devices);
-      })
-      .catch(console.error);
-    // LocalSocket.instance.listen("firehose", firehose);
-  });
-
-  onDestroy(() => {
-    dmFunction && dmFunction();
-    // LocalSocket.instance.forget("firehose", firehose);
-  });
-
-  setBackgroundFill();
   let openDrawer = $state(true);
-  // Example: dynamic models you’ll injec
-  let image: HTMLImgAttributes | undefined = $state();
 </script>
 
-<BasicModelPage open={false} {openDrawer}>
-  {#snippet header()}{/snippet}
+<div
+  class="flex w-full flex-wrap md:flex-nowrap overflow-y-auto md:overflow-y-clip"
+>
+  <div class="flex w-full h-[calc(100vh-2rem)]">
+    <BasicModelPage open={false} {openDrawer}>
+      {#snippet header()}{/snippet}
 
-  {#snippet body()}{/snippet}
-  {#snippet headerContent()}
-    <Navbar title="">{#snippet createSection()}{/snippet}</Navbar>
-  {/snippet}
-  {#snippet bodyContent()}
-    <div class="w-full"></div>
-  {/snippet}
-</BasicModelPage>
-
+      {#snippet body()}{/snippet}
+      {#snippet headerContent()}
+        <Navbar title="Hyphen Command Center"
+          >{#snippet createSection()}{/snippet}</Navbar
+        >
+      {/snippet}
+      {#snippet bodyContent()}
+        <DeviceIndexPage />
+      {/snippet}
+    </BasicModelPage>
+  </div>
+  <!-- <div class="w-1/2 h-[calc(100vh-2rem)]"> -->
+  <div class="w-full md:w-1/2">
+    <DeviceFleetMap />
+  </div>
+</div>
 <PageFooter />

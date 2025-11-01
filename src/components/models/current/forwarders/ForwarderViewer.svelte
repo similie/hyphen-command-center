@@ -60,7 +60,6 @@
   });
 
   onMount(() => {
-    console.log("Listening to forwarder artifacts on:", listenTo);
     LocalSocket.instance.listen(listenTo, forwarderPayload);
   });
   onDestroy(() => {

@@ -355,7 +355,7 @@
                 type="text"
                 name={field.name}
                 {id}
-                color={field.hasError ? "red" : "base"}
+                color={field.hasError ? "red" : undefined}
                 bind:value={$formData[field.name]}
                 oninput={(e) => handleInputChange(field.name, e)}
                 required={field.required}
@@ -363,25 +363,25 @@
             {/if}
 
             {#if field.errors && field.errors.required && field.isDirty}
-              <Helper color="red">
+              <Helper color="rose">
                 <span class="font-medium">{$_t("This field is required")}</span>
               </Helper>
             {:else if field.errors && field.errors.min && field.isDirty}
-              <Helper color="red">
+              <Helper color="rose">
                 <span class="font-medium"
                   >{$_t("This value violates the minimum requirement: ") +
                     field.min}</span
                 >
               </Helper>
             {:else if field.errors && field.errors.max && field.isDirty}
-              <Helper color="red">
+              <Helper color="rose">
                 <span class="font-medium"
                   >{$_t("This value violates the maximum requirement: ") +
                     field.max}
                 </span>
               </Helper>
             {:else if field.errors && field.errors.validate && field.isDirty}
-              <Helper color="red">
+              <Helper color="rose">
                 <span class="font-medium">{$_t("This field is invalid")}</span>
               </Helper>
             {/if}

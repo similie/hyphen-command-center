@@ -12,7 +12,9 @@ import { UserQuery, ConfigQuery, SiteRoutingQuery } from "$lib/server/db/query";
 import { parse } from "cookie";
 import { RedisCache } from "$lib/server/cache";
 import { JobsManager } from "$lib/server/cache/jobs";
+import { bootstrap } from "$lib/server/db/bootstrap";
 RedisCache.init().catch(console.error);
+bootstrap().catch(console.error);
 
 export async function handle({ event, resolve }) {
   const cookies = parse(event.request.headers.get("cookie") || "");
@@ -22,8 +24,6 @@ export async function handle({ event, resolve }) {
     if (!sessionToken) {
       return null;
     }
-
-    EllipsiesConnector.init().cookieValue = sessionToken;
 
     try {
       const uQuery = new UserQuery();
@@ -55,7 +55,6 @@ export async function handle({ event, resolve }) {
         await RedisCache.set(key, config);
         JobsManager.start(config);
       }
-
       return config;
     } catch (e: any) {
       console.error("Failed to get site config", e.message);

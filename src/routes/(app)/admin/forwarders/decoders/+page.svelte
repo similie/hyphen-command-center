@@ -31,6 +31,9 @@
       decoders.push(d);
     }),
   );
+  const onDelete = (decoder: IDecoder) => {
+    decoders = decoders.filter((d) => d.id !== decoder.id);
+  };
 </script>
 
 <BodyContainer>
@@ -45,7 +48,7 @@
           {#snippet header()}
             <Heading tag="h5">{decoder.name}</Heading>
           {/snippet}
-          <DecodeEditor {decoder} />
+          <DecodeEditor {decoder} {onDelete} />
         </AccordionItem>
       {/each}
     </Accordion>

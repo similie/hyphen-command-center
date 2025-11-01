@@ -3,9 +3,9 @@
   import InputFormItem from "$components/input/InputFormItem.svelte";
   import InputItemsRow from "$components/input/InputItemsRow.svelte";
   import RequiredLabel from "$components/input/RequiredLabel.svelte";
+  import DestroyModelModal from "$components/models/destroy/DestroyModelModal.svelte";
   import { Toast } from "$components/toasts";
   import { _t, Debounce, DecoderModel, emitEvent, type IDecoder } from "$lib";
-
   import {
     Button,
     Card,
@@ -17,9 +17,12 @@
     Spinner,
     Textarea,
   } from "flowbite-svelte";
-  import { FloppyDiskOutline } from "flowbite-svelte-icons";
+  import { FloppyDiskOutline, TrashBinOutline } from "flowbite-svelte-icons";
   let formEl = $state<HTMLFormElement | null>(null);
-  let { decoder } = $props<{ decoder?: IDecoder }>();
+  let { decoder, onDelete } = $props<{
+    decoder?: IDecoder;
+    onDelete?: (decoder: IDecoder) => void;
+  }>();
   let localDecoder = $state<Partial<IDecoder>>(decoder || {});
   let nameError = $state<boolean>(false);
   let nameErrorColor = $state<"red" | "green" | "orange" | undefined>(
@@ -99,7 +102,29 @@
   const onInput = () => {
     validForm = formEl?.checkValidity() || false;
   };
+  let showDestroyModal = $state(false);
+  const destroyDecoder = async () => {
+    if (!localDecoder.id) return;
+    try {
+      creating = true;
+      await api.destroy(localDecoder);
+      Toast.success($_t("Decoder deleted successfully"));
+      onDelete?.(localDecoder as IDecoder);
+    } catch (e) {
+      console.error("Error deleting decoder:", e);
+      Toast.error($_t("There was an error deleting the decoder"));
+    } finally {
+      creating = false;
+    }
+  };
 </script>
+
+<DestroyModelModal
+  title={$_t("Delete Decoder")}
+  body={$_t("Are you sure you want to delete this decoder?")}
+  bind:open={showDestroyModal}
+  onDestroy={destroyDecoder}
+/>
 
 <div class="flex flex-wrap md:flex-nowrap space-x-4 mb-12">
   <div class="w-full flex flex-col space-y-4 md:w-1/2">
@@ -199,13 +224,22 @@
     content={`\`\`\`javascript\nreturn JSON.parse(payload.toString());\n\`\`\``}
   />
 
-  <Button
-    disabled={nameError ||
-      !localDecoder.name ||
-      !localDecoder.codec ||
-      creating ||
-      !validForm}
-    class="mt-4"
-    onclick={createDecoder}><FloppyDiskOutline /> {$_t("Save Decoder")}</Button
-  >
+  <div class="flex items-center space-x-2 w-full mt-4">
+    {#if localDecoder.id}
+      <Button color="rose" outline onclick={() => (showDestroyModal = true)}
+        ><TrashBinOutline /></Button
+      >
+    {/if}
+
+    <Button
+      disabled={nameError ||
+        !localDecoder.name ||
+        !localDecoder.codec ||
+        creating ||
+        !validForm}
+      class="w-full"
+      onclick={createDecoder}
+      ><FloppyDiskOutline /> {$_t("Save Decoder")}</Button
+    >
+  </div>
 </div>

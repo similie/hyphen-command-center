@@ -25,7 +25,6 @@
     if (!profile) {
       return;
     }
-    console.log("DeviceFlashConfig profile:", profile);
     for (const key in profile.configSchema) {
       const fieldDef = profile.configSchema[key];
       const defVal = profile.defConfigSchema[key];

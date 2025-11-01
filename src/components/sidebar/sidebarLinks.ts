@@ -4,9 +4,9 @@ import {
   UserAddOutline,
   ClipboardOutline,
   DrawSquareOutline,
-  WandMagicSparklesOutline,
   ShapesOutline,
   BatteryOutline,
+  ComputerSpeakerOutline,
 } from "flowbite-svelte-icons";
 import SideBarSimilie from "./SideBarSimilie.svelte";
 
@@ -19,7 +19,7 @@ export function loadLinks(): { links: SidebarLink[] } {
         label: "Devices",
         classes: "",
         name: "devices",
-        icon: WandMagicSparklesOutline,
+        icon: ComputerSpeakerOutline,
         role: UserRoles.UNRESTRICTED,
       },
 
@@ -87,27 +87,27 @@ export function loadLinks(): { links: SidebarLink[] } {
             links: [],
           },
 
-          {
-            type: "item",
-            href: "/spaces",
-            label: "Spaces",
-            icon: DrawSquareOutline,
-            name: "admin.spaces",
-            classes: "",
-            role: UserRoles.USER_MANAGER,
-            links: [],
-          },
+          // {
+          //   type: "item",
+          //   href: "/spaces",
+          //   label: "Spaces",
+          //   icon: DrawSquareOutline,
+          //   name: "admin.spaces",
+          //   classes: "",
+          //   role: UserRoles.USER_MANAGER,
+          //   links: [],
+          // },
 
-          {
-            type: "item",
-            href: "/forms",
-            label: "Forms",
-            icon: ClipboardOutline,
-            name: "admin.forms",
-            classes: "",
-            role: UserRoles.USER_MANAGER,
-            links: [],
-          },
+          // {
+          //   type: "item",
+          //   href: "/forms",
+          //   label: "Forms",
+          //   icon: ClipboardOutline,
+          //   name: "admin.forms",
+          //   classes: "",
+          //   role: UserRoles.USER_MANAGER,
+          //   links: [],
+          // },
 
           {
             type: "item",

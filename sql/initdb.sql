@@ -1,0 +1,3 @@
+CREATE DATABASE hyphen_api;
+CREATE DATABASE hyphen;
+CREATE DATABASE hyphen_test;

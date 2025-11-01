@@ -14,13 +14,7 @@ enum CommonSubject {
   otp = "Your One-Time Passcode",
   verify = "Verify your email address",
   password = "Your password reset request",
-  invoice = "Your invoice is ready",
-  expirationReminder = "Your courses will be dropped in 24 hours",
-  account = "Your Academy Account",
-  donation = "We thank you for your support",
-  droppedCourses = "Courses Dropped From you Account",
-  tuition = "You made a tuition payment",
-  payment = "The Academy thanks You for your payment",
+  account = "Your Hyphen Account",
 }
 
 const templates = import.meta.glob<{
@@ -73,12 +67,12 @@ export class EmailTemplate {
 
 export class SystemEmail {
   private static readonly FROM: string =
-    process.env.DEFAULT_EMAIL_ADDRESS || "similie@academy.tl";
+    process.env.DEFAULT_EMAIL_ADDRESS || "info@similie.org";
   // private static readonly eq: EmailQuery = new EmailQuery();
   public static async send(to: string, template: EmailTemplateContent) {
     const subject =
       CommonSubject[template.templateName as keyof typeof CommonSubject] ||
-      "Your Academy Request";
+      "Your Hyphen Request";
     const content = await EmailTemplate.render(
       template.templateName,
       template.data,

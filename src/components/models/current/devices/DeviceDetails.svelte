@@ -139,7 +139,7 @@
           <A
             disabled={rebuildingCertificates}
             class="ml-auto"
-            color="red"
+            color="rose"
             onclick={() => (destroyModalOpen = true)}
             ><RefreshOutline
               class={rebuildingCertificates ? "animate-spin" : ""}

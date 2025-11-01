@@ -11,6 +11,7 @@
   import FunctionCallerValue from "./FunctionCallerValue.svelte";
   import { onDestroy, onMount } from "svelte";
   import CancelConfigAction from "./CancelConfigAction.svelte";
+  import { RefreshOutline } from "flowbite-svelte-icons";
 
   let { device, func, pending } = $props<{
     device: IDevice;
@@ -20,10 +21,22 @@
   let pendingVar = $derived(
     pending
       .filter(
-        (p: IDeviceConfig) => p.actionType === DeviceConfigActionType.FUNCTION,
+        (p: IDeviceConfig) =>
+          p.actionType === DeviceConfigActionType.FUNCTION && !p.noNullify,
       )
       .find((p: IDeviceConfig) => p.actionName === func),
   );
+
+  let staticConfigValues = $derived(
+    pending.filter(
+      (p: IDeviceConfig) =>
+        p.actionType === DeviceConfigActionType.FUNCTION &&
+        p.noNullify &&
+        p.actionName === func,
+    ),
+  );
+
+  let hasStaticCall = $derived(staticConfigValues.length > 0);
   let loadedConfig = $state<IDeviceConfig | undefined>(undefined);
   const api = new DeviceConfigModel();
   let loading = $state(false);
@@ -39,13 +52,22 @@
     };
   };
 
+  const verifyStaticConfig = (config: IDeviceConfig) => {
+    if (!staticConfigValues || staticConfigValues.length === 0) {
+      return;
+    }
+    staticConfigValues = staticConfigValues.filter(
+      (p: IDeviceConfig) => p.id !== config.id,
+    );
+    hasStaticCall = staticConfigValues && staticConfigValues.length !== 0;
+  };
+
   const configSocket = (message: IDeviceConfig) => {
     if (!loadedConfig || loadedConfig.id !== message.id) {
-      return;
+      return verifyStaticConfig(message);
     }
     loading = false;
     setValue = message.value || "";
-    // loadedConfig = undefined;
   };
 
   const topicString = $derived(
@@ -88,7 +110,7 @@
   };
 </script>
 
-{#if loadedConfig}
+{#if loadedConfig && !hasStaticCall}
   <div class="relative">
     {#if loadedConfig && loading}
       <CancelConfigAction {loadedConfig} {onRemove} />
@@ -99,6 +121,19 @@
       onCall={() => (loadedConfig = undefined)}
       {setValue}
       {loading}
+      disabled={hasStaticCall}
+    />
+  </div>
+{:else if hasStaticCall}
+  <div class="relative">
+    <div class="absolute top-0 right-0">
+      <RefreshOutline class="animate-spin" />
+    </div>
+    <FunctionCallerValue
+      callValue={func}
+      {onCall}
+      loading
+      disabled={hasStaticCall}
     />
   </div>
 {:else}

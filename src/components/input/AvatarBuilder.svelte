@@ -70,11 +70,11 @@
 
 {#if avatar && !noShowAvatar}
   <Avatar
-    class={square ? "rounded-none  " : "mb-2"}
+    class={square ? `rounded-none ${size === "md" ? "h-11" : ""}` : "mb-2"}
     {border}
     cornerStyle={square ? "rounded" : undefined}
     src={appFileBase(avatar, { size: "md", token })}
-    size="lg"
+    {size}
   />
   <!-- {#if !disabled} -->
   <Button

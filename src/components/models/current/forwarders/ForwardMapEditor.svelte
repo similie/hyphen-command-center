@@ -5,18 +5,21 @@
     InputItemsRow,
     RequiredLabel,
   } from "$components/input";
-
+  import { DestroyModelModal } from "$components/models/destroy";
   import { Toast } from "$components/toasts";
   import { _t, emitEvent, ForwardMapModel, type IForwardMap } from "$lib";
-
   import { Button, Hr, Input, Label, Textarea } from "flowbite-svelte";
-  import { FloppyDiskOutline } from "flowbite-svelte-icons";
+  import { FloppyDiskOutline, TrashBinOutline } from "flowbite-svelte-icons";
   let formEl = $state<HTMLFormElement | null>(null);
-  let { forwardMap } = $props<{ forwardMap?: IForwardMap }>();
+  let { forwardMap, onDelete } = $props<{
+    forwardMap?: IForwardMap;
+    onDelete?: (forwardMap: IForwardMap) => void;
+  }>();
   let localForwardMap = $state<Partial<IForwardMap>>(forwardMap || {});
 
   let validForm = $state(false);
   let creating = $state(false);
+  let destroyModal = $state(false);
   const api = new ForwardMapModel();
 
   const createModel = async () => {
@@ -48,7 +51,30 @@
   const onInput = () => {
     validForm = formEl?.checkValidity() || false;
   };
+  const onDeleteForwardMap = async () => {
+    if (!localForwardMap.id) {
+      return;
+    }
+
+    try {
+      creating = true;
+      await api.destroy(localForwardMap);
+      onDelete?.(localForwardMap as IForwardMap);
+    } catch (e) {
+      console.error("Error deleting forward map:", e);
+      Toast.error($_t("There was an error deleting the forward map"));
+    } finally {
+      creating = false;
+    }
+  };
 </script>
+
+<DestroyModelModal
+  bind:open={destroyModal}
+  onDestroy={onDeleteForwardMap}
+  title={$_t("Delete Forward Map")}
+  body={$_t("Are you sure you want to delete this forward map?")}
+/>
 
 <div class="flex flex-wrap md:flex-nowrap space-x-4">
   <div class="w-full flex flex-col space-y-4 md:w-1/2">
@@ -93,13 +119,21 @@
 <div class="flex w-full flex-col">
   <Hr class="my-4" />
 
-  <Button
-    disabled={!localForwardMap.name ||
-      !Object.keys(localForwardMap.values || {}).length ||
-      creating ||
-      !validForm}
-    class="mt-4"
-    onclick={createModel}
-    ><FloppyDiskOutline /> {$_t("Save Forwarder Map")}</Button
-  >
+  <div class="flex items-center space-x-2 w-full mt-4">
+    {#if localForwardMap.id}
+      <Button outline color="rose" onclick={() => (destroyModal = true)}
+        ><TrashBinOutline /></Button
+      >
+    {/if}
+
+    <Button
+      disabled={!localForwardMap.name ||
+        !Object.keys(localForwardMap.values || {}).length ||
+        creating ||
+        !validForm}
+      class="w-full"
+      onclick={createModel}
+      ><FloppyDiskOutline /> {$_t("Save Forwarder Map")}</Button
+    >
+  </div>
 </div>

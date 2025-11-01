@@ -90,6 +90,16 @@
       <Input disabled={saving} bind:value={savedRepository.branch} />
     </InputFormItem>
   </InputItemsRow>
+  <InputItemsRow>
+    <InputFormItem>
+      <RequiredLabel content="Image Name" />
+      <Input disabled={saving} bind:value={savedRepository.containerName} />
+    </InputFormItem>
+    <InputFormItem>
+      <RequiredLabel content="Build Path" />
+      <Input disabled={saving} bind:value={savedRepository.buildPath} />
+    </InputFormItem>
+  </InputItemsRow>
   <InputFormItem>
     <RequiredLabel content="Repository URL (generally the ssh url)" />
     <Input disabled={saving} bind:value={savedRepository.url} />
@@ -116,7 +126,7 @@
     {#if savedRepository.id}
       <Button
         type="button"
-        color="red"
+        color="rose"
         outline
         disabled={saving}
         onclick={() => (destroyValueBind = true)}><TrashBinOutline /></Button

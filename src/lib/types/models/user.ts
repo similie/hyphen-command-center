@@ -31,21 +31,21 @@ export enum UserRoles {
 }
 
 export const UserRolesStringsNames = {
-  "-1": "Unrestricted",
+  "-1": "Restricted",
   "5": "Admin",
   "4": "User Manager",
-  "3": "Instructor",
-  "2": "Patron",
-  "1": "Student",
-  "0": "Public",
+  "3": "Manager",
+  "2": "Visitor",
+  "1": "Guest",
+  "0": "Blocked",
 };
 
 export enum UserRolesStrings {
-  BLOCKED = "Public",
-  GUEST = "Student",
-  USER = "Patron",
-  MANAGER = "Instructor",
-  USER_MANAGER = "Manager",
+  BLOCKED = "Blocked",
+  GUEST = "Guest",
+  USER = "Visitor",
+  MANAGER = "Manager",
+  USER_MANAGER = "User Manager",
   ADMIN = "Admin",
 }
 

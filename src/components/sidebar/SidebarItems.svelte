@@ -50,15 +50,9 @@
   });
 
   let role = $derived(user?.role || UserRoles.BLOCKED);
-  let showLinks = $state(true);
 
-  const toggleLinks = () => {
-    setTimeout(() => (showLinks = true), 300);
-  };
   siteUser.subscribe((u) => {
-    showLinks = false;
     user = u;
-    toggleLinks();
   });
   $effect(() => {
     if (user?.role === role) {
@@ -89,7 +83,7 @@
 
 <SidebarGroup {style} class={sm ? "-ml-4" : "space-y-2"}>
   {#each sidebar.links as link}
-    {#if isAvailable(link) && showLinks}
+    {#if isAvailable(link)}
       {#if link.type === "item"}
         <SidebarItem
           label={openReady ? $_t(link.label) : ""}
@@ -123,7 +117,7 @@
               </div>
             {/if}
           {/snippet}
-          {#if open && link.links && showLinks}
+          {#if open && link.links}
             {#each link.links as sublink}
               {@const href = `${link.href}${sublink.href}`}
               {#if isAvailable(sublink)}

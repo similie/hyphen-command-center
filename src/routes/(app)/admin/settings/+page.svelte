@@ -30,6 +30,14 @@
       required: false,
     },
     {
+      name: "twoFactorAuth",
+      label: "Two Factor Authentication",
+      type: "checkbox",
+      value: $siteConfig.twoFactorAuth,
+      required: false,
+    },
+
+    {
       name: "siteDescription",
       label: "Site Description",
       type: "textarea",
@@ -63,6 +71,14 @@
     },
 
     {
+      name: "applicationURL",
+      label: "Application URL",
+      type: "text",
+      value: $siteConfig.applicationURL,
+      required: true,
+    },
+
+    {
       name: "apiBaseUrl",
       label: "Api Base Url",
       type: "text",
@@ -75,37 +91,6 @@
       label: "Application Api",
       type: "text",
       value: $siteConfig.applicationApi,
-      required: true,
-    },
-    {
-      name: "currencyDivisor",
-      label: "Currency Divisor",
-      type: "number",
-      value: $siteConfig.currencyDivisor || 100,
-      required: true,
-    },
-
-    {
-      name: "currency",
-      label: "Currency",
-      type: "text",
-      value: $siteConfig.currency || "USD",
-      required: true,
-    },
-
-    {
-      name: "currencySymbol",
-      label: "Currency Symbol",
-      type: "text",
-      value: $siteConfig.currencySymbol || "$",
-      required: true,
-    },
-
-    {
-      name: "paymentTimeout",
-      label: "Payment Timeout",
-      type: "number",
-      value: $siteConfig.paymentTimeout || 7,
       required: true,
     },
 

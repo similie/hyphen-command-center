@@ -54,21 +54,17 @@ export const ConfigTable = pgTable("config", {
   apiBaseUrl: varchar("api_base_url", { length: 64 })
     .notNull()
     .default("api/v1"),
+  applicationURL: varchar("application_url", { length: 128 })
+    .notNull()
+    .default("http://127.0.0.1:1612/api/v2/"),
   applicationApi: varchar("application_api", { length: 128 })
     .notNull()
     .default("http://127.0.0.1:5002/api/v1/"),
   logos: jsonb("logos").default({}),
-  currency: varchar("currency", { length: 32 }).default("USD"),
-  currencySymbol: varchar("currency_symbol", { length: 8 })
-    .default("$")
-    .notNull(),
-  application: uuid("application"),
-  registrationProduct: uuid("registration_product"),
-  currencyDivisor: integer("current_divisor").default(100).notNull(),
   location: text("location"),
+  twoFactorAuth: boolean("two_factor_auth").notNull().default(true),
   coordinates: jsonb("coordinates").default({}),
   googleMapsKey: varchar("google_maps_key", { length: 128 }),
-  paymentTimeout: integer("payment_timeout").default(7),
   created_at: timestamp("created_at").notNull().defaultNow(),
   updated_at: timestamp("updated_at")
     .notNull()

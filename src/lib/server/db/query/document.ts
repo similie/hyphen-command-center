@@ -98,7 +98,7 @@ export class AppDocsQuery extends ModelQuery<ApplicationDocumentModel> {
     }
     const query = `SELECT "role", "owner_uid" from "app_documents" WHERE "uid" = '${uid}'`;
     const result = await this.db.execute(query);
-    if (!result) {
+    if (!result || !result.length) {
       return false;
     }
     const { role, owner_uid } = result[0] as { role: number; owner_uid: UUID };

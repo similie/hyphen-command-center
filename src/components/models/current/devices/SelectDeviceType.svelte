@@ -1,6 +1,7 @@
 <script lang="ts">
   import UserAvatar from "$components/user/UserAvatar.svelte";
   import { _t, DeviceProfile, type IDeviceProfile, type UUID } from "$lib";
+  import { DeviceProfileStore } from "$lib/stores/deviceProfiles";
   import { Avatar, Select } from "flowbite-svelte";
   import { onMount } from "svelte";
 
@@ -26,8 +27,10 @@
       avatar?: UUID;
     }[]
   >([]);
+
   const pullProfiles = async () => {
-    const profiles = await api.find().sort({ name: "ASC" }).fetch();
+    const profiles =
+      $DeviceProfileStore || (await api.find().sort({ name: "ASC" }).fetch());
     deviceProfiles = profiles.map((profile) => ({
       value: profile.id! as UUID,
       name: profile.name,

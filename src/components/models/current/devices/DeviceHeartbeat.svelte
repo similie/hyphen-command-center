@@ -117,70 +117,72 @@
       </InputItemsRow>
     {/if}
     <div class="my-3"></div>
-    <InputItemsRow>
-      <InputFormItem>
-        <P
-          ><Span class="text-primary-600 dark:text-primary-600"
-            >{$_t("Battery")}</Span
-          >:
-          {Math.ceil(heartbeat.pow.bat)}%</P
-        >
-      </InputFormItem>
-      <InputFormItem>
-        <P
-          ><Span class="text-primary-600 dark:text-primary-600"
-            >{$_t("Voltage")}</Span
-          >: {heartbeat.pow.v_cel.toFixed(2)}v</P
-        >
-      </InputFormItem>
-      <InputFormItem>
-        <P
-          ><Span class="text-primary-600 dark:text-primary-600"
-            >{$_t("Current")}</Span
-          >: {heartbeat.pow.current.toFixed(2)}</P
-        >
-      </InputFormItem>
-      <InputFormItem>
-        <P
-          ><Span class="text-primary-600 dark:text-primary-600"
-            >{$_t("Solar")}</Span
-          >: {heartbeat.pow.solar_v.toFixed(2)}v</P
-        >
-      </InputFormItem>
-    </InputItemsRow>
-
-    <InputItemsRow>
-      <InputFormItem>
-        <P
-          ><Span class="text-primary-600 dark:text-primary-600"
-            >{$_t("Free")}</Span
-          >:
-          {Math.ceil(heartbeat.sys.free / 1000)}KB</P
-        >
-      </InputFormItem>
-      <InputFormItem>
-        <P
-          ><Span class="text-primary-600 dark:text-primary-600"
-            >{$_t("Total")}</Span
-          >: {Math.ceil(heartbeat.sys.mem / 1000)}KB</P
-        >
-      </InputFormItem>
-      <InputFormItem>
-        <P
-          ><Span class="text-primary-600 dark:text-primary-600"
-            >{$_t("Uptime")}</Span
-          >: {heartbeat.sys.up}</P
-        >
-      </InputFormItem>
-      <InputFormItem>
-        <P
-          ><Span class="text-primary-600 dark:text-primary-600"
-            >{$_t("Version")}</Span
-          >: {heartbeat.sys.v}</P
-        >
-      </InputFormItem>
-    </InputItemsRow>
-
+    {#if heartbeat.pow}
+      <InputItemsRow>
+        <InputFormItem>
+          <P
+            ><Span class="text-primary-600 dark:text-primary-600"
+              >{$_t("Battery")}</Span
+            >:
+            {Math.ceil(heartbeat.pow.bat)}%</P
+          >
+        </InputFormItem>
+        <InputFormItem>
+          <P
+            ><Span class="text-primary-600 dark:text-primary-600"
+              >{$_t("Voltage")}</Span
+            >: {heartbeat.pow.v_cel.toFixed(2)}v</P
+          >
+        </InputFormItem>
+        <InputFormItem>
+          <P
+            ><Span class="text-primary-600 dark:text-primary-600"
+              >{$_t("Current")}</Span
+            >: {(heartbeat.pow.current || 0).toFixed(2)}</P
+          >
+        </InputFormItem>
+        <InputFormItem>
+          <P
+            ><Span class="text-primary-600 dark:text-primary-600"
+              >{$_t("Solar")}</Span
+            >: {(heartbeat.pow.solar_v || 0).toFixed(2)}v</P
+          >
+        </InputFormItem>
+      </InputItemsRow>
+    {/if}
+    {#if heartbeat.sys}
+      <InputItemsRow>
+        <InputFormItem>
+          <P
+            ><Span class="text-primary-600 dark:text-primary-600"
+              >{$_t("Free")}</Span
+            >:
+            {Math.ceil(heartbeat.sys.free / 1000)}KB</P
+          >
+        </InputFormItem>
+        <InputFormItem>
+          <P
+            ><Span class="text-primary-600 dark:text-primary-600"
+              >{$_t("Total")}</Span
+            >: {Math.ceil(heartbeat.sys.mem / 1000)}KB</P
+          >
+        </InputFormItem>
+        <InputFormItem>
+          <P
+            ><Span class="text-primary-600 dark:text-primary-600"
+              >{$_t("Uptime")}</Span
+            >: {heartbeat.sys.up}</P
+          >
+        </InputFormItem>
+        <InputFormItem>
+          <P
+            ><Span class="text-primary-600 dark:text-primary-600"
+              >{$_t("Version")}</Span
+            >: {heartbeat.sys.v}</P
+          >
+        </InputFormItem>
+      </InputItemsRow>
+    {/if}
     <!---->
   {:else}
     <P class="text-center" italic>{$_t("No heartbeat data available")}</P>

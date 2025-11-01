@@ -21,7 +21,7 @@
 </script>
 
 {#if saveModel}
-  <Modal bind:open>
+  <Modal size="sm" bind:open>
     {#snippet header()}
       <div class="flex space-x-2 items-center align-center w-full">
         <AvatarBuilder

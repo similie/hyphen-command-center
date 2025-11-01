@@ -24,7 +24,7 @@ RUN pnpm install --production=false
 ENV NODE_ENV production
 COPY . .
 # RUN pnpm run build 
-ENV PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_518uG4zAvvJ0717hsEfnS4ar7kirDqwzAStQtYqlRPcEPwj4Wa0iH3ONgJA1HcnR0kP0hEwfltWHzr6ZSX1tg2VMY00851Lqn6P
+ENV PUBLIC_API_URL=http://localhost:1612/api/v2/
 # RUN pnpm rebuild bcrypt && \
 #     BCRYPT_PATH=$(find node_modules/.pnpm -type d -path "*/bcrypt@*" | head -n 1) && \
 #     mkdir -p node_modules/bcrypt/lib && \

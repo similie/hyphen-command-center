@@ -66,6 +66,9 @@ coredump,     data,   coredump,  0xF00000,   0x010000,
   ];
 
   $effect(() => {
+    if (!value) {
+      return;
+    }
     valid =
       value.length > 0 &&
       value.every((v: any) => v.data && v.address !== undefined);
@@ -73,9 +76,7 @@ coredump,     data,   coredump,  0xF00000,   0x010000,
 
   const parseInputAndUpdateValue = (index: number) => {
     const input = selectedAddress[index].address;
-    console.log("Address input changed:", input);
     const parsed = parseInt(input, 16);
-    console.log("Parsed address input:", input, parsed);
     if (!isNaN(parsed)) {
       value[index].address = parsed;
     }
@@ -127,7 +128,7 @@ coredump,     data,   coredump,  0xF00000,   0x010000,
           </TableBodyCell>
           <TableBodyCell>
             <Button
-              color="red"
+              color="rose"
               {disabled}
               size="xs"
               onclick={() => value.splice(index, 1)}><TrashBinOutline /></Button

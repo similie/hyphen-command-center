@@ -34,7 +34,6 @@
     return api
       .count({ device: device.identity })
       .then((c) => {
-        console.log("Counted device events", c);
         return c;
       })
       .catch((e) => {
@@ -85,7 +84,6 @@
       .then(() =>
         pullHistory()
           .then((fetched: SocketMessage[]) => {
-            console.log("Fetched device events", fetched);
             events = fetched;
             LocalSocket.instance.listen(eventName, socketEvents);
           })

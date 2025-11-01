@@ -85,7 +85,7 @@
       {#each rows as row, index}
         <div class="flex flex-start gap-4 w-full">
           <ButtonGroup class="ml-auto mb-4">
-            <Button onclick={() => rows.splice(index, 1)} color="red"
+            <Button onclick={() => rows.splice(index, 1)} color="rose"
               >{$_t("Remove Row")}</Button
             >
             <Button

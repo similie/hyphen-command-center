@@ -4,7 +4,6 @@ export * from "./toasts";
 export * from "./form";
 export * from "./scroll";
 export * from "./headings";
-export * from "./cart";
 export * from "./products";
 export * from "./applications";
 export * from "./persistent";

@@ -9,10 +9,10 @@
   <div class="space-y-6">
     <!-- Intro -->
     <P>
-      <span class="font-semibold text-primary-600">Similie Academy</span> is
-      more than just a student information system. Our platform is designed to
-      empower learning, streamline administration, and scale across
-      organizations. Best of all, it can be
+      <span class="font-semibold text-primary-600">Hyphen Command Center</span>
+      is more than an IoT fleet management platform. Our tools are designed to empower
+      learning, streamline administration, and scale across organizations. Best of
+      all, it can be
       <span class="font-semibold">white-labeled</span> and licensed for third-party
       use—so you can offer a branded, professional solution that meets your community’s
       needs.

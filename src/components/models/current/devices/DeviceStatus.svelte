@@ -1,9 +1,11 @@
 <script lang="ts">
   import { DeviceModel, _t, type IDevice } from "$lib";
+  import { onMount } from "svelte";
   let { device, text } = $props<{ device: IDevice; text?: boolean }>();
-
-  DeviceModel.isOnline(device.lastTouched);
-  let isOnline = $derived(DeviceModel.isOnline(device.lastTouched));
+  let isOnline = $state(false);
+  onMount(async () => {
+    isOnline = await DeviceModel.isDeviceOnline(device);
+  });
 </script>
 
 {#if text}

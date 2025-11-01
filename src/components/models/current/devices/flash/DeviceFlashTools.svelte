@@ -41,7 +41,6 @@
   let breakLoop = $state(false);
   let connected = $state(false);
   let logs = $state<string[]>([]);
-  let showModal = $state(false);
   let isFlashing = $state(false);
   let logBuffer: string[] = [];
 
@@ -267,18 +266,19 @@
   <Hr class="my-4" />
   {#if !connected && !cloudView}
     <div class="flex space-x-4 items-center">
-      <Button
-        color="primary"
-        onclick={connectDevice}
-        class="flex-grow-1"
-        disabled={connecting}
-      >
-        {#if connecting}
-          <Spinner size={"4"} class="mr-2" />
-        {/if}
-        {$_t("Connect to Device")}
-      </Button>
-
+      <div class="w-full flex-grow-1 flex">
+        <Button
+          color="primary"
+          onclick={connectDevice}
+          class=" w-full"
+          disabled={connecting}
+        >
+          {#if connecting}
+            <Spinner size={"4"} class="mr-2" />
+          {/if}
+          {$_t("Connect to Device")}
+        </Button>
+      </div>
       <Select
         class="ml-auto"
         bind:value={baudRate}

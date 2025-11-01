@@ -83,11 +83,10 @@
           required
         />
       </div>
-      <div class="flex flex-col space-y-4">
+      <!-- <div class="flex flex-col space-y-4">
         <P size="xs" italic>{$_t("Don't communicate with me")}</P>
-
         <Toggle name="opt" bind:checked={model.optOut}></Toggle>
-      </div>
+      </div> -->
     </div>
     <div class="flex flex-col space-y-2">
       <Label for="username" class="mb-2"
@@ -98,10 +97,10 @@
       <UsernameGen disabled={disabledForm} bind:user={model} />
     </div>
 
-    <div class="flex flex-col space-y-2">
+    <!-- <div class="flex flex-col space-y-2">
       <Label>{$_t("Your Bio")}</Label>
       <StyleWriter bind:value={model.bio} />
-    </div>
+    </div> -->
 
     <div class="flex flex-col space-y-2">
       <Label for="password" class="mb-2">{$_t("Password")}</Label>

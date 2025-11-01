@@ -136,7 +136,7 @@
 {:else if documents.length}
   <DocumentsViewTable {documents} />
   {#if edit}
-    <Button class="mt-2" color="red" onclick={removeDocs}
+    <Button class="mt-2" color="rose" onclick={removeDocs}
       ><TrashBinOutline /> {$_t("Remove")}</Button
     >
   {/if}

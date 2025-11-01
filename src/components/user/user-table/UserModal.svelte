@@ -93,7 +93,7 @@
   };
 </script>
 
-<Modal bind:open>
+<Modal size="sm" bind:open>
   {#snippet header()}
     <div class="flex space-x-2 items-center align-center w-full">
       <AvatarBuilder
@@ -136,10 +136,10 @@
           <UserEmailInput bind:user={saveModel} onChange={checkValidity} />
         </div>
       </div>
-      <div class="mt-4 w-full">
+      <!-- <div class="mt-4 w-full">
         <Label for="bio">{$_t("User Bio")}</Label>
         <StyleWriter id="bio" bind:value={saveModel.bio} />
-      </div>
+      </div> -->
       <div class="mt-4">
         {#if saveModel.uid && !passwordUpdate}
           <Button
@@ -190,12 +190,12 @@
   {/snippet}
 </Modal>
 
-<Modal color="red" bind:open={deleteModal} autoclose>
+<Modal color="rose" bind:open={deleteModal} autoclose>
   <div class="text-base leading-relaxed">
     {$_t("Are you sure you want to remove this content?")}
   </div>
   {#snippet footer()}
-    <Button onclick={deleteContent} color="red">{$_t("Proceed")}</Button>
+    <Button onclick={deleteContent} color="rose">{$_t("Proceed")}</Button>
     <Button class="ml-auto" color="alternative">{$_t("Go Back")}</Button>
   {/snippet}
 </Modal>

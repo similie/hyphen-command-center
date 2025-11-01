@@ -7,7 +7,6 @@
     _t,
     type IDevice,
     type IDeviceConfig,
-    type SocketMessage,
   } from "$lib";
   import { A, Card, Heading, P, Skeleton } from "flowbite-svelte";
   import { onDestroy, onMount } from "svelte";
@@ -22,18 +21,30 @@
   const api = new DeviceRegistration();
   const dApi = new DeviceConfigModel();
   const socketName = $derived(`devices/config/${device.identity}`);
-  const configSocket = (message: SocketMessage) => {
-    console.log("Config Socket Message", message);
+  let configurations = $state<IDeviceConfig[]>([]);
+  const configSocket = (message: IDeviceConfig) => {
+    console.log("Received device config socket message:", message);
+    if (
+      message.identity !== device.identity ||
+      message.state !== DeviceConfigEnum.WAITING
+    ) {
+      return;
+    }
+    const index = configurations.findIndex((c) => c.id === message.id);
+    if (index !== -1) {
+      return;
+    }
+    configurations.push(message);
   };
 
   let functions = $state<string[]>([]);
   let variables = $state<string[]>([]);
-  let configurations = $state<IDeviceConfig[]>([]);
+
   const pullRegistry = async () => {
     try {
       loading = true;
       configurations = await dApi
-        .find({ state: DeviceConfigEnum.WAITING })
+        .find({ state: DeviceConfigEnum.WAITING, identity: device.identity })
         .fetch();
       const registry = await api
         .find({ identity: device.identity })

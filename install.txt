@@ -1,2 +1,0 @@
-PGPASSWORD="postgres" pg_dump -h 127.0.0.1  "academy_template" -N topology -U postgres -O -x -Fc > /var/log/postgresql/academy.bak
-    PGPASSWORD="similiePostgresMaster" pg_restore -h localhost -U postgres --no-owner --role=postgres -Fc -d academy /etc/scripts/academy.bak

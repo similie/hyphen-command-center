@@ -15,7 +15,6 @@
     emitEvent,
     Debounce,
     SensorTypeName,
-    SensorType,
   } from "$lib";
   import {
     Button,
@@ -109,11 +108,18 @@
   <InputItemsRow>
     <InputFormItem>
       <RequiredLabel content="Name" />
-      <ButtonGroup class="w-full">
-        <Input disabled={saving} bind:value={savedSensor.name} required />
+      <ButtonGroup>
+        <Input
+          disabled={saving}
+          bind:value={savedSensor.name}
+          size="md"
+          required
+          class="h-11"
+        />
         <AvatarBuilder
           square
           disabled={saving}
+          size="md"
           bind:avatar={savedSensor.avatar}
         />
       </ButtonGroup>
@@ -129,7 +135,7 @@
         oninput={validNameCheck}
       />
       {#if !validName}
-        <Helper color="red">
+        <Helper color="rose">
           {$_t(
             "A sensor with this identity already exists. Please choose a different identity.",
           )}
@@ -172,7 +178,7 @@
     {#if savedSensor.id}
       <Button
         type="button"
-        color="red"
+        color="rose"
         outline
         disabled={saving}
         onclick={() => (destroyValueBind = true)}><TrashBinOutline /></Button

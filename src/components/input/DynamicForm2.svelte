@@ -521,7 +521,8 @@
                     </div>
 
                     {#if field.errors && field.errors["pattern_" + index]}
-                      <Helper color="red">{$_t("The input is invalid")}</Helper>
+                      <Helper color="rose">{$_t("The input is invalid")}</Helper
+                      >
                     {/if}
                   </div>
                 {/each}
@@ -621,25 +622,25 @@
               {/key}
             {/if}
             {#if field.errors && field.errors.required && field.isDirty}
-              <Helper color="red">
+              <Helper color="rose">
                 <span class="font-medium">{$_t("This field is required")}</span>
               </Helper>
             {:else if field.errors && field.errors.min && field.isDirty}
-              <Helper color="red">
+              <Helper color="rose">
                 <span class="font-medium"
                   >{$_t("This value violates the minimum requirement: ") +
                     field.min}</span
                 >
               </Helper>
             {:else if field.errors && field.errors.max && field.isDirty}
-              <Helper color="red">
+              <Helper color="rose">
                 <span class="font-medium"
                   >{$_t("This value violates the maximum requirement: ") +
                     field.max}
                 </span>
               </Helper>
             {:else if field.errors && field.errors.validate && field.isDirty}
-              <Helper color="red">
+              <Helper color="rose">
                 <span class="font-medium">{$_t("This field is invalid")}</span>
               </Helper>
             {/if}

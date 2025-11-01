@@ -49,8 +49,6 @@
     >
       <BarsOutline />
     </Button>
-
-    <!-- <P>Academy</P> -->
   </div>
 </div>
 
@@ -65,7 +63,7 @@
     activeUrl={page.url.pathname}
     backdrop={true}
     position="static"
-    divClass={"bg-transparent dark:bg-transparent"}
+    classes={{ div: "bg-transparent dark:bg-transparent" }}
   >
     <div
       class="relative w-full h-[calc(100dvh-2rem)]"

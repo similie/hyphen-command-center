@@ -141,7 +141,7 @@
 
         <Button
           type="button"
-          color="red"
+          color="rose"
           size="xs"
           onclick={() => remove(form)}
         >

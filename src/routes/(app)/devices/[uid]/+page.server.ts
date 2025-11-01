@@ -9,6 +9,10 @@ export async function load(event) {
       "/login?routeTo=" + encodeURIComponent(event.url.pathname),
     );
   }
+  const config = await event.locals.config();
+  if (config) {
+    UserQuery.applyHyphenApiBase(event, config);
+  }
   const api = new DeviceModel();
 
   try {

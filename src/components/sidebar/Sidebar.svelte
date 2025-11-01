@@ -90,7 +90,7 @@
     activeUrl={page.url.pathname}
     backdrop={false}
     position="static"
-    divClass={"bg-transparent dark:bg-transparent"}
+    classes={{ div: "bg-transparent dark:bg-transparent" }}
   >
     <div
       class="relative h-[100dvh]"

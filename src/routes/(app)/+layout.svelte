@@ -2,6 +2,7 @@
   import { page } from "$app/state";
   import { Primary } from "$layouts";
   import { siteUser, userConfig, UserApi } from "$lib";
+  import { DeviceProfileStore } from "$lib/stores/deviceProfiles";
   import { onDestroy, onMount } from "svelte";
   let { children } = $props();
   const userApi = new UserApi();
@@ -10,6 +11,9 @@
     siteUser.set(data?.session?.user);
     if (data?.userConfig && !$userConfig) {
       userConfig.set(data.userConfig);
+    }
+    if (data.profiles && data.profiles.length > 0) {
+      DeviceProfileStore.set(data.profiles);
     }
   });
 

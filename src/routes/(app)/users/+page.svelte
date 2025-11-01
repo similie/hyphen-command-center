@@ -30,7 +30,7 @@
         class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 dark:text-gray-400 w-full"
       >
         <PopoutInfo
-          message="You can add students and contributors to the academy to in this portal."
+          message="You can add students and contributors to this portal."
         />
 
         {$_t("User Accounts")}

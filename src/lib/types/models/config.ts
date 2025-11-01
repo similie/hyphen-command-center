@@ -12,15 +12,11 @@ export interface SiteConfig extends BaseModel {
   defaultRole: number;
   publicSite: boolean;
   logos: Record<string, string>;
-  currencyDivisor?: number;
-  currency: string;
-  currencySymbol: string;
-  application?: UUID;
-  registrationProduct?: UUID;
   location?: string;
   coordinates?: Record<string, string>;
   googleMapsKey?: string;
-  paymentTimeout: number;
+  applicationURL: string;
+  twoFactorAuth: boolean;
 }
 
 export interface UserConfig extends BaseModel {

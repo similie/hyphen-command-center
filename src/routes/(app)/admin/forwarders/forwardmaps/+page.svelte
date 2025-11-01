@@ -31,6 +31,10 @@
       maps.push(d);
     }),
   );
+
+  const onDelete = (map: IForwardMap) => {
+    maps = maps.filter((m) => m.id !== map.id);
+  };
 </script>
 
 <BodyContainer>
@@ -45,7 +49,7 @@
           {#snippet header()}
             <Heading tag="h5">{map.name}</Heading>
           {/snippet}
-          <ForwardMapEditor forwardMap={map} />
+          <ForwardMapEditor forwardMap={map} {onDelete} />
         </AccordionItem>
       {/each}
     </Accordion>

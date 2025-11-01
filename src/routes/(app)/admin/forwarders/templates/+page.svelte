@@ -56,7 +56,7 @@
         <AccordionItem>
           {#snippet header()}
             <div class="flex items-center space-x-2">
-              <UserAvatar size="md" avatar={template.avatar} />
+              <UserAvatar size="md" type="forwarder" avatar={template.avatar} />
               <Heading tag="h5">{template.name}</Heading>
             </div>
           {/snippet}

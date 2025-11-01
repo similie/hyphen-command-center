@@ -28,19 +28,7 @@
     flashing?: boolean;
   }>();
   let selectedAddress = $state<{ select: string; input: string }[]>([]);
-  //   function fileToBase64_byBinaryString(file: File): Promise<string> {
-  //     return new Promise<string>((resolve, reject) => {
-  //       const reader = new FileReader();
-  //       reader.onerror = () =>
-  //         reject(reader.error || new Error("FileReader failed"));
-  //       reader.onload = () => {
-  //         const binaryString = reader.result as string; // each char’s code = byte
-  //         const base64 = btoa(binaryString);
-  //         resolve(base64);
-  //       };
-  //       reader.readAsBinaryString(file);
-  //     });
-  //   }
+
   const selectValueItems = [
     { value: "0x0", name: "0x0 - Other" },
     {
@@ -149,7 +137,7 @@
           </TableBodyCell>
           <TableBodyCell>
             <Button
-              color="red"
+              color="rose"
               disabled={flashing}
               size="xs"
               onclick={() => value.splice(index, 1)}><TrashBinOutline /></Button

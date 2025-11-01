@@ -1,33 +1,36 @@
-import { HTTPConnector, HttpMethod } from "@similie/http-connector";
+import { type UUID } from "@similie/model-connect-entities";
+import { profileExpireTime } from "$lib/stores/deviceProfiles";
+import { HyphenModel } from "./base";
 import {
-  Model,
-  type IEntity,
-  type UUID,
-} from "@similie/model-connect-entities";
-import type { ISensor, SensorType } from "./sensor";
+  type DeviceContentItems,
+  type DeviceStatistics,
+  type IDevice,
+  type IDeviceCertificate,
+  type IDeviceConfig,
+  type IDeviceProfile,
+  type IDeviceRegistration,
+  type IDeviceStream,
+  type IHeartbeat,
+  type ISourceRepository,
+  type ISensorWithKey,
+  HttpMethod,
+} from "../types";
 
-export interface IDevice extends IEntity {
-  name: string;
-  identity: string;
-  owner?: UUID;
-  assignedIdentity?: string;
-  notes: string;
-  meta: Record<string, any>;
-  lat?: number;
-  lng?: number;
-  lastTouched?: Date;
-  profile?: UUID;
-}
-export class DeviceModel extends Model<IDevice> {
+export class DeviceModel extends HyphenModel<IDevice> {
   constructor() {
-    super();
-    this.modelname = "devices";
+    super("devices");
   }
 
-  private formatUrl(path: string) {
-    const { url } = this.connector.raw(this.modelConfig);
-    const thisUrl = `${url}${path}`;
-    return thisUrl;
+  public async pullStatistics(): Promise<DeviceStatistics> {
+    const thisUrl = this.formatUrl(`statistics`);
+    console.log("Fetching device statistics from", thisUrl);
+    const statics = await this.connect<DeviceStatistics>(thisUrl);
+    return statics;
+  }
+
+  public async deviceDetails(device: IDevice): Promise<DeviceContentItems> {
+    const thisUrl = this.formatUrl(`details/${device.identity}`);
+    return this.connect<DeviceContentItems>(thisUrl);
   }
 
   public async removeSensor(
@@ -35,17 +38,11 @@ export class DeviceModel extends Model<IDevice> {
     sensorKey: string,
   ): Promise<{ device: IDevice; sensor: ISensorWithKey }> {
     const thisUrl = this.formatUrl("sensor");
-    const results = await (this.connector as HTTPConnector).getRequestResults(
-      { deviceId: model.id, sensorKey },
-      {},
+    return this.connect<{ device: IDevice; sensor: ISensorWithKey }>(
       thisUrl,
       HttpMethod.DELETE,
+      { deviceId: model.id, sensorKey },
     );
-    if (!results.ok) {
-      throw new Error(`Error fetching sensors for device ${model.identity}`);
-    }
-
-    return results.json();
   }
 
   public async addSensor(
@@ -53,49 +50,27 @@ export class DeviceModel extends Model<IDevice> {
     identity: string,
   ): Promise<{ device: IDevice; sensor: ISensorWithKey }> {
     const thisUrl = this.formatUrl("sensor");
-    const results = await (this.connector as HTTPConnector).getRequestResults(
-      { deviceId: model.id, identity },
-      {},
+    return this.connect<{ device: IDevice; sensor: ISensorWithKey }>(
       thisUrl,
       HttpMethod.POST,
+      { deviceId: model.id, identity },
     );
-    if (!results.ok) {
-      throw new Error(`Error fetching sensors for device ${model.identity}`);
-    }
-
-    return results.json();
   }
 
   public async refreshSensors(model: IDevice): Promise<DeviceConfigModel> {
     const thisUrl = this.formatUrl("sensor");
-    const results = await (this.connector as HTTPConnector).getRequestResults(
-      { deviceId: model.id },
-      {},
-      thisUrl,
-      HttpMethod.PUT,
-    );
-    if (!results.ok) {
-      throw new Error(`Error fetching sensors for device ${model.identity}`);
-    }
-
-    return results.json();
+    return this.connect<DeviceConfigModel>(thisUrl, HttpMethod.PUT, {
+      deviceId: model.id,
+    });
   }
 
   public async sensors(
     model: IDevice,
   ): Promise<{ device: IDevice; sensors: ISensorWithKey[] }> {
     const thisUrl = this.formatUrl(`sensor/${model.id}`);
-    const results = await (this.connector as HTTPConnector).getRequestResults(
-      {},
-      {},
+    return this.connect<{ device: IDevice; sensors: ISensorWithKey[] }>(
       thisUrl,
-      HttpMethod.GET,
     );
-    if (!results.ok) {
-      throw new Error(`Error fetching sensors for device ${model.identity}`);
-    }
-
-    return results.json();
   }
 
   public override async toJson(model: IDevice): Promise<IDevice> {
@@ -110,37 +85,30 @@ export class DeviceModel extends Model<IDevice> {
     return model;
   }
 
-  public static isOnline(lastTouched?: Date): boolean {
+  public static isOnline(lastTouched?: Date, timeInMinutes = 15): boolean {
     if (!lastTouched) return false;
     const now = new Date();
     const diff = now.getTime() - new Date(lastTouched).getTime();
-    return diff < 15 * 60 * 1000; // 15 minutes
+    return diff < timeInMinutes * 60 * 1000; // 15 minutes
+  }
+
+  public static async isDeviceOnline(device: IDevice): Promise<boolean> {
+    const expireTime = await profileExpireTime(device);
+    return this.isOnline(device.lastTouched, expireTime);
   }
 
   public async invalidateCertificate(
     deviceId: string | UUID,
   ): Promise<IDevice | IDevice[]> {
     const thisUrl = this.formatUrl(`invalidate-certificate`);
-    const results = await (this.connector as HTTPConnector).getRequestResults(
-      { id: deviceId },
-      {},
-      thisUrl,
-      HttpMethod.POST,
-    );
-    if (!results.ok) {
-      throw new Error(`Error invalidating certificate for device ${deviceId}`);
-    }
-    return results.json();
+    return this.connect<IDevice | IDevice[]>(thisUrl, HttpMethod.POST, {
+      id: deviceId,
+    });
   }
 
   public async buildArtifact(deviceId: string, buildId: string) {
     const thisUrl = this.formatUrl(`artifacts/${deviceId}/${buildId}`);
-    const results = await (this.connector as HTTPConnector).getRequestResults(
-      {},
-      {},
-      thisUrl,
-      HttpMethod.GET,
-    );
+    const results = await this.connectRaw(thisUrl);
     const blob = await results.blob();
     return blob;
   }
@@ -150,65 +118,26 @@ export class DeviceModel extends Model<IDevice> {
     cb: (data: string) => Promise<void>,
   ) {
     const thisUrl = this.formatUrl(`local-flash`);
-    return await (this.connector as HTTPConnector).buildStreamQuery(
-      { device: device.id, config },
-      {},
+    return await this.streamer(
       thisUrl,
       HttpMethod.POST,
-      async (chunk: string) => {
-        try {
-          await cb(chunk);
-        } catch {
-          //
-        }
-      },
+      { device: device.id, config },
+      cb,
     );
   }
 }
 
-export enum DeviceConfigEnum {
-  ERROR = -1,
-  WAITING = 0,
-  RESOLVED = 1,
-  CANCELED = 2,
-  EXPIRED = 3,
-}
-
-export enum DeviceConfigActionType {
-  FUNCTION = "Function",
-  VARIABLE = "Variable",
-}
-
-export interface IDeviceConfig extends IEntity {
-  identity: string;
-  state: DeviceConfigEnum;
-  topic: string;
-  data: string;
-  value?: string;
-  actionName: string;
-  actionType: DeviceConfigActionType;
-  user?: UUID;
-  meta: Record<string, any>;
-  noNullify: boolean;
-}
-
-export type ISensorWithKey = ISensor & { relation: { key: string } };
-
-export class DeviceConfigModel extends Model<IDeviceConfig> {
+export class DeviceConfigModel extends HyphenModel<IDeviceConfig> {
   constructor() {
-    super();
-    this.modelname = "devicesconfig";
+    super("devicesconfig");
   }
 
   public async publish(topic: string, message: string = "") {
-    const { url } = this.connector.raw(this.modelConfig);
-    const thisUrl = `${url}publish`;
-    const results = await (this.connector as HTTPConnector).getRequestResults(
-      { topic, message },
-      {},
-      thisUrl,
-      HttpMethod.POST,
-    );
+    const thisUrl = this.formatUrl(`publish`);
+    const results = await this.connectRaw(thisUrl, HttpMethod.POST, {
+      topic,
+      message,
+    });
 
     const values = results.ok ? await results.json() : null;
     if (!values) {
@@ -226,106 +155,32 @@ export class DeviceConfigModel extends Model<IDeviceConfig> {
   }
 }
 
-export type DevicePayload = any;
-export type IPv4 = `${number}.${number}.${number}.${number}`;
-
-export type DevicePayloadMessage = {
-  device: string;
-  target: number;
-  date: Date;
-  payload: DevicePayload;
-};
-
-export interface IHeartbeat extends IEntity {
-  device: string;
-  date: Date | number;
-  network?: {
-    ssid: string;
-    bssid: string;
-    rssi: number;
-    channel: number;
-    encryp: number;
-    l_ip: IPv4;
-    g_ip: IPv4;
-    mask: IPv4;
-    dns1: IPv4;
-    dns2: IPv4;
-  };
-  cell?: {
-    IMEI: string;
-    IMSI: string;
-    l_ip: IPv4;
-    op: string;
-    prov: string;
-    n_mode: number;
-    sig_q: number;
-    ccid: string;
-    cell: string;
-    modem: string;
-    temp: number;
-  };
-  sys: { free: number; mem: number; up: string; v: string };
-  pow: { bat: number; current: number; solar_v: number; v_cel: number };
-}
-
-export class HeartbeatModel extends Model<IHeartbeat> {
+export class HeartbeatModel extends HyphenModel<IHeartbeat> {
   constructor() {
-    super();
-    this.modelname = "heartbeats";
+    super("heartbeats");
   }
 }
 
-export interface IDeviceRegistration extends IEntity {
-  identity: string;
-  functionCount: number;
-  variableCount: number;
-  functions: string[];
-  variables: string[];
-  meta: Record<string, any>;
-}
-
-export class DeviceRegistration extends Model<IDeviceRegistration> {
+export class DeviceRegistration extends HyphenModel<IDeviceRegistration> {
   constructor() {
-    super();
-    this.modelname = "registrations";
+    super("registrations");
   }
 }
 
-export interface IDeviceStream extends IEntity {
-  device: string;
-  topic: string;
-  payload: Buffer | { type: string; data: number[] };
-}
-
-export class DeviceStream extends Model<IDeviceStream> {
+export class DeviceStream extends HyphenModel<IDeviceStream> {
   constructor() {
-    super();
-    this.modelname = "streams";
+    super("streams");
   }
 }
 
-export interface IDeviceCertificate extends IEntity {
-  identity: string;
-  cert: string;
-  key: string;
-  ca: string;
-}
-
-export class DeviceCertificate extends Model<IDeviceCertificate> {
+export class DeviceCertificate extends HyphenModel<IDeviceCertificate> {
   constructor() {
-    super();
-    this.modelname = "certificates";
+    super("certificates");
   }
 
   async downloadAsBlob(identity: string): Promise<Blob> {
-    const { url } = this.connector.raw(this.modelConfig);
-    const thisUrl = `${url}download/${identity}`;
-    const results = await (this.connector as HTTPConnector).getRequestResults(
-      {},
-      {},
-      thisUrl,
-      HttpMethod.GET,
-    );
+    const thisUrl = this.formatUrl(`download/${identity}`);
+    const results = await this.connectRaw(thisUrl);
     const blob = new Blob([await results.arrayBuffer()], {
       type: "application/zip",
     });
@@ -342,34 +197,14 @@ export class DeviceCertificate extends Model<IDeviceCertificate> {
   }
 }
 
-export interface ISourceRepository extends IEntity {
-  name: string;
-  url: string;
-  sshKey: string;
-  branch: string;
-  meta: Record<string, any>;
-}
-
-export class SourceRepository extends Model<ISourceRepository> {
+export class SourceRepository extends HyphenModel<ISourceRepository> {
   constructor() {
-    super();
-    this.modelname = "repositories";
+    super("repositories");
   }
 }
 
-export interface IDeviceProfile extends IEntity {
-  name: string;
-  avatar: UUID;
-  script: string;
-  defConfigSchema: Record<string, any>;
-  configSchema: Record<string, any>;
-  partitions: { address: number; type: string }[];
-  repository: UUID;
-}
-
-export class DeviceProfile extends Model<IDeviceProfile> {
+export class DeviceProfile extends HyphenModel<IDeviceProfile> {
   constructor() {
-    super();
-    this.modelname = "deviceprofiles";
+    super("deviceprofiles");
   }
 }

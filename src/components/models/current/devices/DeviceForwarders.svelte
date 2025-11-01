@@ -27,7 +27,6 @@
         .find({ owner: device.id, ownedBy: ParameterValueOwnerBy.DEVICE })
         .sort({ createdAt: "ASC" })
         .fetch();
-      console.log("Pulled device forwarders", forwarders);
     } catch (e) {
       console.error("Error fetching device forwarders:", e);
     } finally {

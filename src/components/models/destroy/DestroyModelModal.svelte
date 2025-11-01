@@ -10,7 +10,7 @@
     onDestroy,
     onCancel,
     btnText,
-    btnColor = "red",
+    btnColor = "rose",
     children,
   } = $props<{
     open: boolean;
@@ -22,6 +22,7 @@
     btnText?: string;
     children?: Snippet;
     btnColor?:
+      | "rose"
       | "primary"
       | "dark"
       | "alternative"

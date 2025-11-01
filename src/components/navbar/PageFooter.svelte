@@ -54,7 +54,7 @@
   <BottomNavItem
     ><A
       class="text-nowrap"
-      href="https://www.facebook.com/similieacademy"
+      href="https://www.facebook.com/similie.org"
       target="_blank"><FacebookSolid />&nbsp;{$_t("Facebook")}</A
     ></BottomNavItem
   >

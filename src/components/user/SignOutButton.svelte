@@ -13,7 +13,6 @@
     | "light"
     | "dark"
     | "primary"
-    | "none"
     | undefined = undefined;
   const api = new UserApi();
   const logout = async () => {
