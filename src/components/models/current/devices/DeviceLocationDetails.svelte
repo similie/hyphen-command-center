@@ -182,7 +182,7 @@
         {#each markers as { lngLat, name }}
           <SimilieMarker {lngLat} {device}>
             <Popup offset={[0, -10]}>
-              <div class="text-lg font-bold">{name}</div>
+              <div class="text-lg font-bold dark:text-gray-600">{name}</div>
             </Popup>
           </SimilieMarker>
         {/each}

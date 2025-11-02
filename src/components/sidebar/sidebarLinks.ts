@@ -20,7 +20,7 @@ export function loadLinks(): { links: SidebarLink[] } {
         classes: "",
         name: "devices",
         icon: ComputerSpeakerOutline,
-        role: UserRoles.UNRESTRICTED,
+        role: UserRoles.USER,
       },
 
       {
