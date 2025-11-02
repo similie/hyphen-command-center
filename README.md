@@ -1,4 +1,6 @@
-<img src="/static/favicon.png" width="40px" alt="Hyphen Logo"> # Hyphen Command Center (UI)
+<img src="/static/favicon.png" width="40px" alt="Hyphen Logo" />
+
+# Hyphen Command Center (UI)
 
 **Hyphen Command Center** is the SvelteKit-based frontend for managing the  
 Hyphen ecosystem — a full-stack, open platform by [Similie](https://similie.org)  
