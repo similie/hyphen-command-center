@@ -271,7 +271,7 @@ with additional commercial-use terms.
 
 Community and nonprofit use is fully open under GPLv3.
 Commercial deployment or derivative services require a commercial license from Similie.
-Contact: licensing@similie.org￼
+Contact: info@similie.org￼
 
 See LICENSE.md￼ for full terms.
 
