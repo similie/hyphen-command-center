@@ -12,9 +12,9 @@
 </script>
 
 <div
-  class="flex w-full flex-wrap md:flex-nowrap overflow-y-auto md:overflow-y-clip-"
+  class="flex w-full flex-wrap md:flex-nowrap overflow-y-auto md:overflow-y-clip h-[calc(100vh-4rem)]"
 >
-  <div class="flex w-full h-[calc(100vh-4rem)]">
+  <div class="flex w-full">
     <BasicModelPage open={false} {openDrawer}>
       {#snippet header()}{/snippet}
 
