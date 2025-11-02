@@ -56,10 +56,10 @@ export const ConfigTable = pgTable("config", {
     .default("api/v1"),
   applicationURL: varchar("application_url", { length: 128 })
     .notNull()
-    .default("http://127.0.0.1:1612/api/v2/"),
+    .default("http://127.0.0.1:5173"),
   applicationApi: varchar("application_api", { length: 128 })
     .notNull()
-    .default("http://127.0.0.1:5002/api/v1/"),
+    .default("http://127.0.0.1:1612/api/v2"),
   logos: jsonb("logos").default({}),
   location: text("location"),
   twoFactorAuth: boolean("two_factor_auth").default(true),
