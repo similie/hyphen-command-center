@@ -35,7 +35,7 @@ export async function seed(db: PostgresJsDatabase<Record<string, never>>) {
     {
       uid: "301e149b-a10d-41b8-a6f6-a47a7317ab95",
       name: "Hyphen Admin",
-      email: "notanemail@similie.org", // Change to your desired admin email
+      email: "not-an-email@similie.org", // Change to your desired admin email
       phone: null,
       username: "hyphenadmin",
       password: "$2a$12$FXPgiq1Zw.TtKX3iud.16ehiVhe9qK6fjT4gr9bemQvZt9RXnkfUy", // Admin1234
