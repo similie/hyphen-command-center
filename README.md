@@ -1,4 +1,4 @@
-# 🖥️ Hyphen Command Center (UI)
+<img src="/static/favicon.png" width="40px" alt="Hyphen Logo"> # Hyphen Command Center (UI)
 
 **Hyphen Command Center** is the SvelteKit-based frontend for managing the  
 Hyphen ecosystem — a full-stack, open platform by [Similie](https://similie.org)  
@@ -9,6 +9,8 @@ It provides a rich interface for interacting with the
 offering device control, firmware builds, MQTT monitoring, and system configuration.
 
 ---
+
+![Hyphen Screenshot](/static/platform-1200.jpg)
 
 ## 🚀 Overview
 
@@ -233,9 +235,10 @@ The UI interacts with the Hyphen Command Center API￼
 through the configured SIBLING_API_URL.
 
 It communicates over REST and SSE to handle:
-• Device registration and firmware builds
-• MQTT message streams
-• Configuration sync and telemetry visualization
+
+- Device registration and firmware builds (HyphenOS but can be adopted for other build systems)
+- MQTT message streams
+- Configuration sync and telemetry visualization
 
 All authenticated API calls use JWT tokens managed via the Ellipsies session layer.
 
@@ -318,8 +321,8 @@ and community empowerment across Southeast Asia and beyond.
 We develop open, modular systems for IoT data collection, early warning, and analytics,  
 enabling governments, NGOs, and citizens to make data-driven decisions that save lives.
 
-🌐 [https://similie.org](https://similie.org)  
-📧 [hello@similie.org](mailto:hello@similie.org)  
+🌐 [https://similie.com](https://similie.com)  
+📧 [info@similie.org](mailto:info@similie.org)  
 🐙 [GitHub @similie](https://github.com/similie)
 
 ---

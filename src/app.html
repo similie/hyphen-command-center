@@ -5,46 +5,61 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <!-- 🌐 Basic Meta -->
+    <meta name="title" content="Hyphen Command Center — Similie" />
     <meta
       name="description"
-      content="Hyphen Command Center by Similie — Open-source platform for managing climate technology deployments for robust environmental data collection."
+      content="Hyphen Command Center — open-source IoT management by Similie for real-time telemetry, firmware builds, and secure MQTT device control."
     />
     <meta
       name="keywords"
-      content="Hyphen Command Center, climate technology, education, Timor, Timor-Leste, AI training, electronics, IoT, software development, digital skills, vocational training"
+      content="Similie, Hyphen, IoT, Command Center, MQTT, firmware, telemetry, climate resilience, SvelteKit, Drizzle ORM, Ellipsies, PostgreSQL, Redis"
     />
-    <meta name="author" content="Hyphen Command Center" />
-    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Similie" />
+    <meta name="theme-color" content="#06c4de" />
 
-    <meta
-      property="og:title"
-      content="Hyphen Command Center | Climate Tech & Digital Education"
-    />
+    <!-- 📱 Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://hyphen.similie.com" />
+    <meta property="og:title" content="Hyphen Command Center — Similie" />
     <meta
       property="og:description"
-      content="Building open technology and digital skills for global impact. Join Similie to make impossible, possible."
+      content="Open-source IoT management platform for real-time telemetry, firmware builds, and secure MQTT device control."
     />
-    <meta
-      property="og:image"
-      content="%sveltekit.assets%/favicon/favicon-96x96.png"
-    />
-    <meta property="og:url" content="https://similie.com" />
-    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/platform-1200.jpg" />
 
-    <!-- Twitter Card -->
+    <!-- 🐦 Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta
-      name="twitter:title"
-      content="Hyphen Command Center | Similie Provides Climate Tech & Digital Education"
-    />
+    <meta name="twitter:url" content="https://hyphen.similie.com" />
+    <meta name="twitter:title" content="Hyphen Command Center — Similie" />
     <meta
       name="twitter:description"
-      content="Open technology, digital learning, and scholarships that empower communities in Timor-Leste and across the globe."
+      content="Open-source IoT management platform for real-time telemetry, firmware builds, and secure MQTT device control."
     />
-    <meta
-      name="twitter:image"
-      content="%sveltekit.assets%/favicon/favicon-96x96.png"
-    />
+    <meta name="twitter:image" content="/platform-2400.jpg" />
+    <meta name="twitter:creator" content="@_similie" />
+
+    <!-- 🧩 Schema.org (JSON-LD) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.com",
+        "@type": "SoftwareApplication",
+        "name": "Hyphen Command Center",
+        "url": "https://hyphen.similie.com",
+        "applicationCategory": "IoT Management",
+        "operatingSystem": "Cross-platform",
+        "publisher": {
+          "@type": "Organization",
+          "name": "Similie",
+          "url": "https://hyphen.similie.com",
+          "logo": "https://hyphen.similie.com/similie.png"
+        },
+        "description": "Open-source IoT management platform for real-time telemetry, firmware builds, and secure MQTT device control.",
+        "softwareVersion": "1.0.0",
+        "license": "GPL-3.0",
+        "image": "https://hyphen.similie.com/logo.png"
+      }
+    </script>
 
     <link
       rel="icon"
@@ -75,7 +90,5 @@
     <div id="svelte" class="max-h-screen overflow-auto relative w-full">
       %sveltekit.body%
     </div>
-
-    <script src="https://js.stripe.com/basil/stripe.js" async></script>
   </body>
 </html>
