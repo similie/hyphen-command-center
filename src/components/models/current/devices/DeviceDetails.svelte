@@ -128,17 +128,13 @@
     </InputFormItem>
     <InputFormItem>
       {#if editable}
-        <div class="flex items-center w-full">
-          <A
-            class="md:ml-auto"
-            disabled={rebuildingCertificates}
-            onclick={download}
+        <div class="flex items-center w-full space-x-2 md:ml-auto">
+          <A disabled={rebuildingCertificates} onclick={download}
             ><DownloadOutline /> {$_t("Download Device Certificates")}</A
           >
 
           <A
             disabled={rebuildingCertificates}
-            class="ml-auto"
             color="rose"
             onclick={() => (destroyModalOpen = true)}
             ><RefreshOutline

@@ -64,6 +64,7 @@
   {items}
   {size}
   {required}
+  classes={{ span: "space-y-1 " }}
   disabled={disabled || loading}
   {id}
   onchange={() => onChange && onChange(value)}

@@ -266,7 +266,7 @@
   <Hr class="my-4" />
   {#if !connected && !cloudView}
     <div class="flex space-x-4 items-center">
-      <div class="w-full flex-grow-1 flex">
+      <div class="w-full flex-grow flex">
         <Button
           color="primary"
           onclick={connectDevice}
@@ -279,12 +279,14 @@
           {$_t("Connect to Device")}
         </Button>
       </div>
-      <Select
-        class="ml-auto"
-        bind:value={baudRate}
-        disabled={connecting}
-        items={connectBaudRates}
-      />
+      <div>
+        <Select
+          class="ml-auto"
+          bind:value={baudRate}
+          disabled={connecting}
+          items={connectBaudRates}
+        />
+      </div>
     </div>
   {:else if connected && !cloudView}
     <div class="flex items-center mb-4">
@@ -300,7 +302,8 @@
       <TabItem open title={$_t("Local Flashing")}>
         <!-- Flashing tool content here -->
         <div class="flex flex-col space-y-4">
-          <FlashOptionsSelect bind:options></FlashOptionsSelect>
+          <FlashOptionsSelect disabled={isFlashing} bind:options
+          ></FlashOptionsSelect>
           <LocalFlasher
             {device}
             onStart={async () => {

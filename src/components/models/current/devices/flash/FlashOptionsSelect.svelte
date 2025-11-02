@@ -12,8 +12,13 @@
   import { InputItemsRow, InputFormItem } from "$components/input";
   import type { Snippet } from "svelte";
 
-  let { options = $bindable(), children } = $props<{
+  let {
+    options = $bindable(),
+    children,
+    disabled,
+  } = $props<{
     options: FlashOptions;
+    disabled?: boolean;
     children?: Snippet;
   }>();
 
@@ -53,12 +58,13 @@
     <InputFormItem class="space-y-4">
       <InputFormItem>
         <Label for="eraseAll">{$_t("Erase All")}</Label>
-        <Toggle bind:checked={options.eraseAll} id="eraseAll" />
+        <Toggle {disabled} bind:checked={options.eraseAll} id="eraseAll" />
       </InputFormItem>
       <InputItemsRow>
         <InputFormItem>
           <Label for="flashMode">{$_t("Flash Mode")}</Label>
           <Select
+            {disabled}
             items={selectOptions}
             bind:value={options.flashMode}
             id="flashMode"
@@ -67,6 +73,7 @@
         <InputFormItem>
           <Label for="flashFreq">{$_t("Flash Frequency")}</Label>
           <Select
+            {disabled}
             items={freqOptions}
             bind:value={options.flashFreq}
             id="flashFreq"
@@ -78,6 +85,7 @@
         <InputFormItem>
           <Label for="flashSize">{$_t("Flash Size")}</Label>
           <Select
+            {disabled}
             items={flashSizeOptions}
             bind:value={options.flashSize}
             id="flashSize"
@@ -86,6 +94,7 @@
         <InputFormItem>
           <Label for="baudRate">{$_t("Upload Baud Rate")}</Label>
           <Select
+            {disabled}
             items={baudRateOptions}
             bind:value={options.baudRate}
             id="baudRate"

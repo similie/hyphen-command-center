@@ -1,7 +1,7 @@
 <script lang="ts">
   import { ForwardMapModel, type IForwardMap, type UUID } from "$lib";
   import { onMount } from "svelte";
-  import { MultiSelect } from "flowbite-svelte";
+  import { label, MultiSelect } from "flowbite-svelte";
   let {
     value = $bindable(),
     id,
@@ -45,6 +45,7 @@
   {size}
   {required}
   disabled={disabled || loading}
+  classes={{ span: "space-y-1 " }}
   {id}
   onchange={() => onChange && onChange(value)}
 />
