@@ -244,8 +244,6 @@ It communicates over REST and SSE to handle:
 
 All authenticated API calls use JWT tokens managed via the Ellipsies session layer.
 
-⸻
-
 ## 🧠 Scaling & Load Balancing
 
 Both the frontend (hyphen) and API (hyphen-command-center-api)
@@ -254,15 +252,11 @@ are designed for horizontal scaling using Docker Swarm or Compose replicas.
 The NGINX reverse proxy (nginx) routes traffic to all UI and API replicas,
 handling load balancing automatically.
 
-⸻
-
 ## 🤝 Contributing
 
 We welcome open-source contributions to improve the Hyphen ecosystem. 1. Fork the repository 2. Create a feature branch 3. Submit a pull request describing your change
 
 Please follow existing coding conventions and include clear commit messages.
-
-⸻
 
 ## 🪪 License
 
@@ -275,8 +269,6 @@ Contact: info@similie.org￼
 
 See LICENSE.md￼ for full terms.
 
-⸻
-
 ## 🌍 About Similie
 
 Similie is a technology company dedicated to climate resilience and community empowerment.
@@ -286,8 +278,6 @@ manage infrastructure, weather, and environment through IoT and data-driven inte
 🌐 https://similie.com
 📧 info@similie.org￼
 
-⸻
-
 ---
 
 ## 🧭 Related Projects
@@ -296,6 +286,8 @@ manage infrastructure, weather, and environment through IoT and data-driven inte
 | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | [**Hyphen Command Center API**](https://github.com/similie/hyphen-command-center-api) | The backend API that manages MQTT connections, firmware builds, and the device registry for all Hyphen systems.                                              |
 | [**Hyphen Connect**](https://github.com/similie/hyphen-connect)                       | The ESP32-compatible client library and reference firmware that allows hardware devices to communicate securely with the Hyphen Command Center.              |
+| [**HyphenOS**](https://github.com/similie/hyphenos)                                   | The ESP32-compatible OS we use for our fleet of IoT environmental sensors.                                                                                   |
+| [**Hyphen Elemental Hardware**](https://github.com/similie/hyphen-elemental)          | Hardware schematics we have designed to fully support HyphenOS for continuous and fail-safe operation                                                        |
 | [**Ellipsies**](https://github.com/similie/ellipsies)                                 | The TypeScript backend microservice framework built by Similie, providing decorators, routing-controllers, and TypeORM integration for the Hyphen ecosystem. |
 
 ---
