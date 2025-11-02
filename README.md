@@ -1,4 +1,4 @@
-<img src="/static/favicon.png" width="40px" alt="Hyphen Logo" />
+<img src="/static/favicon.png" width="60px" alt="Hyphen Logo" />
 
 # Hyphen Command Center (UI)
 
@@ -199,8 +199,8 @@ When the SvelteKit container starts for the first time:
 1.  Drizzle ORM automatically runs migrations
 2.  The seed script creates a default configuration and user:
 
-_Username_ hyphenadmin
-_Password_ Admin1234
+- _Username_: hyphenadmin
+- _Password_: Admin1234
 
 The password is stored as a bcrypt hash.
 You can modify the seed script in src/lib/server/db/seed.ts to fit your environment.
@@ -330,5 +330,5 @@ enabling governments, NGOs, and citizens to make data-driven decisions that save
 ---
 
 **Hyphen Command Center (UI)**  
-© 2025 [Similie](https://similie.org) — All Rights Reserved  
+© 2025 [Similie](https://similie.com) — All Rights Reserved  
 Licensed under GPLv3 with Similie Commercial Use Terms
