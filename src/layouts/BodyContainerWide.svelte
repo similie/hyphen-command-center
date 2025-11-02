@@ -8,7 +8,7 @@
   }>();
 </script>
 
-<div class="flex w-full flex-grow flex-col space-y-6">
+<div class="flex w-full flex-grow flex-col space-y-4">
   <div class="  mx-auto w-full">
     {@render headerContent()}
   </div>

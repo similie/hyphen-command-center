@@ -3,14 +3,20 @@
   import { onMount } from "svelte";
   import { page } from "$app/state";
   import { browser } from "$app/environment";
+  import { PUBLIC_GA_TRACKING_ID } from "$env/static/public";
   import "../app.css";
   let { children } = $props();
   let ready = $state(false);
   const setGtag = () => {
-    if (browser && import.meta.env.MODE === "production") {
+    if (
+      browser &&
+      import.meta.env.MODE === "production" &&
+      PUBLIC_GA_TRACKING_ID &&
+      PUBLIC_GA_TRACKING_ID !== "G-XXXXXXXXXX"
+    ) {
       const script1 = document.createElement("script");
       script1.async = true;
-      script1.src = "https://www.googletagmanager.com/gtag/js?id=G-D37PHNCQKR";
+      script1.src = `https://www.googletagmanager.com/gtag/js?id=${PUBLIC_GA_TRACKING_ID}`;
       document.head.appendChild(script1);
 
       const script2 = document.createElement("script");
@@ -18,7 +24,7 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-D37PHNCQKR');
+      gtag('config', '${PUBLIC_GA_TRACKING_ID}');
     `;
       document.head.appendChild(script2);
     }
@@ -27,7 +33,7 @@
   onMount(async () => {
     await loadI18n();
     setGtag();
-    EllipsiesConnector.init();
+
     const url = new URL(window.location.href);
     // Look for the force-reload param
     const reloadTo = url.searchParams.get("force-reload"); //  [oai_citation:0‡MDN Web Docs](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Frameworks_libraries/Svelte_stores?utm_source=chatgpt.com)
@@ -42,6 +48,7 @@
     const data = page.data;
     if (data?.config && (!$siteConfig || $siteConfig.id === -1)) {
       siteConfig.set(data.config);
+      EllipsiesConnector.start(data.config.applicationApi);
     }
   });
 </script>

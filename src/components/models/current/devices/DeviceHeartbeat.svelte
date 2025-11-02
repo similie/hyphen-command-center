@@ -44,13 +44,18 @@
         {:else}
           <P>({$_t("WiFi")})</P>
         {/if}
+        <A onclick={fetchLatestHeartbeat} class="ml-auto md:hidden"
+          ><RefreshOutline /></A
+        >
       </InputItemsRow>
       <InputItemsRow class="items-center">
         <Label class="text-md" color="primary">{$_t("Updated")}:</Label>
         <DateFormat stamp={heartbeat.createdAt} />
       </InputItemsRow>
 
-      <A onclick={fetchLatestHeartbeat} class="ml-auto"><RefreshOutline /></A>
+      <A onclick={fetchLatestHeartbeat} class="ml-auto hidden md:block"
+        ><RefreshOutline /></A
+      >
     </InputItemsRow>
     <div class="my-3"></div>
     {#if heartbeat && heartbeat.cell && Object.keys(heartbeat.cell).length}

@@ -23,7 +23,6 @@ export class DeviceModel extends HyphenModel<IDevice> {
 
   public async pullStatistics(): Promise<DeviceStatistics> {
     const thisUrl = this.formatUrl(`statistics`);
-    console.log("Fetching device statistics from", thisUrl);
     const statics = await this.connect<DeviceStatistics>(thisUrl);
     return statics;
   }

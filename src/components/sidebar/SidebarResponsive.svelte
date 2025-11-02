@@ -5,14 +5,12 @@
   import {
     Sidebar,
     Button,
-    NavBrand,
     DarkMode,
     SidebarWrapper,
     A,
     Heading,
     P,
     Popover,
-    SidebarItem,
   } from "flowbite-svelte";
   import {
     ArrowLeftToBracketOutline,
@@ -21,7 +19,7 @@
     UserOutline,
   } from "flowbite-svelte-icons";
   import SidebarItems from "./SidebarItems.svelte";
-  import { PersonalProfile, UserAvatar } from "$components";
+  import { NavBranding, PersonalProfile, UserAvatar } from "$components";
   import { cubicInOut } from "svelte/easing";
   import BuiltWithLove from "$components/content/BuiltWithLove.svelte";
   let showSidebar = $state(false);
@@ -40,7 +38,11 @@
 
 <!-- Floating open button (mobile only) -->
 <div class="relative">
-  <div class="md:hidden fixed top-3 left-3 z-[60] flex items-center">
+  <div
+    class="md:hidden fixed {showSidebar
+      ? 'left-36 top-2 '
+      : 'left-3 top-2 '} z-[60] flex items-center"
+  >
     <Button
       color="alternative"
       class="rounded-full p-2 shadow-md"
@@ -71,7 +73,10 @@
       transition:slide={{ duration: 200, easing: cubicInOut }}
     >
       <SidebarWrapper id="sidebar-wrapper-responsive">
-        <div class="flex h-12"></div>
+        <div class="flex mb-2">
+          <NavBranding />
+        </div>
+
         <SidebarItems sm open={showSidebar}></SidebarItems>
       </SidebarWrapper>
       <div class="absolute bottom-0" id="sidebar-content-responsive">

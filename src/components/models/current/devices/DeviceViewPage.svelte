@@ -121,7 +121,9 @@
       {#snippet header()}
         <Heading tag="h5">{$_t("Device Details")}</Heading>
       {/snippet}
-      <div class="flex flex-wrap md:flex-nowrap space-x-4 w-full">
+      <div
+        class="flex flex-wrap md:flex-nowrap space-y-4 md:space-y-0 md:space-x-4 w-full"
+      >
         <DeviceDetails {editable} {device} />
         <DeviceHeartbeat {device} />
         <DeviceLocationDetails {editable} {device} />
@@ -131,7 +133,7 @@
       {#snippet header()}
         <Heading tag="h5">{$_t("Integrations")}</Heading>
       {/snippet}
-      <div class="flex flex-wrap md:flex-nowrap space-x-4">
+      <div class="flex flex-wrap md:flex-nowrap space-x-4 space-y-4">
         <DeviceSensors {device} />
         <DeviceForwarders {device} />
       </div>

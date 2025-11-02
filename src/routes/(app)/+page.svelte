@@ -12,9 +12,9 @@
 </script>
 
 <div
-  class="flex w-full flex-wrap md:flex-nowrap overflow-y-auto md:overflow-y-clip"
+  class="flex w-full flex-wrap md:flex-nowrap overflow-y-auto md:overflow-y-clip-"
 >
-  <div class="flex w-full h-[calc(100vh-2rem)]">
+  <div class="flex w-full h-[calc(100vh-2rem)]-">
     <BasicModelPage open={false} {openDrawer}>
       {#snippet header()}{/snippet}
 
@@ -30,8 +30,9 @@
     </BasicModelPage>
   </div>
   <!-- <div class="w-1/2 h-[calc(100vh-2rem)]"> -->
-  <div class="w-full md:w-1/2">
+  <div class="w-full h-full">
     <DeviceFleetMap />
   </div>
 </div>
+
 <PageFooter />

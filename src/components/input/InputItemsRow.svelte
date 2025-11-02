@@ -6,6 +6,6 @@
   }>();
 </script>
 
-<div class="flex w-full space-x-2 {className}">
+<div class="flex w-full space-x-2 {className} flex-wrap md:flex-nowrap">
   {@render children()}
 </div>

@@ -48,9 +48,9 @@
 
 <BodyContainer>
   {#if loading}
-    <P class="text-center">{$_t("Loading Forward Maps...")}</P>
+    <P class="text-center">{$_t("Loading Forwarders...")}</P>
   {:else if forwarders.length === 0}
-    <P class="text-center">{$_t("No Forward Maps found")}.</P>
+    <P class="text-center">{$_t("No Site-Level Forwarders Found")}.</P>
   {:else}
     <Accordion flush={true} class="w-full">
       {#each forwarders as _forwarder, index}

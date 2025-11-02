@@ -118,7 +118,7 @@
 {/if}
 
 <Card
-  class="w-full dark:bg-gray-950 flex flex-col p-6 max-w-full overflow-hidden space-y-4"
+  class="w-full dark:bg-gray-950 flex flex-col p-6 max-w-full overflow-hidden  space-y-4"
 >
   <InputItemsRow>
     <InputFormItem>
@@ -130,7 +130,7 @@
       {#if editable}
         <div class="flex items-center w-full">
           <A
-            class="ml-auto"
+            class="md:ml-auto"
             disabled={rebuildingCertificates}
             onclick={download}
             ><DownloadOutline /> {$_t("Download Device Certificates")}</A
@@ -181,7 +181,7 @@
     </InputFormItem>
   </InputItemsRow>
 
-  <InputItemsRow>
+  <InputItemsRow class="space-y-4 md:space-y-0 md:space-x-4">
     <InputFormItem>
       <Label>{$_t("Device Profile")}</Label>
       <InputItemsRow>

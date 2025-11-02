@@ -1,26 +1,26 @@
 import type { SiteConfig } from "$lib/types";
 import { writable } from "svelte/store";
 export const siteConfig = writable<SiteConfig>({
-  siteName: "4Shadow",
+  siteName: "Hyphen Command Center",
   key: "default_local",
   logos: {
     nav: "/favicon.png",
     // "https://flowbite.com/docs/images/logo.svg"
   },
-  siteDescription: "Point forecast and tile server for open data",
-  defaultTheme: "light",
+  siteDescription:
+    "Open-source IoT management platform for real-time telemetry, firmware builds, and secure MQTT device control.",
+  defaultTheme: "dark",
   defaultLocale: "en",
   defaultLocaleName: "English",
-  apiBaseUrl: "http://localhost:3000/api/v1/",
+  apiBaseUrl: "http://localhost:1612/api/v2/",
   id: -1,
   applicationApi: "http://localhost:5001/api/",
   created_at: new Date(),
   updated_at: new Date(),
   defaultRole: 2,
   publicSite: false,
-  currency: "USD",
-  currencySymbol: "$",
-  currencyDivisor: 100,
+  applicationURL: "http://localhost:5173/",
+  twoFactorAuth: false,
 });
 
 export const siteConfigInstance = () => {

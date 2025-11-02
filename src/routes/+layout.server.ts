@@ -5,7 +5,6 @@ import {
   type SiteConfig,
   type Session,
   DeviceProfile,
-  EllipsiesConnector,
 } from "$lib";
 import { UserQuery } from "$lib/server/db/query";
 import { redirect } from "@sveltejs/kit";

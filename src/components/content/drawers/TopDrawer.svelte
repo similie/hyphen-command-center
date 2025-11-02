@@ -38,7 +38,7 @@
 >
   <div class="flex items-center">
     {@render header()}
-    <CloseButton onclick={closeHeader} class="mb-4ml-auto" />
+    <CloseButton onclick={closeHeader} class="ml-auto" />
   </div>
   {@render body()}
 </Drawer>

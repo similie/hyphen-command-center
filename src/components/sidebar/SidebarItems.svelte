@@ -82,6 +82,9 @@
 </script>
 
 <SidebarGroup {style} class={sm ? "-ml-4" : "space-y-2"}>
+  <!-- {#if sm}
+    <SidebarItem label={$_t("Home")} href="/"></SidebarItem>
+  {/if} -->
   {#each sidebar.links as link}
     {#if isAvailable(link)}
       {#if link.type === "item"}
@@ -110,9 +113,9 @@
         >
           {#snippet icon()}
             {#if link.icon && !sm}
-              <div class={open ? "-ml-4-" : ""}>
+              <div class={open ? "ml-4-" : ""}>
                 <link.icon
-                  class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-300 hover:text-primary-700 "
+                  class="w-6 h-6  text-gray-500 transition duration-75 dark:text-gray-300 hover:text-primary-700 "
                 />
               </div>
             {/if}
@@ -124,7 +127,6 @@
                 <SidebarDropdownItem
                   label={$_t(sublink.label)}
                   {href}
-                  spanClass="ms-1"
                   active={page.url.pathname === href}
                 />
               {/if}

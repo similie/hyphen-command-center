@@ -7,13 +7,8 @@
   const api = new DeviceModel();
   let statistics = $state<any>({});
   const pullStatistics = async () => {
-    // Placeholder for future statistics fetching logic
     try {
-      // Simulate fetching statistics
-
       statistics = await api.pullStatistics();
-      console.log("Fetching device statistics...", statistics);
-      // You can replace this with actual API calls
     } catch (error) {
       console.error("Error fetching device statistics:", error);
     }
@@ -21,7 +16,7 @@
   onMount(pullStatistics);
 </script>
 
-<BodyContainer innerClass="space-y-2 mb-6">
+<BodyContainer innerClass="space-y-2 mb-2">
   <div class="w-full grid grid-cols-1 md:grid-cols-3 gap-4 justify-center">
     <Card class="p-3 dark:bg-gray-950">
       <!-- text-primary-600 dark:text-primary-400-->

@@ -62,7 +62,7 @@
 {#if loading}
   <P class="text-center">{$_t("Loading Device Forwarders...")}</P>
 {:else}
-  <div class="flex w-full flex-col mb-4 px-16">
+  <div class="flex w-full flex-col mb-4 md:px-8">
     <Heading tag="h3" class="mb-2">{$_t("Device Forwarders")}</Heading>
     <P class="text-sm">
       {$_t(

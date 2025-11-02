@@ -51,6 +51,7 @@ export async function handle({ event, resolve }) {
         return cachedConfig;
       }
       const config = await cQuery.getSiteConfig(siteName);
+
       if (config) {
         await RedisCache.set(key, config);
         JobsManager.start(config);

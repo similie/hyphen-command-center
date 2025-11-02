@@ -25,6 +25,7 @@ ENV NODE_ENV production
 COPY . .
 # RUN pnpm run build 
 ENV PUBLIC_API_URL=http://localhost:1612/api/v2/
+ENV PUBLIC_GA_TRACKING_ID=G-XXXXXXXXXX
 # RUN pnpm rebuild bcrypt && \
 #     BCRYPT_PATH=$(find node_modules/.pnpm -type d -path "*/bcrypt@*" | head -n 1) && \
 #     mkdir -p node_modules/bcrypt/lib && \

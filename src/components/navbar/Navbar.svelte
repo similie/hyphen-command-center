@@ -29,24 +29,28 @@
 <Navbar color="form">
   <div class="flex w-full flex-col">
     <div class="flex w-full">
-      <NavBrand class="flex  space-x-4 items-center ">
-        {#if $siteConfig?.logos.header || src}
-          <Img
-            class="mt-2 dark:hidden"
-            {width}
-            {alt}
-            src={src ?? $siteConfig?.logos.header}
-          />
-        {/if}
-        {#if $siteConfig?.logos.darkHeader || darkSrc}
-          <Img
-            class="mt-2 hidden  dark:block"
-            {width}
-            {alt}
-            src={darkSrc ?? $siteConfig?.logos.darkHeader}
-          />
-        {/if}
-        <Heading tag="h4">{$_t(title)}</Heading>
+      <NavBrand class="flex space-x-4 items-center">
+        <div class="flex md:hidden w-8"></div>
+        <div class="hidden md:flex">
+          {#if $siteConfig?.logos.header || src}
+            <Img
+              class="mt-2 dark:hidden"
+              {width}
+              {alt}
+              src={src ?? $siteConfig?.logos.header}
+            />
+          {/if}
+          {#if $siteConfig?.logos.darkHeader || darkSrc}
+            <Img
+              class="mt-2 hidden  dark:block"
+              {width}
+              {alt}
+              src={darkSrc ?? $siteConfig?.logos.darkHeader}
+            />
+          {/if}
+        </div>
+        <Heading class="text-center md:text-left" tag="h4">{$_t(title)}</Heading
+        >
       </NavBrand>
 
       <NavUl>

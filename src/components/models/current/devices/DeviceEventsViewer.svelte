@@ -13,7 +13,7 @@
 </script>
 
 <div class="grid grid-cols-1 gap-4 md:grid-cols-12 w-full">
-  <div class="order-2 md:order-1 col-span-5">
+  <div class="order-2 md:order-1 col-span-1 md:col-span-5">
     <EventsRawViewerTable
       {onScrollToBottom}
       removeDevice
@@ -21,11 +21,11 @@
       {events}
     />
   </div>
-  <div class="order-1 md:order-2 col-span-4">
+  <div class="order-1 md:order-2 col-span-1 md:col-span-4">
     <EventsRawViewerData event={selected} />
   </div>
 
-  <div class="order-3 md:order-3 col-span-3">
+  <div class="order-3 md:order-3 col-span-1 md:col-span-3">
     <DeviceConfigControls {device} />
   </div>
 </div>

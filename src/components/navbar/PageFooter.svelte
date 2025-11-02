@@ -26,8 +26,8 @@
 <BottomNav
   activeUrl={"/"}
   position="relative"
-  outerClass="bg-white dark:bg-gray-950 mx-auto- border-transparent"
-  innerClass="flex "
+  outerClass="bg-white dark:bg-gray-950 mx-auto-  border-transparent"
+  innerClass="flex md:flex-nowrap  flex-wrap justify-center"
 >
   <BottomNavItem>
     <A class="text-nowrap" href="https://similie.com" target="_blank">

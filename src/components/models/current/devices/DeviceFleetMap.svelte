@@ -126,7 +126,7 @@
       mapRef = map;
       console.log("Map loaded", mapRef);
     }}
-    class="relative  h-full w-full sm:aspect-video sm:max-h-full  "
+    class="relative  h-full w-full aspect-video -aspect-auto  md:aspect-square "
     attributionControl={false}
     style="https://cdn.similie.org/public/app/4shadow/similie-dark.json"
   >
