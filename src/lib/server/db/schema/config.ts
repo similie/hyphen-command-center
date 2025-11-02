@@ -62,7 +62,7 @@ export const ConfigTable = pgTable("config", {
     .default("http://127.0.0.1:5002/api/v1/"),
   logos: jsonb("logos").default({}),
   location: text("location"),
-  twoFactorAuth: boolean("two_factor_auth").notNull().default(true),
+  twoFactorAuth: boolean("two_factor_auth").default(true),
   coordinates: jsonb("coordinates").default({}),
   googleMapsKey: varchar("google_maps_key", { length: 128 }),
   created_at: timestamp("created_at").notNull().defaultNow(),
