@@ -1,9 +1,17 @@
 <script lang="ts">
   import { Navbar, NavBrand, NavUl, Heading, Img } from "flowbite-svelte";
-  import { _t, type CrumbHeading, siteUser, UserRoles, siteConfig } from "$lib";
+  import {
+    _t,
+    type CrumbHeading,
+    siteUser,
+    UserRoles,
+    siteConfig,
+    OpenMobileNavbar,
+  } from "$lib";
 
   import type { Snippet } from "svelte";
   import BreadCrumbs from "$components/content/BreadCrumbs.svelte";
+  import { page } from "$app/state";
 
   let {
     title,
@@ -24,6 +32,7 @@
     alt?: string;
     width?: number;
   }>();
+  let activeUrl = $derived(page.url.pathname);
 </script>
 
 <Navbar color="form">
@@ -52,18 +61,16 @@
         <Heading class="text-center md:text-left" tag="h4">{$_t(title)}</Heading
         >
       </NavBrand>
-
-      <NavUl>
-        {#if navLi}
+      {#if navLi}
+        <NavUl {activeUrl}>
           {@render navLi()}
-        {/if}
-      </NavUl>
+        </NavUl>
+      {/if}
 
       <div class="ml-auto flex space-x-4 items-center">
-        {#if !$siteUser || $siteUser.role <= UserRoles.USER}
-          <!-- <CartIcon class="mt-3" /> -->
+        {#if !$OpenMobileNavbar}
+          {@render createSection()}
         {/if}
-        {@render createSection()}
       </div>
     </div>
     <!-- <div class="flex md:order-2 items-center space-x-4"> -->
@@ -73,5 +80,10 @@
       </div>
     {/if}
     <!-- </div> -->
+    {#if navLi}
+      <NavUl {activeUrl} class="block md:hidden text-center">
+        {@render navLi()}
+      </NavUl>
+    {/if}
   </div>
 </Navbar>

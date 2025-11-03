@@ -9,7 +9,7 @@
 
   import BasicModelPage from "$layouts/BasicModelPage.svelte";
   import { _t, siteUser, UserRoles } from "$lib";
-  import { NavLi, NavUl, Button } from "flowbite-svelte";
+  import { NavLi, Button } from "flowbite-svelte";
   import { PlusOutline } from "flowbite-svelte-icons";
   import { type Snippet } from "svelte";
   let { children } = $props<{ children: Snippet }>();
@@ -46,7 +46,7 @@
     <ForwardCreateElements />
   {/snippet}
   {#snippet headerContent()}
-    <Navbar title="Devices"
+    <Navbar title="Forwarders"
       >{#snippet createSection()}
         {#if $siteUser && $siteUser.role >= UserRoles.USER_MANAGER}
           <Button type="button" onclick={() => (openDrawer = !openDrawer)}
@@ -64,14 +64,11 @@
         {/if}
       {/snippet}
       {#snippet navLi()}
-        <NavUl {activeUrl}>
-          <NavLi href="/admin/forwarders">{$_t("Forwarder")}</NavLi>
-          <NavLi href="/admin/forwarders/templates">{$_t("Templates")}</NavLi>
-          <NavLi href="/admin/forwarders/forwardmaps"
-            >{$_t("Forward Maps")}</NavLi
-          >
-          <NavLi href="/admin/forwarders/decoders">{$_t("Decoders")}</NavLi>
-        </NavUl>
+        <NavLi href="/admin/forwarders">{$_t("Forwarder")}</NavLi>
+        <NavLi href="/admin/forwarders/templates">{$_t("Templates")}</NavLi>
+        <NavLi href="/admin/forwarders/forwardmaps">{$_t("Forward Maps")}</NavLi
+        >
+        <NavLi href="/admin/forwarders/decoders">{$_t("Decoders")}</NavLi>
       {/snippet}
     </Navbar>
   {/snippet}

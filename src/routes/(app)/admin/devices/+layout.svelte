@@ -9,7 +9,7 @@
 
   import BasicModelPage from "$layouts/BasicModelPage.svelte";
   import { _t, siteUser, UserRoles } from "$lib";
-  import { NavLi, NavUl, Button } from "flowbite-svelte";
+  import { NavLi, Button } from "flowbite-svelte";
   import { PlusOutline } from "flowbite-svelte-icons";
   import { type Snippet } from "svelte";
   let { children } = $props<{ children: Snippet }>();
@@ -42,29 +42,27 @@
     <DeviceCreateElements />
   {/snippet}
   {#snippet headerContent()}
-    <Navbar title="Forwarders"
+    <Navbar title="Devices"
       >{#snippet createSection()}
         {#if $siteUser && $siteUser.role >= UserRoles.USER_MANAGER}
           <Button type="button" onclick={() => (openDrawer = !openDrawer)}
             ><PlusOutline />
             {#if activeUrl.includes("devices/firmware")}
-              {$_t("Attach Firmware Repository")}
+              {$_t("Create Repository")}
             {:else if activeUrl.includes("devices/sensors")}
               {$_t("Create a Sensor")}
             {:else}
-              {$_t("Create a Device Profile")}
+              {$_t("Create a Profile")}
             {/if}
           </Button>
         {/if}
       {/snippet}
       {#snippet navLi()}
-        <NavUl {activeUrl}>
-          <NavLi href="/admin/devices">{$_t("Profiles")}</NavLi>
-          <NavLi href="/admin/devices/firmware"
-            >{$_t("Firmware Repositories")}</NavLi
-          >
-          <NavLi href="/admin/devices/sensors">{$_t("Sensors")}</NavLi>
-        </NavUl>
+        <NavLi href="/admin/devices">{$_t("Profiles")}</NavLi>
+        <NavLi href="/admin/devices/firmware"
+          >{$_t("Firmware Repositories")}</NavLi
+        >
+        <NavLi href="/admin/devices/sensors">{$_t("Sensors")}</NavLi>
       {/snippet}
     </Navbar>
   {/snippet}

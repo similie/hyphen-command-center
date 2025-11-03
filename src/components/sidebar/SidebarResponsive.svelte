@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from "$app/state";
   import { slide } from "svelte/transition";
-  import { siteUser, _t, UserApi } from "$lib";
+  import { siteUser, _t, UserApi, OpenMobileNavbar } from "$lib";
   import {
     Sidebar,
     Button,
@@ -22,6 +22,7 @@
   import { NavBranding, PersonalProfile, UserAvatar } from "$components";
   import { cubicInOut } from "svelte/easing";
   import BuiltWithLove from "$components/content/BuiltWithLove.svelte";
+  import { onDestroy } from "svelte";
   let showSidebar = $state(false);
   let showProfiles = $state(false);
   //   let isOpen = $state(false);
@@ -30,6 +31,14 @@
   });
   const api = new UserApi();
   let open = $state(false);
+  const toggleTheBar = () => {
+    showSidebar = !showSidebar;
+    OpenMobileNavbar.set(showSidebar);
+  };
+
+  onDestroy(() => {
+    OpenMobileNavbar.set(false);
+  });
 </script>
 
 {#if $siteUser}
@@ -46,7 +55,7 @@
     <Button
       color="alternative"
       class="rounded-full p-2 shadow-md"
-      onclick={() => (showSidebar = !showSidebar)}
+      onclick={toggleTheBar}
       aria-label="Open navigation"
     >
       <BarsOutline />

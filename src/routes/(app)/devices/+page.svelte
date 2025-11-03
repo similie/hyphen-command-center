@@ -1,9 +1,5 @@
 <script lang="ts">
-  import {
-    CreateNewDevice,
-    CreatePopOutDetails,
-    EventsRawViewer,
-  } from "$components";
+  import { CreateNewDevice, CreatePopOutDetails } from "$components";
   import DevicesTable from "$components/models/current/devices/DevicesTable.svelte";
   import Navbar from "$components/navbar/Navbar.svelte";
   import { HeaderContentWrapper } from "$layouts";
@@ -11,9 +7,6 @@
   import BodyContainer from "$layouts/BodyContainer.svelte";
   import {
     type CrumbHeading,
-    type FireHoseEvent,
-    type SocketMessage,
-    LocalSocket,
     _t,
     addNavbarCrumb,
     removeNavbarCrumb,

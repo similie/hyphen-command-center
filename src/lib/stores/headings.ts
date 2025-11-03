@@ -1,6 +1,8 @@
 import type { CrumbHeading } from "$lib/types";
 import { writable } from "svelte/store";
 
+export const OpenMobileNavbar = writable<boolean>(false);
+
 export const NavbarCrumbs = writable<CrumbHeading[]>([]);
 
 export const addNavbarCrumb = (crumb: CrumbHeading[]) => {

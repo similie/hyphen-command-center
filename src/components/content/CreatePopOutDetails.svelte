@@ -11,7 +11,7 @@
 <div class="w-full flex items-center mx-5">
   <h5
     id="drawer-label"
-    class="inline-flex items-center mb-4 text-base font-semibold text-gray-500 dark:text-gray-400 w-full"
+    class="inline-flex items-center text-base font-semibold text-gray-500 dark:text-gray-400 w-full"
   >
     <PopoutInfo {message} />
 
