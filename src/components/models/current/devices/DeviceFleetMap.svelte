@@ -2,13 +2,16 @@
   import {
     type DeviceContentItems,
     DeviceModel,
+    type FireHoseEvent,
     type IDevice,
+    LocalSocket,
+    type SocketMessage,
     _t,
     copyToClipboard,
   } from "$lib";
   import type { UUID } from "crypto";
   import type { Map as MapLibreMap } from "maplibre-gl";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import { MapLibre, Popup } from "svelte-maplibre";
   import DeviceStatus from "./DeviceStatus.svelte";
   import { BatteryIndicator, DateFormat, Toast, UserAvatar } from "$components";
@@ -28,6 +31,14 @@
   let mapRef = $state<MapLibreMap | undefined>();
   let contentMap = $state<Record<UUID, DeviceContentItems>>({});
   const markers = $state<Array<DeviceMarker>>([]);
+
+  const afterFetchDevices = () => {
+    const map = mapRef!;
+    const coords = markers.map((m) => m.lngLat);
+    if (map && coords.length > 0) {
+      fitMapToMarkers(map, coords);
+    }
+  };
 
   const pullDevices = async () => {
     try {
@@ -50,12 +61,39 @@
           markers.push(...localMarkers);
         })
         .fetch();
+      afterFetchDevices();
     } catch (e) {
       console.error("Error fetching devices for map markers", e);
     }
   };
 
-  onMount(pullDevices);
+  const devicesUpdated = (event: SocketMessage<FireHoseEvent>) => {
+    const { device } = event;
+
+    if (!device) {
+      return;
+    }
+
+    const index = markers.findIndex((m: DeviceMarker) => m.id === device.id);
+    if (index === -1) {
+      return;
+    }
+
+    markers[index].device = device;
+    if (device.lat && device.lng) {
+      markers[index].lngLat = [device.lng, device.lat];
+    }
+    markers[index] = { ...markers[index] };
+  };
+
+  onDestroy(() => {
+    LocalSocket.instance.forget("devices", devicesUpdated);
+  });
+
+  onMount(() => {
+    pullDevices();
+    LocalSocket.instance.listen("devices", devicesUpdated);
+  });
 
   function fitMapToMarkers(map: MapLibreMap, markerCoords: [number, number][]) {
     if (!map || markerCoords.length === 0) return;
@@ -89,15 +127,6 @@
     });
   }
 
-  // Run after markers update
-  $effect(() => {
-    const map = mapRef!;
-    const coords = markers.map((m) => m.lngLat);
-    if (map && coords.length > 0) {
-      fitMapToMarkers(map, coords);
-    }
-  });
-
   const onOpen = async (device: IDevice) => {
     if (contentMap[device.id as UUID]) {
       return;
@@ -105,7 +134,6 @@
 
     try {
       const details = await api.deviceDetails(device);
-      console.log("Fetched device details for popup:", details);
       if (!details) {
         return;
       }
@@ -114,8 +142,6 @@
       console.error("Error fetching device details for popup", e);
       return;
     }
-
-    console.log("Popup opened for device:", device);
   };
 </script>
 
@@ -124,7 +150,7 @@
     {zoom}
     onload={(map) => {
       mapRef = map;
-      console.log("Map loaded", mapRef);
+      afterFetchDevices();
     }}
     class="relative  h-full w-full aspect-video -aspect-auto  md:aspect-square "
     attributionControl={false}

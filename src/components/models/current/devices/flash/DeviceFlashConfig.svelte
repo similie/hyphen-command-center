@@ -1,6 +1,12 @@
 <script lang="ts">
   import { DynamicForm2 } from "$components/input";
-  import { extractFormToJson, type FormField, type IDeviceProfile } from "$lib";
+  import {
+    ConnectionType,
+    ConnectionTypeNames,
+    extractFormToJson,
+    type FormField,
+    type IDeviceProfile,
+  } from "$lib";
   import { onMount } from "svelte";
 
   let {
@@ -21,13 +27,62 @@
     const values = extractFormToJson(data);
     value = values;
   };
+
+  /**
+   * 
+   export enum ConnectionType {
+  WIFI_PREFERRED,
+  CELLULAR_PREFERRED,
+  WIFI_ONLY,
+  CELLULAR_ONLY,
+  NONE,
+} 
+
+export const ConnectionTypeNames = {
+  "0": "WiFi Preferred",
+  "1": "Cellular Preferred",
+  "2": "WiFi Only",
+  "3": "Cellular Only",
+  "4": "None",
+};
+   */
+
+  const getConnectionTypeOptions = () => {
+    const values = [];
+    for (const key in ConnectionTypeNames) {
+      if (isNaN(Number(key))) {
+        continue;
+      }
+      values.push({
+        name: ConnectionTypeNames[key as keyof typeof ConnectionTypeNames],
+        value: key,
+      });
+    }
+    return values;
+  };
+  const connectionSelectOptions = getConnectionTypeOptions();
+  const selectOptions: FormField = $state({
+    type: "select",
+    selectOptions: connectionSelectOptions,
+    required: true,
+    name: "connection_type",
+    label: "Connection Type",
+    value: ConnectionType.CELLULAR_PREFERRED,
+  });
+
   onMount(() => {
     if (!profile) {
       return;
     }
     for (const key in profile.configSchema) {
-      const fieldDef = profile.configSchema[key];
       const defVal = profile.defConfigSchema[key];
+      const fieldDef = profile.configSchema[key];
+      if (key === "connection_type" && fieldDef === "number") {
+        selectOptions.value = defVal || selectOptions.value;
+        fields.push(selectOptions);
+        continue;
+      }
+
       const field: FormField = {
         name: key,
         label: key
@@ -40,8 +95,6 @@
       };
       fields.push(field);
     }
-
-    console.log("Generated fields for DynamicForm2:", fields);
   });
 </script>
 

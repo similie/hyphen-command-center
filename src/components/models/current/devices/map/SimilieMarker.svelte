@@ -4,6 +4,7 @@
   import { Marker, type LngLatLike } from "svelte-maplibre";
   import DeviceAirtag from "@tabler/icons-svelte/icons/device-airtag";
   import MobiledataOff from "@tabler/icons-svelte/icons/mobiledata-off";
+  import { profileExpireTime } from "$lib/stores/deviceProfiles";
 
   let {
     device,
@@ -16,9 +17,14 @@
     lngLat: LngLatLike;
     draggable?: boolean;
   }>();
+  let expireTime = $state<number>(15);
   let isOnline = $state(false);
   onMount(async () => {
-    isOnline = await DeviceModel.isDeviceOnline(device);
+    expireTime = await profileExpireTime(device);
+    isOnline = DeviceModel.isOnline(device.lastTouched, expireTime);
+  });
+  $effect(() => {
+    isOnline = DeviceModel.isOnline(device.lastTouched, expireTime);
   });
 </script>
 

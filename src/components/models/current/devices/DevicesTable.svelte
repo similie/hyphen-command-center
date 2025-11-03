@@ -44,7 +44,6 @@
     return undefined;
   };
   const fetchDevices = () => {
-    // console.log("Fetching devices", skip, limit, (skip - 1) * limit);
     loading = true;
     dApi
       .find(getQuery())

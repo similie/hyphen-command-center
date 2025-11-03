@@ -24,6 +24,10 @@
   const api = new DeviceStream();
   const socketEvents = (event: SocketMessage<FireHoseEvent>) => {
     events = [event, ...events];
+    if (!event.device) {
+      return;
+    }
+    device.lastTouched = event.device.lastTouched;
   };
   const limit = 50;
   let count = $state(0);

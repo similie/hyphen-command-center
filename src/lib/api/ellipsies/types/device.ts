@@ -13,6 +13,22 @@ export interface IDevice extends IEntity {
   profile?: UUID;
 }
 
+export enum ConnectionType {
+  WIFI_PREFERRED,
+  CELLULAR_PREFERRED,
+  WIFI_ONLY,
+  CELLULAR_ONLY,
+  NONE,
+}
+
+export const ConnectionTypeNames = {
+  "0": "WiFi Preferred",
+  "1": "Cellular Preferred",
+  "2": "WiFi Only",
+  "3": "Cellular Only",
+  "4": "None",
+};
+
 export type WeekStreamCount = {
   week_start_date: string;
   week_label: string;
