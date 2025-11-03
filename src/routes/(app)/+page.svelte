@@ -29,7 +29,6 @@
       {/snippet}
     </BasicModelPage>
   </div>
-  <!-- <div class="w-1/2 h-[calc(100vh-2rem)]"> -->
   <div class="w-full h-full md:p-0 p-8">
     <DeviceFleetMap />
   </div>

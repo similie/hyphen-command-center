@@ -1,11 +1,12 @@
 <script lang="ts">
   import { siteConfig, type UserModel, _t, type IDevice } from "$lib";
+  import { DeviceProfileStore } from "$lib/stores/deviceProfiles";
   import QrCode from "@castlenine/svelte-qrcode";
   import { Button, Modal, A, Toggle } from "flowbite-svelte";
 
   let { device, size = 200 } = $props<{ device: IDevice; size?: number }>();
 
-  const baseUrl = `${$siteConfig.applicationApi}/devices/${device.id}`;
+  const baseUrl = `${$siteConfig.applicationURL}/devices/${device.id}`;
   let open = $state(false);
 
   // whether to include the name under the QR code
@@ -77,6 +78,10 @@
       printWindow.close();
     }, 200);
   }
+  let deviceType = $derived(
+    $DeviceProfileStore.find((p) => p?.id === device.id)?.name ||
+      "Hyphen Elemental 4",
+  );
 </script>
 
 <Modal bind:open title={device.name}>
@@ -93,7 +98,7 @@
         <p class="font-semibold">{device.name}</p>
       {/if}
       <p class="font-semibold">{device.identity}</p>
-      <p class="font-semibold">Hyphen Elemental 4</p>
+      <p class="font-semibold">{deviceType}</p>
     {/if}
   </div>
 
