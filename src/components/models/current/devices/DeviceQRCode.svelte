@@ -79,7 +79,7 @@
     }, 200);
   }
   let deviceType = $derived(
-    $DeviceProfileStore.find((p) => p?.id === device.id)?.name ||
+    $DeviceProfileStore.find((p) => p?.id === device.profile)?.name ||
       "Hyphen Elemental 4",
   );
 </script>
