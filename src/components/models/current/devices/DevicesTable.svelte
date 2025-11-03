@@ -12,6 +12,7 @@
     Heading,
     P,
     Search,
+    Spinner,
     Table,
     TableBody,
     TableBodyCell,
@@ -27,6 +28,7 @@
   let skip = $state(1);
   let count = $state(0);
   let search = $state("");
+  let loading = $state(true);
   let devices = $state<IDevice[]>([]);
   const dApi = new DeviceModel();
   const getQuery = () => {
@@ -43,6 +45,7 @@
   };
   const fetchDevices = () => {
     // console.log("Fetching devices", skip, limit, (skip - 1) * limit);
+    loading = true;
     dApi
       .find(getQuery())
       .sort({ lastTouched: { direction: "DESC", nulls: "LAST" }, name: "ASC" })
@@ -52,8 +55,12 @@
       .then((fetchedDevices: IDevice[]) => {
         // Handle the retrieved devices
         devices = fetchedDevices;
+        loading = false;
       })
-      .catch(console.error);
+      .catch(console.error)
+      .finally(() => {
+        loading = false;
+      });
   };
 
   const setup = () => {
@@ -101,6 +108,8 @@
     devices = devices.filter((d) => d.id !== device.id);
     count = Math.max(0, count - 1);
   };
+
+  const tableRows = ["Identity", "Name", "Status", "Last Heard", " "];
 </script>
 
 <div class="w-full rounded-2xl mb-4">
@@ -118,17 +127,23 @@
 
 <Table hoverable class="w-full" shadow striped>
   <TableHead>
-    <TableHeadCell>{$_t("Identity")}</TableHeadCell>
-    <TableHeadCell>{$_t("Name")}</TableHeadCell>
-    <TableHeadCell>{$_t("Status")}</TableHeadCell>
-    <TableHeadCell>{$_t("Last Heard")}</TableHeadCell>
-    <TableHeadCell>{" "}</TableHeadCell>
+    {#each tableRows as row}
+      <TableHeadCell>{$_t(row)}</TableHeadCell>
+    {/each}
   </TableHead>
 
   <TableBody>
-    {#if !devices.length}
+    {#if loading}
       <TableBodyRow>
-        <TableBodyCell colspan={5}>
+        <TableBodyCell colspan={tableRows.length}>
+          <P class="text-center w-full"
+            >{$_t("Loading devices...")} <Spinner /></P
+          >
+        </TableBodyCell>
+      </TableBodyRow>
+    {:else if !devices.length}
+      <TableBodyRow>
+        <TableBodyCell colspan={tableRows.length}>
           <P class="text-center w-full">{$_t("No devices found")}</P>
         </TableBodyCell>
       </TableBodyRow>
