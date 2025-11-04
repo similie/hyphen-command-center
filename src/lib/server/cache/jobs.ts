@@ -136,6 +136,7 @@ export class JobsManager {
       "send-email",
       "process-device-forward-artifacts",
       "processed-device-sensor",
+      "ota-ack-queue",
     ];
   }
 
@@ -153,7 +154,20 @@ export class JobsManager {
       },
     });
   }
-
+  public static otaAckProcessor(job: JobValue) {
+    const { message, device } = job.data as {
+      message: Buffer<ArrayBufferLike>;
+      device: any;
+    };
+    return socketServer.broadcast({
+      topic: `device/${device.identity}/ota/ack`,
+      data: {
+        message: message.toString(),
+        _uid: generateUniqueUUID(),
+        _date: new Date(),
+      },
+    });
+  }
   public get getJob() {
     if (!JobsManager._instance) {
       throw new Error("Jobs manager not started");
@@ -186,6 +200,11 @@ export class JobsManager {
         name: jobNames[4],
         opt: queue.queueOpt,
         cb: JobsManager.processDeviceSensorsSync,
+      },
+      {
+        name: jobNames[5],
+        opt: queue.queueOpt,
+        cb: JobsManager.otaAckProcessor,
       },
     ];
     return jobs;

@@ -15,6 +15,7 @@ import {
   type ISensorWithKey,
   HttpMethod,
 } from "../types";
+import { EllipsiesConnector } from "../connector";
 
 export class DeviceModel extends HyphenModel<IDevice> {
   constructor() {
@@ -110,6 +111,21 @@ export class DeviceModel extends HyphenModel<IDevice> {
     const results = await this.connectRaw(thisUrl);
     const blob = await results.blob();
     return blob;
+  }
+
+  public async buildCloudFlashConfig(
+    deviceId: string,
+    buildId: string,
+    host?: string,
+  ): Promise<IDeviceConfig> {
+    const thisUrl = this.formatUrl(`ota`);
+    const results = await this.connectRaw(thisUrl, HttpMethod.POST, {
+      deviceId,
+      buildId,
+      host: host || EllipsiesConnector.init().url,
+    });
+    const config = await results.json();
+    return config;
   }
   public async flashDeviceLocal(
     device: IDevice,
