@@ -55,7 +55,7 @@ export const ConnectionTypeNames = {
       }
       values.push({
         name: ConnectionTypeNames[key as keyof typeof ConnectionTypeNames],
-        value: key,
+        value: +key,
       });
     }
     return values;
@@ -78,7 +78,7 @@ export const ConnectionTypeNames = {
       const defVal = profile.defConfigSchema[key];
       const fieldDef = profile.configSchema[key];
       if (key === "connection_type" && fieldDef === "number") {
-        selectOptions.value = defVal || selectOptions.value;
+        selectOptions.value = +(defVal || selectOptions.value);
         fields.push(selectOptions);
         continue;
       }
