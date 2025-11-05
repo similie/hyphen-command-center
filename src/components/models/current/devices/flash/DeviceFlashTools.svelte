@@ -28,6 +28,7 @@
   import ConsoleLogger from "./ConsoleLogger.svelte";
   import LocalFlasher from "./LocalFlasher.svelte";
   import { Toast } from "$components/toasts";
+  import CloudFlashTool from "./CloudFlashTool.svelte";
 
   let { device } = $props<{ device: IDevice }>();
   const MAX_LOG_LINES = 200;
@@ -367,6 +368,6 @@
       <ConsoleLogger {logs} />
     </div>
   {:else if cloudView}
-    <P>{$_t("Cloud Flashing is not yet implemented.")}</P>
+    <CloudFlashTool {device} bind:flashing={isFlashing} />
   {/if}
 </Card>
