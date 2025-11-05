@@ -140,7 +140,7 @@
     if (isArray) {
       return $formData[field.name].length > 0;
     }
-    return !!$formData[field.name];
+    return $formData[field.name] != null && $formData[field.name] !== "";
   };
 
   const formValidation = ($formData: { [key: string]: any }) => {

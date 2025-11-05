@@ -81,6 +81,7 @@
     console.log("OTA ACK topic message received:", data);
     try {
       const message = data.message.toString();
+      console.log("OTA ACK topic message string:", message);
       const values = JSON.parse(message) || {};
 
       if (values.status === "complete") {
@@ -107,7 +108,6 @@
       }
     } catch (err: any) {
       console.error("Error processing OTA ACK topic message:", err);
-      forget();
       appendLog(`OTA Flashing error: ${err.message || "Unknown error"}`);
       return;
     }
