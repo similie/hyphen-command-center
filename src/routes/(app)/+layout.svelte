@@ -1,5 +1,6 @@
 <script lang="ts">
   import { page } from "$app/state";
+  import { Toasts } from "$components";
   import { Primary } from "$layouts";
   import { siteUser, userConfig, UserApi } from "$lib";
   import { DeviceProfileStore } from "$lib/stores/deviceProfiles";
@@ -24,6 +25,7 @@
   onDestroy(() => userApi.removeLoginCheck());
 </script>
 
+<Toasts />
 <Primary>
   {@render children()}
 </Primary>

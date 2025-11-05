@@ -53,14 +53,6 @@
   });
 </script>
 
-<svelte:head>
-  <title>{$siteConfig?.siteName || "Similie"}</title>
-  <meta
-    name="description"
-    content={$siteConfig?.siteDescription || "Similie - API Key Management"}
-  />
-</svelte:head>
-
 {#if ready}
   {@render children()}
 {/if}

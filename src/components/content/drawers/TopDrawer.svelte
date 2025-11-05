@@ -31,6 +31,7 @@
   placement="top"
   outsideclose={false}
   width="full"
+  class="overflow-y-auto max-h-screen"
   transitionParams={transitionParamsTop}
   bind:hidden
   dismissable={false}

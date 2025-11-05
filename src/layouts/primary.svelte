@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { Sidebar, Toasts } from "$components";
+  import { Sidebar } from "$components";
   import { ScrollTopValue } from "$lib";
-  import { onMount } from "svelte";
+  import { onMount, type Snippet } from "svelte";
   import { afterNavigate } from "$app/navigation";
+  let { children } = $props<{ children: Snippet }>();
   onMount(() => {
     const container = document.getElementById("main-body-content");
     if (!container) {
@@ -27,11 +28,11 @@
 
 <div class=" min-h-screen flex flex-row">
   <Sidebar />
+
   <main
     id="main-body-content"
     class="h-screen max-h-[100dvh] w-full flex flex-col overflow-y-auto"
   >
-    <Toasts />
-    <slot />
+    {@render children()}
   </main>
 </div>

@@ -2,6 +2,7 @@
   import { TopDrawer } from "$components";
   import { type Snippet } from "svelte";
   import { BodyContainerWide } from "$layouts";
+  import { Drawer } from "flowbite-svelte";
 
   let {
     body,
