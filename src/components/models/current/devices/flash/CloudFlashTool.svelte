@@ -80,7 +80,7 @@
   const onTopicMessage = (data: SocketMessage) => {
     console.log("OTA ACK topic message received:", data);
     try {
-      const message = data.message.toString();
+      const message = data.message; //.toString();
       console.log("OTA ACK topic message string:", message);
       const values = JSON.parse(message) || {};
 

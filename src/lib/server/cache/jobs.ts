@@ -159,13 +159,15 @@ export class JobsManager {
       message: Buffer<ArrayBufferLike>;
       device: any;
     };
+    const data = {
+      message: message.toString(),
+      _uid: generateUniqueUUID(),
+      _date: new Date(),
+    };
+    console.log("Broadcasting OTA ACK for device:", device.identity, data);
     return socketServer.broadcast({
       topic: `device/${device.identity}/ota/ack`,
-      data: {
-        message: message.toString(),
-        _uid: generateUniqueUUID(),
-        _date: new Date(),
-      },
+      data,
     });
   }
   public get getJob() {
