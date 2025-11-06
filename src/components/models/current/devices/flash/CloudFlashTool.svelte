@@ -56,13 +56,23 @@
     LocalSocket.instance.forget(socketTopic, onTopicMessage);
   };
 
+  const reset = () => {
+    flashing = false;
+    complete = false;
+    error = 0;
+    progress = 0;
+    buildId = "";
+    logs = [];
+  };
+
   const runFailedTimer = () => {
-    const error =
+    const errorMessage =
       "OTA Flashing timed out. Device did not respond after reboot.";
     timer = setTimeout(() => {
       flashing = false;
-      appendLog(nl(error));
-      Toast.error(error);
+      error = 500;
+      appendLog(nl(errorMessage));
+      Toast.error(errorMessage);
       forget();
     }, 60000);
   };
@@ -86,25 +96,28 @@
     }
   };
 
+  const completeFlash = () => {
+    clearTimeout(timer);
+    appendLog(nl("OTA Flashing complete for build: " + buildId));
+    forget();
+    Toast.success("OTA Flashing complete.");
+    setTimeout(() => {
+      complete = true;
+      progress = 0;
+      flashing = false;
+    }, 2000);
+  };
+
   let socketTopic = $derived(`device/${device.identity}/ota/ack`);
 
   const onTopicMessage = (data: SocketMessage) => {
     console.log("OTA ACK topic message received:", data);
     try {
       const message = data.message; //.toString();
-      console.log("OTA ACK topic message string:", message);
       const values = JSON.parse(message) || {};
 
       if (values.status === "complete") {
-        clearTimeout(timer);
-        appendLog(nl("OTA Flashing complete for build: " + values.build));
-        forget();
-        Toast.success("OTA Flashing complete.");
-        setTimeout(() => {
-          complete = true;
-          progress = 0;
-          flashing = false;
-        }, 2000);
+        completeFlash();
       } else if (values.status === "started") {
         appendLog(
           nl(
@@ -214,19 +227,13 @@
       {$_t("No profile assigned to device. Cannot flash firmware.")}
     </P>
   {:else if complete}
-    <Card
-      class="bg-primary-600 dark:bg-primary-600 max-w-full p-3 flex flex-col space-y-4"
-    >
-      <Heading tag="h5" class="text-white dark:text-white text-center ">
+    <Card class=" max-w-full p-3 flex flex-col space-y-4">
+      <Heading tag="h5" class=" text-center ">
         {$_t("OTA Flashing complete! Your device was updated successfully.")}
       </Heading>
-      <P class="text-white text-center font-bold"
-        >{$_t("Build ID")}: {buildId}</P
-      >
+      <P class=" text-center font-bold">{$_t("Build ID")}: {buildId}</P>
       <Hr class="my-4" />
-      <Button color="light" onclick={() => (complete = false)}
-        >{$_t("Flash Again")}</Button
-      >
+      <Button color="alternative" onclick={reset}>{$_t("Flash Again")}</Button>
     </Card>
   {:else if error !== 0}
     <Card
@@ -242,9 +249,7 @@
         >{$_t("Build ID")}: {buildId || "Unknown"}</P
       >
       <Hr class="my-4" />
-      <Button color="light" onclick={() => (error = 0)}
-        >{$_t("Try Again")}</Button
-      >
+      <Button color="light" onclick={reset}>{$_t("Try Again")}</Button>
     </Card>
     <ConsoleLogger {logs} />
   {:else if flashing}
@@ -273,18 +278,4 @@
       >
     </div>
   {/if}
-  <!-- <Button
-    color="rose"
-    onclick={() => {
-      flashing = true;
-      sendFlashToDevice("6ecc199b-8efb-436b-b940-425e30e0452f");
-    }}>Test This Puppy</Button
-  > -->
-
-  <!-- <Button
-    color="rose"
-    onclick={() => {
-      Toast.success("6ecc199b-8efb-436b-b940-425e30e0452f");
-    }}>Cheers</Button
-  > -->
 </div>
