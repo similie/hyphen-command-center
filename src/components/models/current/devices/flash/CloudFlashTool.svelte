@@ -16,6 +16,7 @@
     Heading,
     Hr,
     P,
+    Progressbar,
     Spinner,
   } from "flowbite-svelte";
   import { onDestroy, onMount } from "svelte";
@@ -35,6 +36,7 @@
   let confirmFlash = $state(false);
   let complete = $state(false);
   let error = $state(0);
+  let progress = $state(0);
   let profile = $state<IDeviceProfile | null>(null);
   let loading = $state(true);
   let config = $state<{ [key: string]: any }>({});
@@ -44,6 +46,10 @@
     logs = [...logs.slice(-MAX_LOG_LINES), line];
   };
 
+  const nl = (val: string) => {
+    return val.endsWith("\r") ? val : val + "\r";
+  };
+
   let timer: NodeJS.Timeout;
 
   const forget = () => {
@@ -51,11 +57,12 @@
   };
 
   const runFailedTimer = () => {
+    const error =
+      "OTA Flashing timed out. Device did not respond after reboot.";
     timer = setTimeout(() => {
       flashing = false;
-      Toast.error(
-        "OTA Flashing timed out. Device did not respond after reboot.",
-      );
+      appendLog(nl(error));
+      Toast.error(error);
       forget();
     }, 60000);
   };
@@ -90,35 +97,42 @@
 
       if (values.status === "complete") {
         clearTimeout(timer);
-        appendLog("OTA Flashing complete for build: " + values.build);
+        appendLog(nl("OTA Flashing complete for build: " + values.build));
         forget();
         Toast.success("OTA Flashing complete.");
         setTimeout(() => {
           complete = true;
+          progress = 0;
           flashing = false;
         }, 2000);
       } else if (values.status === "started") {
         appendLog(
-          "OTA Flashing started on device. This can take several minutes and may appear to have stalled.",
+          nl(
+            "OTA Flashing started on device. This can take several minutes and may appear to have stalled.",
+          ),
         );
       } else if (values.status === "error" || values.status === "failed") {
         error = values.code ?? 0;
-        appendLog(`OTA Flashing error: ${values.error || "Unknown error"}`);
+        appendLog(nl(`OTA Flashing error: ${values.error || "Unknown error"}`));
         flashing = false;
         forget();
       } else if (values.status === "progress") {
+        progress = values.progress || 0;
         appendLog(
-          `OTA Flashing progress: ${values.progress + "%" || "Unknown progress"}`,
+          nl(
+            `OTA Flashing progress: ${values.progress + "%" || "Unknown progress"}`,
+          ),
         );
       } else if (values.status === "rebooting") {
         runFailedTimer();
-        appendLog("OTA Flashing: Device is rebooting...");
+        progress = 100;
+        appendLog(nl("OTA Flashing: Device is rebooting..."));
       } else {
-        appendLog(`OTA Flashing status: ${values.status}`);
+        appendLog(nl(`OTA Flashing status: ${values.status}`));
       }
     } catch (err: any) {
       console.error("Error processing OTA ACK topic message:", err);
-      appendLog(`OTA Flashing error: ${err.message || "Unknown error"}`);
+      appendLog(nl(`OTA Flashing error: ${err.message || "Unknown error"}`));
       return;
     }
   };
@@ -201,7 +215,7 @@
     </P>
   {:else if complete}
     <Card
-      class="bg-primary-600 dark:bg-emerald-600 max-w-full p-3 flex flex-col space-y-4"
+      class="bg-primary-600 dark:bg-primary-600 max-w-full p-3 flex flex-col space-y-4"
     >
       <Heading tag="h5" class="text-white dark:text-white text-center ">
         {$_t("OTA Flashing complete! Your device was updated successfully.")}
@@ -235,6 +249,10 @@
     <ConsoleLogger {logs} />
   {:else if flashing}
     <ConsoleLogger {logs} />
+    {#if progress > 0}
+      <Hr class="my-2" />
+      <Progressbar {progress} />
+    {/if}
   {:else}
     <Accordion flush>
       <AccordionItem>
