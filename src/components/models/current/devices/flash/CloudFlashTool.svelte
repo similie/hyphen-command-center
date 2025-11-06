@@ -12,7 +12,9 @@
     Accordion,
     AccordionItem,
     Button,
+    Card,
     Heading,
+    Hr,
     P,
     Spinner,
   } from "flowbite-svelte";
@@ -31,6 +33,8 @@
   const dProfile = new DeviceProfile();
   // let building = $state(false);
   let confirmFlash = $state(false);
+  let complete = $state(false);
+  let error = $state(0);
   let profile = $state<IDeviceProfile | null>(null);
   let loading = $state(true);
   let config = $state<{ [key: string]: any }>({});
@@ -90,15 +94,21 @@
         forget();
         Toast.success("OTA Flashing complete.");
         setTimeout(() => {
+          complete = true;
           flashing = false;
         }, 2000);
+      } else if (values.status === "started") {
+        appendLog(
+          "OTA Flashing started on device. This can take several minutes and may appear to have stalled.",
+        );
       } else if (values.status === "error" || values.status === "failed") {
+        error = values.code ?? 0;
         appendLog(`OTA Flashing error: ${values.error || "Unknown error"}`);
         flashing = false;
         forget();
       } else if (values.status === "progress") {
         appendLog(
-          `OTA Flashing progress: ${values.progress || "Unknown progress"}`,
+          `OTA Flashing progress: ${values.progress + "%" || "Unknown progress"}`,
         );
       } else if (values.status === "rebooting") {
         runFailedTimer();
@@ -160,8 +170,8 @@
         throw new Error("Build ID not received from flash process.");
       }
 
-      const sendValues = await sendFlashToDevice(buildId);
-      console.log("Prepared firmware files for flashing:", sendValues);
+      await sendFlashToDevice(buildId);
+      console.log("Prepared firmware files for flashing", buildId);
     } catch (err) {
       console.error("Error sending device to flash:", err);
     } finally {
@@ -189,6 +199,40 @@
     <P class="text-center text-rose-500">
       {$_t("No profile assigned to device. Cannot flash firmware.")}
     </P>
+  {:else if complete}
+    <Card
+      class="bg-primary-600 dark:bg-emerald-600 max-w-full p-3 flex flex-col space-y-4"
+    >
+      <Heading tag="h5" class="text-white dark:text-white text-center ">
+        {$_t("OTA Flashing complete! Your device was updated successfully.")}
+      </Heading>
+      <P class="text-white text-center font-bold"
+        >{$_t("Build ID")}: {buildId}</P
+      >
+      <Hr class="my-4" />
+      <Button color="light" onclick={() => (complete = false)}
+        >{$_t("Flash Again")}</Button
+      >
+    </Card>
+  {:else if error !== 0}
+    <Card
+      class="bg-rose-600 mb-6 dark:bg-rose-600 max-w-full p-3 flex flex-col space-y-4"
+    >
+      <Heading tag="h5" class="text-white dark:text-white text-center ">
+        {$_t(
+          "There was an error during OTA Flashing. Please review the logs for details.",
+        )}
+      </Heading>
+      <P class="text-center text-white">{$_t("Error code:")} {error}</P>
+      <P class="text-white text-center font-bold"
+        >{$_t("Build ID")}: {buildId || "Unknown"}</P
+      >
+      <Hr class="my-4" />
+      <Button color="light" onclick={() => (error = 0)}
+        >{$_t("Try Again")}</Button
+      >
+    </Card>
+    <ConsoleLogger {logs} />
   {:else if flashing}
     <ConsoleLogger {logs} />
   {:else}
