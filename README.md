@@ -117,10 +117,10 @@ Developer Flexibility
 
 - Built for Hyphen deployments — but adaptable to any IoT environment
 - Bring your own:
-- - Cloud provider
-- - Certificate authority
-- - Firmware stack
-- - Data processing pipeline
+  - Cloud provider
+  - Certificate authority
+  - Firmware stack
+  - Data processing pipeline
 
 ## 🧰 Tech Stack
 
