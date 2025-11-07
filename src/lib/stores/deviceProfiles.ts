@@ -16,7 +16,12 @@ export const findDeviceProfileByDevice = async (device: IDevice) => {
   const profiles = await pullDeviceProfilesFromStore();
   return profiles.find((profile) => profile.id === device.profile) ?? null;
 };
-
+export const addProfileToStore = (updatedProfile: IDeviceProfile) => {
+  DeviceProfileStore.update((profiles) => {
+    profiles.push(updatedProfile);
+    return profiles;
+  });
+};
 export const updateProfileInStore = (updatedProfile: IDeviceProfile) => {
   DeviceProfileStore.update((profiles) => {
     const index = profiles.findIndex(

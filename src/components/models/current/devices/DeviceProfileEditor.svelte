@@ -22,7 +22,10 @@
   } from "flowbite-svelte";
   import { PlusOutline, TrashBinOutline } from "flowbite-svelte-icons";
   import { DeviceRepositoriesSelect, PartitionTableDetails } from ".";
-  import { updateProfileInStore } from "$lib/stores/deviceProfiles";
+  import {
+    addProfileToStore,
+    updateProfileInStore,
+  } from "$lib/stores/deviceProfiles";
   const api = new DeviceProfile();
   let { profile = $bindable(), onDelete } = $props<{
     profile?: IDeviceProfile;
@@ -60,6 +63,7 @@
         updateProfileInStore(result);
       } else {
         const value = await api.create(setProfile as IDeviceProfile);
+        addProfileToStore(value);
         setProfile = { defConfigSchema: {}, configSchema: {} };
         emitEvent<IDeviceProfile>("deviceprofile:created", value);
       }
@@ -132,15 +136,19 @@
       <Label>{$_t("Build Repository")}</Label>
       <DeviceRepositoriesSelect bind:value={setProfile.repository} />
     </InputFormItem>
+  </InputItemsRow>
+  <InputItemsRow>
     <InputFormItem>
       <Label
         >{$_t("Offline After")} <small>({$_t("time in minutes")})</small></Label
       >
       <Input type="number" bind:value={setProfile.offline} min={0} />
     </InputFormItem>
-    <InputFormItem shrink>
+    <InputFormItem>
       <Label>{$_t("Cloud Flash")}</Label>
-      <Toggle bind:checked={setProfile.cloudFlash}></Toggle>
+      <Toggle bind:checked={setProfile.cloudFlash}
+        ><small>{$_t("Enable cloud flashing for this device")}</small></Toggle
+      >
     </InputFormItem>
   </InputItemsRow>
   <PartitionTableDetails bind:value={setProfile.partitions} />
