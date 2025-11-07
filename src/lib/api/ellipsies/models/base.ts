@@ -1,6 +1,6 @@
 import { UserApi } from "$lib/api/models";
-import type { BaseModel } from "$lib/types";
 import { Debounce } from "$lib/utils";
+import { browser } from "$app/environment";
 import { HttpMethod, type HTTPConnector } from "@similie/http-connector";
 import {
   Model,
@@ -10,20 +10,28 @@ import {
 } from "@similie/model-connect-entities";
 
 export class HyphenModel<t extends IEntity> extends Model<t> {
-  private readonly userApi: UserApi;
+  private readonly userApi: UserApi | null = null;
   private static maintainCounter: number = 0;
   private readonly maintainThreshold: number = 5; // e.g., every 5 calls
   private readonly debounce: Debounce = new Debounce();
   constructor(modelname: string) {
     super();
     this.modelname = modelname;
-    this.userApi = new UserApi();
+
+    //  Only instantiate when running in client browser
+    if (browser) {
+      this.userApi = new UserApi();
+    }
   }
 
   private runMaintainSession = this.debounce.bounce(
     async (self: HyphenModel<t>) => {
       try {
+        if (!self.userApi) {
+          return;
+        }
         const result = await self.userApi.maintainSession();
+        // console.log("Maintaining session...", result);
         if (!result.ok) {
           console.warn("Session could not be maintained.");
         }
@@ -35,6 +43,7 @@ export class HyphenModel<t extends IEntity> extends Model<t> {
   );
 
   private maintain() {
+    if (!browser) return; // ✅ No-op on server
     // we do this because we want to make sure our requests
     // touch the api to maintain the session only every N calls
     if (HyphenModel.maintainCounter < this.maintainThreshold) {

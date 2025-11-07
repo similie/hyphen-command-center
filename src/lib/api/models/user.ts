@@ -213,6 +213,7 @@ export class UserApi extends ApiModel<UserModel> {
   }
 
   async maintainSession(): Promise<{ ok: boolean }> {
+    console.log("Maintaining session...", this.urlSet("session"));
     const results = await this.get(this.urlSet("session"));
     return results.json();
   }
