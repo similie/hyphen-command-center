@@ -14,7 +14,21 @@ const pullDeviceProfilesFromStore = () => {
 
 export const findDeviceProfileByDevice = async (device: IDevice) => {
   const profiles = await pullDeviceProfilesFromStore();
-  return profiles.find((profile) => profile.id === device.profile);
+  return profiles.find((profile) => profile.id === device.profile) ?? null;
+};
+
+export const updateProfileInStore = (updatedProfile: IDeviceProfile) => {
+  DeviceProfileStore.update((profiles) => {
+    const index = profiles.findIndex(
+      (profile) => profile.id === updatedProfile.id,
+    );
+    if (index !== -1) {
+      profiles[index] = updatedProfile;
+    } else {
+      profiles.push(updatedProfile);
+    }
+    return profiles;
+  });
 };
 
 export const profileExpireTime = async (device: IDevice) => {

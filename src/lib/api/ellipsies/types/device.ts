@@ -157,6 +157,7 @@ export interface IDeviceProfile extends IEntity {
   configSchema: Record<string, any>;
   partitions: { address: number; type: string }[];
   repository: UUID;
+  cloudFlash: boolean;
 }
 
 export type DeviceContentItems = {

@@ -8,11 +8,12 @@
   import { isDarkMode, onDarkModeChange } from "$lib";
   import { writable } from "svelte/store";
   import { onDestroy, onMount } from "svelte";
-  // export let text: string;
-  let { text, class: className = "" } = $props<{
-    text: string;
-    class?: string;
-  }>();
+  export let text: string;
+  export let className = "";
+  // let { text, class: className = "" } = $props<{
+  //   text: string;
+  //   class?: string;
+  // }>();
   let darkMode = writable(isDarkMode());
   let dmFunction: (() => void) | undefined;
   onMount(async () => {

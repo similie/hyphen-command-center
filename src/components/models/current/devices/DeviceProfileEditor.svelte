@@ -18,9 +18,11 @@
     Label,
     Select,
     Textarea,
+    Toggle,
   } from "flowbite-svelte";
   import { PlusOutline, TrashBinOutline } from "flowbite-svelte-icons";
   import { DeviceRepositoriesSelect, PartitionTableDetails } from ".";
+  import { updateProfileInStore } from "$lib/stores/deviceProfiles";
   const api = new DeviceProfile();
   let { profile = $bindable(), onDelete } = $props<{
     profile?: IDeviceProfile;
@@ -55,6 +57,7 @@
         );
         setProfile = result;
         emitEvent<IDeviceProfile>("deviceprofile:created", result);
+        updateProfileInStore(result);
       } else {
         const value = await api.create(setProfile as IDeviceProfile);
         setProfile = { defConfigSchema: {}, configSchema: {} };
@@ -134,6 +137,10 @@
         >{$_t("Offline After")} <small>({$_t("time in minutes")})</small></Label
       >
       <Input type="number" bind:value={setProfile.offline} min={0} />
+    </InputFormItem>
+    <InputFormItem shrink>
+      <Label>{$_t("Cloud Flash")}</Label>
+      <Toggle bind:checked={setProfile.cloudFlash}></Toggle>
     </InputFormItem>
   </InputItemsRow>
   <PartitionTableDetails bind:value={setProfile.partitions} />

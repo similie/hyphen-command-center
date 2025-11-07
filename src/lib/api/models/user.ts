@@ -212,6 +212,11 @@ export class UserApi extends ApiModel<UserModel> {
     return results.json();
   }
 
+  async maintainSession(): Promise<{ ok: boolean }> {
+    const results = await this.get(this.urlSet("session"));
+    return results.json();
+  }
+
   async runLoginCheck() {
     this.removeLoginCheck();
     UserApi._interval = setInterval(async () => {
@@ -220,6 +225,7 @@ export class UserApi extends ApiModel<UserModel> {
         if (!thisUser) {
           return this.removeLoginCheck();
         }
+
         const results = await this.get(this.urlSet("tap"));
         if (results.status !== 200) {
           return;

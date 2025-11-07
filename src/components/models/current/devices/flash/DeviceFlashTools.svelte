@@ -6,16 +6,14 @@
     Card,
     Heading,
     Hr,
-    NavLi,
-    NavUl,
     P,
     Select,
     Spinner,
     TabItem,
     Tabs,
   } from "flowbite-svelte";
-  import { onDestroy } from "svelte";
-  import { _t, type IDevice } from "$lib"; // adjust import path as needed
+  import { onDestroy, onMount } from "svelte";
+  import { _t, type IDevice, type IDeviceProfile } from "$lib"; // adjust import path as needed
 
   import {
     flashESP32WithCerts,
@@ -29,6 +27,7 @@
   import LocalFlasher from "./LocalFlasher.svelte";
   import { Toast } from "$components/toasts";
   import CloudFlashTool from "./CloudFlashTool.svelte";
+  import { findDeviceProfileByDevice } from "$lib/stores/deviceProfiles";
 
   let { device } = $props<{ device: IDevice }>();
   const MAX_LOG_LINES = 200;
@@ -227,6 +226,10 @@
   };
   let cloudView = $state(false);
   // Cleanup on component destroy
+  let profile = $state<IDeviceProfile | null>(null);
+  onMount(async () => {
+    profile = await findDeviceProfileByDevice(device);
+  });
   onDestroy(async () => {
     connected = false;
     breakLoop = true;
@@ -241,27 +244,29 @@
   <div class="flex w-full items-center">
     <Heading tag="h5">{$_t("Device")}: {device.name}</Heading>
     <div class="ml-auto flex space-x-2 items-center">
-      <A
-        href="#"
-        disabled={connected && !cloudView}
-        color={cloudView ? "gray" : "primary"}
-        onclick={() => {
-          cloudView = false;
-        }}>{$_t("Local")}</A
-      >
-      <A
-        href="#"
-        color={!cloudView ? "gray" : "primary"}
-        disabled={connected && cloudView}
-        onclick={() => {
-          if (connected) {
-            return Toast.error(
-              $_t("Disconnect the device to use Cloud Flashing."),
-            );
-          }
-          cloudView = true;
-        }}>{$_t("Cloud")}</A
-      >
+      {#if profile && profile.cloudFlash}
+        <A
+          href="#"
+          disabled={connected && !cloudView}
+          color={cloudView ? "gray" : "primary"}
+          onclick={() => {
+            cloudView = false;
+          }}>{$_t("Local")}</A
+        >
+        <A
+          href="#"
+          color={!cloudView ? "gray" : "primary"}
+          disabled={connected && cloudView}
+          onclick={() => {
+            if (connected) {
+              return Toast.error(
+                $_t("Disconnect the device to use Cloud Flashing."),
+              );
+            }
+            cloudView = true;
+          }}>{$_t("Cloud")}</A
+        >
+      {/if}
     </div>
   </div>
   <Hr class="my-4" />
