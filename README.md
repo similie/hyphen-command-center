@@ -61,7 +61,7 @@ and seeding when run in a containerized environment.
 
 ---
 
-## ⚙️ Core Features
+## ⚙️ Core Capabilities
 
 - **Unified Command Dashboard** — monitor devices, builds, and telemetry in real time
 - **Drizzle ORM Integration** — database migrations and seeding automatically on boot
@@ -72,6 +72,55 @@ and seeding when run in a containerized environment.
 - **Multi-Network Support** — connected across webapps, Redis, and DB networks
 
 ---
+
+## ⚡ Hyphen Command Center — Feature Overview
+
+Hyphen Command Center is built for the Hyphen Ecosystem, but is fully flexible and extendable for custom firmware ecosystems and third-party platforms.
+
+Core Capabilities
+
+- Full Device Fleet Management across WiFi & Cellular devices
+- Secure Certificate-Based Authentication (AWS by default, pluggable to other PKI systems)
+- Global Device Map View showing online/offline state and telemetry health
+- Real-Time Telemetry Stream Viewer for live sensor and event data
+- Device Vitals Dashboard including signal strength, battery, temperature, and connection quality
+- Local Flash & Cloud Flash Support
+- Local Flash: compile + flash devices directly via USB
+- Cloud Flash: OTA firmware deployment via WiFi or Cellular networks
+- Per-Device & Per-Fleet Configuration Management
+- Change parameters remotely
+- Apply staged, conditional, and scheduled config updates
+
+Firmware + Build System Integration
+
+- Works with Hyphen OS firmware by default
+- PlatformIO build pipeline included
+- Custom build pipelines supported
+- Add your own Docker-based build script
+- Integrate any toolchain / MCU SDK
+- Extensible Scripting Support for CI/CD firmware delivery workflows
+
+Cloud Interoperability & Ecosystem Tools
+
+- Hyphen Connect Protocol Support
+- Remote function calls & variable reads, per-device
+- Simplifies dynamic configuration without rewriting firmware
+- Forwarders & Data Routing
+- Map device parameters → your backend schema
+- Create routing rules for transforming and forwarding telemetry
+- Send data to external services or message brokers
+- Custom Payload Decoders
+- Decode proprietary payload formats
+- Normalize outputs to JSON or your internal types
+
+Developer Flexibility
+
+- Built for Hyphen deployments — but adaptable to any IoT environment
+- Bring your own:
+- - Cloud provider
+- - Certificate authority
+- - Firmware stack
+- - Data processing pipeline
 
 ## 🧰 Tech Stack
 
