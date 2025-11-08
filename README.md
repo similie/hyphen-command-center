@@ -137,6 +137,17 @@ Developer Flexibility
 
 ---
 
+```mermaid
+flowchart TD
+  CC["Hyphen Command Center (Web UI)"] <--> API["Hyphen Command Center API"]
+  API <--> Ellipsies["Ellipsies (Orchestration & Workflow Engine)"]
+  API <--> MQTT["MQTT Broker + Certificate Authority"]
+  MQTT <--> OS["HyphenOS (Device Runtime)"]
+  OS --> Sensors["Sensors / Actuators"]
+  CC --> Forwarders["Forwarders / Decoders"]
+  Forwarders --> External["External Systems / Data Pipelines"]
+```
+
 ## 🧾 Prerequisites
 
 - **Docker Desktop** (Mac, Windows, Linux)
@@ -335,7 +346,7 @@ manage infrastructure, weather, and environment through IoT and data-driven inte
 | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | [**Hyphen Command Center API**](https://github.com/similie/hyphen-command-center-api) | The backend API that manages MQTT connections, firmware builds, and the device registry for all Hyphen systems.                                              |
 | [**Hyphen Connect**](https://github.com/similie/hyphen-connect)                       | The ESP32-compatible client library and reference firmware that allows hardware devices to communicate securely with the Hyphen Command Center.              |
-| [**HyphenOS**](https://github.com/similie/hyphenos)                                   | The ESP32-compatible OS we use for our fleet of IoT environmental sensors.                                                                                   |
+| [**HyphenOS**](https://github.com/similie/hyphen-os)                                  | The ESP32-compatible OS we use for our fleet of IoT environmental sensors.                                                                                   |
 | [**Hyphen Elemental Hardware**](https://github.com/similie/hyphen-elemental)          | Hardware schematics we have designed to fully support HyphenOS for continuous and fail-safe operation                                                        |
 | [**Ellipsies**](https://github.com/similie/ellipsies)                                 | The TypeScript backend microservice framework built by Similie, providing decorators, routing-controllers, and TypeORM integration for the Hyphen ecosystem. |
 
