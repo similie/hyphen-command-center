@@ -23,3 +23,5 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 *.code-workspace
 image_builds/
+.vscode
+build.conf
