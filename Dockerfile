@@ -13,7 +13,7 @@ COPY .npmrc ./
 
 COPY patches ./patches
 
-COPY package.json ./
+COPY package.json pnpm-lock.yaml ./
 # RUN pnpm install
 RUN pnpm install --production=false
 
