@@ -100,6 +100,7 @@
       }
       return newTarget;
     });
+    console.log("Set secret params for forwarder:", editForwarder.targets);
   };
 
   const onSelectLocal = (template: IForwarderTemplate) => {
@@ -140,6 +141,7 @@
       }
       valid = false;
       formEl?.reset();
+      selectedTemplate = undefined;
     } catch (error) {
       console.error("Error saving forwarder:", error);
     } finally {

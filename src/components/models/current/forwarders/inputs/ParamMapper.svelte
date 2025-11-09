@@ -1,7 +1,7 @@
 <script lang="ts">
   import { ForwardMapModel, type IForwardMap, type UUID } from "$lib";
   import { onMount } from "svelte";
-  import { label, MultiSelect } from "flowbite-svelte";
+  import { MultiSelect } from "flowbite-svelte";
   let {
     value = $bindable(),
     id,

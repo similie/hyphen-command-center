@@ -62,8 +62,8 @@
   {:else if value.kind === ForwarderTargetKind.MQTT}
     <InputItemsRow>
       <InputFormItem grow>
-        <RequiredLabel content={$_t("Host URL")} />
-        <Input {disabled} bind:value={value.urlTemplate} required />
+        <RequiredLabel content={$_t("Forward Topic")} />
+        <Input {disabled} bind:value={value.topicTemplate} required />
         <Helper
           >{$_t(
             "Values from context will be interpolated, for example: /api/v1/devices/{device.identity}",
