@@ -49,7 +49,7 @@ services:
         max-file: "3"
   hyphen-command-center-api:
     build:
-      context: ../Hyphen-CommandCenter-API
+      context: ../hyphen-command-center-api
       dockerfile: Dockerfile
     networks:
       - webapps
