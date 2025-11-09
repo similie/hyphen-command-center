@@ -164,7 +164,6 @@ export class JobsManager {
       _uid: generateUniqueUUID(),
       _date: new Date(),
     };
-    console.log("Broadcasting OTA ACK for device:", device.identity, data);
     return socketServer.broadcast({
       topic: `device/${device.identity}/ota/ack`,
       data,

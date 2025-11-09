@@ -39,6 +39,7 @@ services:
       - PUBLIC_API_URL=${PUBLIC_API_URL}
       - SIBLING_API_URL=http://hyphen-command-center-api:1612/api/v2/
       - DEFAULT_EMAIL_ADDRESS=info@similie.org
+      - PUBLIC_GA_TRACKING_ID=G-XXXXXXXXXX
     extra_hosts:
       - "host.docker.internal:host-gateway" # Allows you to connect an localhost version of ollama
     depends_on:
