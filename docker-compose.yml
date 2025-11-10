@@ -14,18 +14,19 @@ services:
     networks:
       - webapps
   hyphen:
-    build:
-      context: ./
-      dockerfile: Dockerfile
+    # build:
+    #   context: ./
+    #   dockerfile: Dockerfile
     env_file: .env
-
+    image: similie/hyphen-command-center:latest
+    pull_policy: always
     networks:
       - webapps
       - redisnet
       - db-net
     restart: unless-stopped
     deploy:
-      replicas: 4
+      replicas: 1
     expose:
       - 4173
     environment:
@@ -49,16 +50,18 @@ services:
         max-size: "10m"
         max-file: "3"
   hyphen-command-center-api:
-    build:
-      context: ../hyphen-command-center-api
-      dockerfile: Dockerfile
+    # build: # assuming command center api is in a sibling folder
+    #   context: ../hyphen-command-center-api
+    #   dockerfile: Dockerfile
+    image: similie/hyphen-command-center-api:latest
+    pull_policy: always
     networks:
       - webapps
       - redisnet
       - db-net
     env_file: .env
     deploy:
-      replicas: 4
+      replicas: 1
     restart: unless-stopped
     depends_on:
       - redis
@@ -92,12 +95,11 @@ services:
     networks:
       - redisnet
   db:
-    # map to 5435 because we probably have 5432 already open
+    # map to 5433 because we probably have 5432 already open
     # ports:
-    #   - 5435:5432
+    #   - 5433:5432
     expose:
       - "5432:5432"
-    # image: postgres:16.0-bullseye
     image: timescale/timescaledb-ha:pg17
     networks:
       - db-net
