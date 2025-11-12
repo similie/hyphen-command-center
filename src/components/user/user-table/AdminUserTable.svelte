@@ -61,7 +61,6 @@
   }, 500);
 
   reload = () => {
-    console.log("Reloading users", users);
     localUsers = users;
     localCount = count;
     currentPage = 1;
@@ -82,9 +81,6 @@
     users = users.filter((u: UserModel) => u.uid !== user.uid);
     localUsers = users;
     localCount -= 1;
-    console.log("User removed:", user);
-    // Toast.success(`User ${user.name} removed successfully.`);
-    // reload && reload();
   };
 </script>
 
