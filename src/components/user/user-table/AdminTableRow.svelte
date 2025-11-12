@@ -5,7 +5,6 @@
   import UserRoleToggle from "../UserRoleToggle.svelte";
   import { Toast } from "$components/toasts";
   import UserModal from "./UserModal.svelte";
-  import { UserQRCode } from "..";
   let open = $state(false);
   const api = new UserApi();
   let { user, onremove } = $props<{
@@ -17,7 +16,6 @@
     api
       .update({ [key]: user[key] }, { uid: user.uid })
       .then(() => {
-        console.log("User updated successfully:", user);
         Toast.success(`User ${user.name} updated successfully.`);
       })
       .catch((error) => {
@@ -27,7 +25,6 @@
   };
 
   const oninput = (action: ModelActions, user: UserModel) => {
-    console.log("Action:", action, "User:", user);
     if (action === ModelActions.DELETE) {
       // Handle delete action
       Toast.success(`User ${user.name} deleted successfully.`);
@@ -35,7 +32,6 @@
       return onremove(user);
     }
     Toast.success(`User ${user.name} updated successfully.`);
-    // open = false; // Close the modal after action
   };
 </script>
 
@@ -52,7 +48,6 @@
   <TableBodyCell
     ><UserRoleToggle disabled {user} {changeAction} /></TableBodyCell
   >
-  <!-- <TableBodyCell><UserQRCode {user} /></TableBodyCell> -->
   <TableBodyCell
     ><Button type="button" onclick={() => (open = true)}>{$_t("Edit")}</Button
     ></TableBodyCell

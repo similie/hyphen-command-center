@@ -26,11 +26,11 @@
 
   const api = new UserApi();
   let dirty = $state(false);
-  //   let disabledForm = $state(false);
   let saving = $state(false);
   let allRequired = $state(false);
-
+  let clear = $state<(() => void) | undefined>();
   const debounce = new Debounce();
+  let reloadInputs = $state(false);
   const requiredFields = ["name", "username", "email", "password", "role"];
   const onInput = debounce.bounce(() => {
     if (!model) {
@@ -50,13 +50,22 @@
     allRequired = UserApi.fieldValidator(model, requiredFields);
   };
 
+  const runReload = () => {
+    reloadInputs = true;
+    setTimeout(() => {
+      reloadInputs = false;
+    }, 100);
+  };
+
   const setUser = (changedUser: UserModel) => {
     if (!autoClear) {
       model = changedUser;
       user = changedUser;
     } else {
       model = { ...defaultUser };
+      clear?.();
       user = model;
+      runReload();
     }
 
     oncomplete(changedUser);
@@ -108,7 +117,7 @@
 <form oninput={checkValidity} onsubmit={saveChanges}>
   <div class="flex flex-col space-y-4">
     <div class="flex space-x-2">
-      <div class="flex flex-col space-y-2 flex-grow">
+      <div class="flex flex-col space-y-2 flex-1">
         <Label for="name">{$_t("Name")}</Label>
         <Input
           type="text"
@@ -139,26 +148,30 @@
         oninput={onRoleChange}
       />
     </div>
-    <div class="flex flex-col space-y-2">
-      <Label for="username" class="mb-2"
-        >{$_t("Username")}
-        <small class="text-gray-500">({$_t("Minimum eight characters")})</small
-        ></Label
-      >
-      <UsernameGen
-        disabled={saving}
-        bind:user={model}
-        onChange={checkValidity}
-      />
-    </div>
-    <div class="flex flex-col space-y-2">
-      <Label class="mb-2">{$_t("Email")}</Label>
-      <UserEmailInput
-        disabled={saving}
-        bind:user={model}
-        onChange={checkValidity}
-      />
-    </div>
+    {#if !reloadInputs}
+      <div class="flex flex-col space-y-2">
+        <Label for="username" class="mb-2"
+          >{$_t("Username")}
+          <small class="text-gray-500"
+            >({$_t("Minimum eight characters")})</small
+          ></Label
+        >
+        <UsernameGen
+          disabled={saving}
+          bind:user={model}
+          bind:clear
+          onChange={checkValidity}
+        />
+      </div>
+      <div class="flex flex-col space-y-2">
+        <Label class="mb-2">{$_t("Email")}</Label>
+        <UserEmailInput
+          disabled={saving}
+          bind:user={model}
+          onChange={checkValidity}
+        />
+      </div>
+    {/if}
     {#if !model.uid || model.uid === ($siteUser && $siteUser.uid)}
       <div class="flex flex-col space-y-2">
         <Label class="mb-2">{$_t("Password")}</Label>
@@ -177,7 +190,7 @@
       type="submit"
       class="ml-auto"
       disabled={saving || !allRequired || !dirty}
-      size="xl">{$_t("Create")} <PlusOutline /></Button
+      >{$_t("Create")} <PlusOutline /></Button
     >
   </div>
 </form>

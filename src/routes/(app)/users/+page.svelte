@@ -7,12 +7,7 @@
   } from "$layouts";
   import { Button } from "flowbite-svelte";
   import { _t, type UserModel } from "$lib";
-  import {
-    AdminUserTable,
-    CreatePopOutDetails,
-    Navbar,
-    PopoutInfo,
-  } from "$components";
+  import { AdminUserTable, CreatePopOutDetails, Navbar } from "$components";
   import { PlusOutline } from "flowbite-svelte-icons";
   import UserAccountForm from "$components/user/UserAccountForm.svelte";
   let openDrawer = $state(true);

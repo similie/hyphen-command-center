@@ -62,7 +62,9 @@
   />
 </Modal>
 {#if loading}
-  <P class="text-center">{$_t("Loading Device Forwarders...")}</P>
+  <div class="flex w-full">
+    <P class="text-center">{$_t("Loading Device Forwarders...")}</P>
+  </div>
 {:else}
   <div class="flex w-full flex-col mb-4 md:px-8">
     <Heading tag="h3" class="mb-2">{$_t("Device Forwarders")}</Heading>
