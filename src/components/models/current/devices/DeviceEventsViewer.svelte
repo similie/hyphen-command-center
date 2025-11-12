@@ -18,8 +18,16 @@
   let selected = $state<SocketMessage<FireHoseEvent> | undefined>(undefined);
 </script>
 
-<div class="grid grid-cols-1 gap-4 md:grid-cols-{editable ? 12 : 2} w-full">
-  <div class="order-2 md:order-1 col-span-1 md:col-span-{editable ? 5 : 1}">
+<div
+  class="grid grid-cols-1 gap-4 {editable
+    ? 'md:grid-cols-12'
+    : 'md:grid-cols-2'} w-full"
+>
+  <div
+    class="order-2 md:order-1 col-span-1 {editable
+      ? 'md:col-span-5'
+      : 'md:col-span-1'}"
+  >
     <EventsRawViewerTable
       {onScrollToBottom}
       removeDevice
@@ -27,7 +35,11 @@
       {events}
     />
   </div>
-  <div class="order-1 md:order-2 col-span-1 md:col-span-{editable ? 4 : 1}">
+  <div
+    class="order-1 md:order-2 col-span-1 {editable
+      ? 'md:col-span-4'
+      : 'md:col-span-1'}"
+  >
     <EventsRawViewerData event={selected} />
   </div>
   {#if editable}
