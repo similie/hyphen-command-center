@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.2](https://github.com/similie/hyphen-command-center/compare/v1.1.1...v1.1.2) (2025-11-12)
+
+
+### Bug Fixes
+
+* corrected forwarders loading ([56a90c1](https://github.com/similie/hyphen-command-center/commit/56a90c13af9db788078b107a7275411046aa742d))
+* corrected page layout for differing roles ([e0f04d4](https://github.com/similie/hyphen-command-center/commit/e0f04d407b03679abf14514be2a27fbbcc2dae08))
+
 ### [1.1.1](https://github.com/similie/hyphen-command-center/compare/v1.1.0...v1.1.1) (2025-11-09)
 
 ## 1.1.0 (2025-11-09)
