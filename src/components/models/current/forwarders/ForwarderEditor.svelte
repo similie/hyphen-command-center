@@ -45,12 +45,14 @@
     ownerName,
     order = 0,
     onDelete,
+    editable = true,
   } = $props<{
     value?: IForwarders;
     owner?: UUID;
     ownedBy?: ParameterValueOwnerBy;
     ownerName?: string;
     order?: number;
+    editable?: boolean;
     onDelete?: (forwarder: IForwarders) => void;
   }>();
   let valid = $state(false);
@@ -164,15 +166,17 @@
     }
   };
 
-  let isAdmin = $derived($siteUser && $siteUser.role > UserRoles.MANAGER);
+  let isAdmin = $derived($siteUser && $siteUser.role >= UserRoles.MANAGER);
 </script>
 
-<DestroyModelModal
-  bind:open={destroyModal}
-  title={"Destroy Forwarder " + (editForwarder.name || "")}
-  onDestroy={destroyForwarder}
-  body="You can simply disabled the forwarder to stop the integration activity"
-/>
+{#if editable}
+  <DestroyModelModal
+    bind:open={destroyModal}
+    title={"Destroy Forwarder " + (editForwarder.name || "")}
+    onDestroy={destroyForwarder}
+    body="You can simply disabled the forwarder to stop the integration activity"
+  />
+{/if}
 
 <form
   bind:this={formEl}
@@ -192,12 +196,12 @@
           <div class="flex flex-col items-center- space-y-2">
             <div class="flex items-center space-x-2">
               <UserAvatar avatar={selectedTemplate.avatar} size="sm" />
-              {#if !editForwarder.id && isAdmin}
+              {#if !editForwarder.id && isAdmin && editable}
                 <Button
                   color="rose"
                   outline
                   pill
-                  disabled={saving}
+                  disabled={saving || !editable}
                   size="xs"
                   onclick={() => {
                     selectedTemplate = undefined;
@@ -216,7 +220,7 @@
       </InputFormItem>
       <InputFormItem>
         <Toggle
-          disabled={saving}
+          disabled={saving || !editable}
           class="ml-auto"
           bind:checked={editForwarder.enabled}>{$_t("Enabled")}</Toggle
         >
@@ -225,12 +229,16 @@
     <InputItemsRow>
       <InputFormItem>
         <RequiredLabel content="Forwarder Name" />
-        <Input disabled={saving} bind:value={editForwarder.name} required />
+        <Input
+          disabled={saving || !editable}
+          bind:value={editForwarder.name}
+          required
+        />
       </InputFormItem>
       <InputFormItem>
         <RequiredLabel content="Topic Pattern" />
         <Input
-          disabled={saving}
+          disabled={saving || !editable}
           bind:value={editForwarder.topicPattern}
           required
         />
@@ -257,7 +265,7 @@
                 {@const mqttTemplate = targetTemplate as MqttTargetTemplate}
                 {@const templateParams = mqttTemplate.payloadTemplate || []}
                 {#if templateParams.length === 0}
-                  <Card class="p-2  dark:bg-gray-950">
+                  <Card class="p-2 dark:bg-gray-950">
                     <P class="text-center"
                       >{$_t("No body parameters required for this target.")}</P
                     >
@@ -270,7 +278,7 @@
                     keys={templateParams}
                     name="MQTT Payload"
                     disabled={saving}
-                    editable={isAdmin}
+                    editable={isAdmin && editable}
                     bind:valid={readyValues[`target_${tIdx}_mqtt_payload`]}
                     ownedBy={ParameterValueOwnerBy.INTEGRATION}
                     owner={(editForwarder.id as UUID) || editForwarder.uid}
@@ -285,7 +293,7 @@
                 {@const templateBody = httpTemplate.bodyTemplate || []}
 
                 {#if templateHeaders.length === 0}
-                  <Card class="p-2  dark:bg-gray-950">
+                  <Card class="p-2 dark:bg-gray-950">
                     <P class="text-center"
                       >{$_t(
                         "No header parameters required for this target.",
@@ -299,7 +307,7 @@
                     keys={httpTemplate.headers || []}
                     name="HTTP Headers"
                     disabled={saving}
-                    editable={isAdmin}
+                    editable={isAdmin && editable}
                     bind:valid={readyValues[`target_${tIdx}_http_headers`]}
                     ownedBy={ParameterValueOwnerBy.INTEGRATION}
                     onChange={() => validateForm()}
@@ -308,7 +316,7 @@
                   />
                 {/if}
                 {#if templateBody.length === 0}
-                  <Card class=" p-2  dark:bg-gray-950">
+                  <Card class=" p-2 dark:bg-gray-950">
                     <P class="text-center"
                       >{$_t("No body parameters required for this target.")}</P
                     >
@@ -319,7 +327,7 @@
                     keys={httpTemplate.bodyTemplate || []}
                     name="HTTP Body"
                     disabled={saving}
-                    editable={isAdmin}
+                    editable={isAdmin && editable}
                     bind:valid={readyValues[`target_${tIdx}_http_body`]}
                     ownedBy={ParameterValueOwnerBy.INTEGRATION}
                     onChange={() => validateForm()}
@@ -333,7 +341,7 @@
         {/each}
       {/if}
     </InputItemsRow>
-    {#if $siteUser && $siteUser.role > UserRoles.MANAGER}
+    {#if editable}
       <div class="w-full flex flex-col">
         <Hr />
         <InputItemsRow>

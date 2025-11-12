@@ -27,6 +27,7 @@
   onDestroy(() => {
     removeNavbarCrumb(headings.map((h) => h.title));
   });
+  let editable = $derived($siteUser && $siteUser.role >= UserRoles.MANAGER);
 </script>
 
 <BasicModelPage bind:openDrawer={closeNav}>
@@ -45,7 +46,7 @@
   {#snippet headerContent()}
     <Navbar title="Devices" headings={$NavbarCrumbs}
       >{#snippet createSection()}
-        {#if $siteUser && $siteUser.role >= UserRoles.USER_MANAGER}
+        {#if editable}
           <Button type="button" onclick={() => (closeNav = false)}
             ><PlusOutline /> {$_t("Create a device")}</Button
           >
@@ -55,7 +56,7 @@
   {/snippet}
   {#snippet bodyContent()}
     <BodyContainer width={8}>
-      <DevicesTable />
+      <DevicesTable {editable} />
     </BodyContainer>
   {/snippet}
 </BasicModelPage>

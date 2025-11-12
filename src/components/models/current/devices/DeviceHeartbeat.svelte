@@ -17,7 +17,6 @@
         .sort({ createdAt: "DESC" })
         .limit(1)
         .fetchOne();
-      console.log("Fetched latest heartbeat", heartbeat);
     } catch {
       console.error("Error fetching latest heartbeat");
     } finally {

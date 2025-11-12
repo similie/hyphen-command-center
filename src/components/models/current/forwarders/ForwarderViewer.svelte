@@ -89,7 +89,7 @@
           {#each socketItems as item, index}
             <ListgroupItem
               active={selectedSocket?._uid === item._uid}
-              id={`item-${index}`}
+              id={`forwarder-socket-item-${index}`}
             >
               <div class="flex w-full flex-col space-y-2">
                 <Label>{$_t("Artifact ID")}</Label>
