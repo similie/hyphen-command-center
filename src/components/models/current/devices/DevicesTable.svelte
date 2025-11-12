@@ -24,6 +24,7 @@
   import DevicesTableRow from "./DevicesTableRow.svelte";
   import PaginationControls from "$components/input/PaginationControls.svelte";
   import { goto } from "$app/navigation";
+  let { editable = true } = $props<{ editable?: boolean }>();
   const limit = 50;
   let skip = $state(1);
   let count = $state(0);
@@ -108,7 +109,10 @@
     count = Math.max(0, count - 1);
   };
 
-  const tableRows = ["Identity", "Name", "Status", "Last Heard", " "];
+  const tableRows = ["Identity", "Name", "Status", "Last Heard"];
+  if (editable) {
+    tableRows.push(" ");
+  }
 </script>
 
 <div class="w-full rounded-2xl mb-4">
@@ -152,7 +156,7 @@
           onclick={() => navigateTo(device)}
           class="hover:cursor-pointer dark:border-primary-200 border-primary-700"
         >
-          <DevicesTableRow {device} {onRemove} />
+          <DevicesTableRow {editable} {device} {onRemove} />
         </TableBodyRow>
       {/each}
     {/if}

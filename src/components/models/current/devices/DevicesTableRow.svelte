@@ -6,8 +6,13 @@
   import { DotsHorizontalOutline } from "flowbite-svelte-icons";
   import DestroyModelModal from "$components/models/destroy/DestroyModelModal.svelte";
 
-  let { device, onRemove } = $props<{
+  let {
+    device,
+    onRemove,
+    editable = true,
+  } = $props<{
     device: IDevice;
+    editable?: boolean;
     onRemove: (device: IDevice) => void;
   }>();
   const api = new DeviceModel();
@@ -58,30 +63,31 @@
     {$_t("Never")}
   {/if}
 </TableBodyCell>
-
-<TableBodyCell>
-  <Button
-    color="alternative"
-    size="xs"
-    onclick={(e: MouseEvent) => {
-      e.stopPropagation();
-      e.preventDefault();
-    }}
-  >
-    {#if !deleting}
-      <Popover trigger="click" placement="bottom">
-        <A
-          disabled={deleting}
-          onclick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            showRemove = true;
-          }}>{$_t("Remove Device")}</A
-        >
-      </Popover>
-      <DotsHorizontalOutline size={"sm"} />
-    {:else}
-      <Spinner size={"4"} />
-    {/if}
-  </Button>
-</TableBodyCell>
+{#if editable}
+  <TableBodyCell>
+    <Button
+      color="alternative"
+      size="xs"
+      onclick={(e: MouseEvent) => {
+        e.stopPropagation();
+        e.preventDefault();
+      }}
+    >
+      {#if !deleting}
+        <Popover trigger="click" placement="bottom">
+          <A
+            disabled={deleting}
+            onclick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              showRemove = true;
+            }}>{$_t("Remove Device")}</A
+          >
+        </Popover>
+        <DotsHorizontalOutline size={"sm"} />
+      {:else}
+        <Spinner size={"4"} />
+      {/if}
+    </Button>
+  </TableBodyCell>
+{/if}

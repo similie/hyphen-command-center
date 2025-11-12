@@ -12,6 +12,8 @@
     addNavbarCrumb,
     removeNavbarCrumb,
     NavbarCrumbs,
+    siteUser,
+    UserRoles,
   } from "$lib";
   import { GradientButton } from "flowbite-svelte";
   import { onDestroy, onMount } from "svelte";
@@ -52,12 +54,14 @@
   {#snippet headerContent()}
     <Navbar title="Devices" headings={$NavbarCrumbs}
       >{#snippet createSection()}
-        <GradientButton
-          outline
-          color="cyanToBlue"
-          onclick={() => (closeNav = !closeNav)}
-          >{$_t("Flash Utilities")}</GradientButton
-        >
+        {#if $siteUser && $siteUser.role >= UserRoles.MANAGER}
+          <GradientButton
+            outline
+            color="cyanToBlue"
+            onclick={() => (closeNav = !closeNav)}
+            >{$_t("Flash Utilities")}</GradientButton
+          >
+        {/if}
       {/snippet}
     </Navbar>
   {/snippet}

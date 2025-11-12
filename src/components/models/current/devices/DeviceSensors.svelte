@@ -20,7 +20,10 @@
   import { Toast } from "$components/toasts";
   const dApi = new DeviceModel();
   const sApi = new SensorModel();
-  let { device } = $props<{ device: IDevice }>();
+  let { device, editable = true } = $props<{
+    device: IDevice;
+    editable?: boolean;
+  }>();
   let deviceSensors = $state<ISensorWithKey[]>([]);
   let sensors = $state<ISensor[]>([]);
   let loading = $state(false);
@@ -122,12 +125,18 @@
         imgClass="object-cover h-32"
         class="max-w-xs relative"
       >
-        <div class="absolute top-2 right-2 rounded-full p-1">
-          <Button size="xs" color="rose" pill onclick={() => onRemove(sensor)}>
-            <TrashBinOutline size="xs" />
-          </Button>
-        </div>
-
+        {#if editable}
+          <div class="absolute top-2 right-2 rounded-full p-1">
+            <Button
+              size="xs"
+              color="rose"
+              pill
+              onclick={() => onRemove(sensor)}
+            >
+              <TrashBinOutline size="xs" />
+            </Button>
+          </div>
+        {/if}
         <div class="p-2 flex flex-col h-38 text-overflow-hidden">
           <Heading class="text-center" tag="h6">{sensor.name}</Heading>
           <P class="text-center" size="sm">{sensor.description}</P>
@@ -139,13 +148,15 @@
       </Card>
     {/each}
   </div>
-  <div class="w-[22em]">
-    <Label>{$_t("Available Sensors")}</Label>
-    <AvailableSensors
-      {onAdd}
-      {sensors}
-      appliedSensors={deviceSensors}
-      {device}
-    />
-  </div>
+  {#if editable}
+    <div class="w-[22em]">
+      <Label>{$_t("Available Sensors")}</Label>
+      <AvailableSensors
+        {onAdd}
+        {sensors}
+        appliedSensors={deviceSensors}
+        {device}
+      />
+    </div>
+  {/if}
 </div>

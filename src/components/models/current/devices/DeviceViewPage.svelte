@@ -115,7 +115,7 @@
   };
 
   let editable = $derived(
-    ($siteUser?.role || UserRoles.UNRESTRICTED) > UserRoles.MANAGER,
+    ($siteUser?.role || UserRoles.UNRESTRICTED) >= UserRoles.MANAGER,
   );
 </script>
 
@@ -138,10 +138,10 @@
         <Heading tag="h5">{$_t("Integrations")}</Heading>
       {/snippet}
       <div class="flex flex-wrap md:flex-nowrap space-x-4 space-y-4">
-        <DeviceSensors {device} />
-        <DeviceForwarders {device} />
+        <DeviceSensors {editable} {device} />
+        <DeviceForwarders {editable} {device} />
       </div>
     </AccordionItem>
   </Accordion>
-  <DeviceEventsViewer {events} {device} {onScrollToBottom} />
+  <DeviceEventsViewer {editable} {events} {device} {onScrollToBottom} />
 </div>

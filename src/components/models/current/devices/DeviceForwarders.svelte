@@ -6,8 +6,6 @@
     type IDevice,
     type IForwarders,
     onEvent,
-    siteUser,
-    UserRoles,
   } from "$lib";
   import { Accordion, Button, Heading, Modal, P } from "flowbite-svelte";
   import { onDestroy, onMount } from "svelte";
@@ -15,7 +13,10 @@
   import { PlusOutline } from "flowbite-svelte-icons";
   import ForwarderEditor from "../forwarders/ForwarderEditor.svelte";
 
-  let { device } = $props<{ device: IDevice }>();
+  let { device, editable = true } = $props<{
+    device: IDevice;
+    editable?: boolean;
+  }>();
   const api = new ForwardersModel();
   let forwarders = $state<IForwarders[]>([]);
   let loading = $state(true);
@@ -57,6 +58,7 @@
     owner={device.id}
     ownedBy={ParameterValueOwnerBy.DEVICE}
     ownerName={device.name}
+    {editable}
   />
 </Modal>
 {#if loading}
@@ -69,12 +71,12 @@
         "Device Forwarders allow you to send device data to external systems or services.",
       )}
     </P>
-    <Accordion flush={true} class="w-full">
+    <Accordion flush class="w-full">
       {#each forwarders as forwarder}
         <ForwarderViewer {forwarder} />
       {/each}
     </Accordion>
-    {#if $siteUser && $siteUser.role > UserRoles.MANAGER}
+    {#if editable}
       <div class="flex w-full">
         <Button class="mt-4 " onclick={() => (createModalOpen = true)}
           ><PlusOutline />{$_t("Add Device Forwarder")}</Button
