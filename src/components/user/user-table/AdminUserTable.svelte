@@ -109,9 +109,7 @@
     <TableHeadCell>{$_t("Username")}</TableHeadCell>
     <TableHeadCell>{$_t("Email")}</TableHeadCell>
     <TableHeadCell>{$_t("Role")}</TableHeadCell>
-    <!-- <TableHeadCell>{$_t("QR")}</TableHeadCell> -->
     <TableHeadCell>{$_t("")}</TableHeadCell>
-    <!-- <TableHeadCell>{$_t("Status")}</TableHeadCell> -->
   </TableHead>
   <TableBody>
     {#each localUsers as user (user.uid)}

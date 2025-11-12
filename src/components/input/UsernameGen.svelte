@@ -24,11 +24,13 @@
     disabled = false,
     token = "",
     onChange,
+    clear = $bindable(),
   } = $props<{
     user: UserModel | Partial<UserModel>;
     token?: string;
     disabled?: boolean;
     valid?: boolean;
+    clear?: () => void;
     onChange?: (username: string) => void;
   }>();
 
@@ -95,6 +97,11 @@
       checkValidity();
     }
   });
+
+  clear = () => {
+    model = generateUsernameOptions();
+    checkValidity();
+  };
 </script>
 
 <ButtonGroup class="w-full">

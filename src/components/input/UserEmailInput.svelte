@@ -13,17 +13,32 @@
     CheckCircleOutline,
     CloseOutline,
   } from "flowbite-svelte-icons";
+  import { onMount } from "svelte";
   const debounce = new Debounce();
-  export let user: UserModel | Partial<UserModel>;
-  export let disabled: boolean = false;
-  export let onChange: ((email: string) => void) | undefined = undefined;
+  let {
+    user = $bindable(),
+    disabled,
+    onChange,
+  } = $props<{
+    user: UserModel | Partial<UserModel>;
+    disabled?: boolean;
+    onChange?: (email: string) => void;
+  }>();
   const api = new UserApi();
-  let model: string = user.email || "";
-  let originalEmail: string = model;
+  let model = $state(user.email || "");
+  let originalEmail = $state(user.email || "");
   let changed = false;
-  let validityCheck = UserValidityResults.PRISTINE;
-  let color: "green" | "red" | "default" | undefined = undefined;
-
+  let validityCheck = $state(UserValidityResults.PRISTINE);
+  let color = $state<"green" | "red" | "default" | undefined>(undefined);
+  const onValidate = () => {
+    if (!user || user.email) {
+      return;
+    }
+    originalEmail = user.email || "";
+    model = originalEmail;
+    validityCheck = UserValidityResults.PRISTINE;
+    color = getColor();
+  };
   const checkValidity = debounce.bounce(async () => {
     if (originalEmail && model === originalEmail) {
       validityCheck = UserValidityResults.VALID;
@@ -58,12 +73,7 @@
     return undefined;
   };
 
-  $: if (user && !user.email) {
-    originalEmail = user.email || "";
-    model = originalEmail;
-    validityCheck = UserValidityResults.PRISTINE;
-    color = getColor();
-  }
+  onMount(onValidate);
 </script>
 
 <ButtonGroup class="w-full">

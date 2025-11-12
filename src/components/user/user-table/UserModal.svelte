@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { page } from "$app/stores";
   import {
     UserEmailInput,
     UserRoleSelect,
@@ -7,7 +6,7 @@
     AvatarBuilder,
     PasswordGen,
     UsernameGen,
-    StyleWriter,
+    DestroyModelModal,
   } from "$components";
 
   import {
@@ -19,7 +18,7 @@
     ModelActions,
     UserApi,
   } from "$lib";
-  import { Button, Modal, Label, Input, Textarea } from "flowbite-svelte";
+  import { Button, Modal, Label, Input } from "flowbite-svelte";
   import { tick } from "svelte";
 
   let {
@@ -52,7 +51,7 @@
     if (!model.uid) {
       return;
     }
-    await api.update({ active: false }, { uid: model.uid });
+    await api.destroy({ uid: model.uid });
     oninput && oninput(ModelActions.DELETE, model);
   };
 
@@ -91,8 +90,19 @@
       saving = false;
     }
   };
+  let isUserManager = $derived(
+    $siteUser && $siteUser.role >= UserRoles.USER_MANAGER,
+  );
 </script>
 
+{#if isUserManager}
+  <DestroyModelModal
+    bind:open={deleteModal}
+    onDestroy={deleteContent}
+    title={`${$_t("Delete User")}: ${model.name}`}
+    body="Removing this user cannot be undone. Please confirm this action."
+  />
+{/if}
 <Modal size="sm" bind:open>
   {#snippet header()}
     <div class="flex space-x-2 items-center align-center w-full">
@@ -109,7 +119,7 @@
   {#if !saving}
     <form oninput={checkValidity}>
       <div class="grid grid-cols-2 gap-4">
-        {#if $siteUser && $siteUser.role >= UserRoles.USER_MANAGER}
+        {#if isUserManager}
           <div>
             <Label for="name">{$_t("Full name")}</Label>
             <Input
@@ -136,10 +146,6 @@
           <UserEmailInput bind:user={saveModel} onChange={checkValidity} />
         </div>
       </div>
-      <!-- <div class="mt-4 w-full">
-        <Label for="bio">{$_t("User Bio")}</Label>
-        <StyleWriter id="bio" bind:value={saveModel.bio} />
-      </div> -->
       <div class="mt-4">
         {#if saveModel.uid && !passwordUpdate}
           <Button
@@ -167,7 +173,7 @@
     <ModelCreateLoader caption="User" />
   {/if}
   {#snippet footer()}
-    {#if $siteUser && $siteUser.role >= UserRoles.USER_MANAGER && !saving}
+    {#if isUserManager && !saving}
       <div class="flex w-full">
         <div class="ml-auto flex content-center space-x-4">
           {#if $siteUser && $siteUser.uid !== model.uid}
@@ -187,15 +193,5 @@
         </div>
       </div>
     {/if}
-  {/snippet}
-</Modal>
-
-<Modal color="rose" bind:open={deleteModal} autoclose>
-  <div class="text-base leading-relaxed">
-    {$_t("Are you sure you want to remove this content?")}
-  </div>
-  {#snippet footer()}
-    <Button onclick={deleteContent} color="rose">{$_t("Proceed")}</Button>
-    <Button class="ml-auto" color="alternative">{$_t("Go Back")}</Button>
   {/snippet}
 </Modal>
