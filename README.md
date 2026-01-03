@@ -318,17 +318,6 @@ We welcome open-source contributions to improve the Hyphen ecosystem. 1. Fork th
 
 Please follow existing coding conventions and include clear commit messages.
 
-## 🪪 License
-
-This project is distributed under the GNU General Public License v3 (GPLv3)
-with additional commercial-use terms.
-
-Community and nonprofit use is fully open under GPLv3.
-Commercial deployment or derivative services require a commercial license from Similie.
-Contact: info@similie.org￼
-
-See LICENSE.md￼ for full terms.
-
 ## 🌍 About Similie
 
 Similie is a technology company dedicated to climate resilience and community empowerment.
