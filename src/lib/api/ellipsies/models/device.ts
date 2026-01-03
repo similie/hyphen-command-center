@@ -57,6 +57,17 @@ export class DeviceModel extends HyphenModel<IDevice> {
     );
   }
 
+  public async setTimezone(
+    model: IDevice,
+    tz: number,
+  ): Promise<DeviceConfigModel> {
+    const thisUrl = this.formatUrl("timezone");
+    return this.connect<DeviceConfigModel>(thisUrl, HttpMethod.POST, {
+      deviceId: model.id,
+      tz,
+    });
+  }
+
   public async refreshSensors(model: IDevice): Promise<DeviceConfigModel> {
     const thisUrl = this.formatUrl("sensor");
     return this.connect<DeviceConfigModel>(thisUrl, HttpMethod.PUT, {

@@ -11,6 +11,7 @@ export interface IDevice extends IEntity {
   lng?: number;
   lastTouched?: Date;
   profile?: UUID;
+  tzOffsetHours: number | null;
 }
 
 export enum ConnectionType {

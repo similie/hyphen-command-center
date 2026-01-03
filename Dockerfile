@@ -1,4 +1,4 @@
-FROM node:20.19.2-bookworm
+FROM node:24-bookworm
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 RUN apt-get update && apt-get install -y python3 make g++
 RUN npm install -g pnpm

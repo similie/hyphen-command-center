@@ -29,6 +29,7 @@
   let editProps = $state<Record<string, boolean>>({});
   let name = $state(device.name || "");
   let notes = $state(device.notes || "");
+  let tz = $state(device.tzOffsetHours || 0);
   let hideDeviceProfile = $state(true);
   let destroyModalOpen = $state(false);
   let rebuildingCertificates = $state(false);
@@ -57,6 +58,22 @@
       hideDeviceProfile = true;
     } catch (e) {
       console.error("Error saving device profile", e);
+    }
+  };
+
+  const editTimezone = async () => {
+    if (tz === null || tz === undefined) {
+      return;
+    }
+    editProps.timezone = false;
+    if (tz === device.tzOffsetHours) {
+      return;
+    }
+    try {
+      await api.setTimezone(device, tz);
+      device.tzOffsetHours = tz;
+    } catch (e) {
+      console.error("Error saving device timezone", e);
     }
   };
 
@@ -203,6 +220,30 @@
     <InputFormItem grow>
       <DeviceQRCode {device} />
     </InputFormItem>
+  </InputItemsRow>
+  <InputItemsRow>
+    <InputFormItem>
+      <Label>{$_t("Timezone offset hours")}</Label>
+      <div class="flex space-x-2">
+        {#if !editProps.timezone}
+          <P>{device.tzOffsetHours}</P>
+          {#if editable}
+            <A onclick={() => (editProps.timezone = true)}><EditOutline /></A>
+          {/if}
+        {:else if editable}
+          <Input size="sm" type="number" step="0.5" bind:value={tz} required />
+
+          <A disabled={!tz} onclick={editTimezone}>
+            {#if !tz}
+              <BanOutline />
+            {:else}
+              <FloppyDiskOutline />
+            {/if}
+          </A>
+        {/if}
+      </div>
+    </InputFormItem>
+    <InputFormItem><span></span></InputFormItem>
   </InputItemsRow>
   <InputItemsRow>
     <InputFormItem>

@@ -17,7 +17,7 @@
   <Body>
     <Container>
       <Heading class="text-cyan-500 text-2xl"
-        >You're one-time passcode. Do not share this with anyone.</Heading
+        >Your one-time passcode. Do not share this with anyone.</Heading
       >
       <Text style={{ fontWeight: 900 }}>{passcode}</Text>
       <Text>
